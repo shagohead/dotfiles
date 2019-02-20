@@ -12,20 +12,21 @@ set -x CPPFLAGS {$CPPFLAGS} -I/usr/local/opt/zlib/include
 set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
 set -x PYENV_ROOT $HOME/.pyenv
 set -x PATH /usr/local/opt/gnu-getopt/bin $PATH
-set -x PATH /usr/local/opt/node@8/bin $PATH
-set -x PATH /usr/local/opt/icu4c/bin $PATH
+#set -x PATH /usr/local/opt/node@8/bin $PATH
+#set -x PATH /usr/local/opt/icu4c/bin $PATH
 set -x PATH /usr/local/opt/gettext/bin $PATH
 set -x PATH /usr/local/opt/ruby/bin $PATH
 set -x PATH /Users/lastdanmer/.local/bin $PATH
 
+abbr -a dc docker-compose
+abbr -a dex docker exec -it
+abbr -a dig dig +short
 abbr -a ga git add
 abbr -a gc git commit
 abbr -a gca git commit --amend
 abbr -a gco git checkout
 abbr -a gd git diff
 abbr -a gs git status
-abbr -a dc docker-compose
-abbr -a dex docker exec -it
 abbr -a l ls -la
 abbr -a tm tmux -u
 abbr -a run ./manage.py runserver

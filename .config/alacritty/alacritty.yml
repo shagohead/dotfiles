@@ -373,7 +373,7 @@ shell:
     - -l
     - -i
     - -C
-    - 'tmux -u'
+    - 'tmux -u a || tmux -u'
 
 # Windows 10 ConPTY backend (Windows only)
 #

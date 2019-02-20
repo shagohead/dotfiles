@@ -3,11 +3,14 @@ function! ExecuteMacroOverVisualRange()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
 
+set pastetoggle=<F2>
+
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
 nmap <Leader>tt :tab split<CR><C-]>
 nmap <Leader>ty :tab split<CR>:YcmCompleter GoTo<CR>
 
+nmap <Leader>\<BS> :echo ''<CR>
 nmap <Leader>\<CR> :noh<CR>
 nmap <Leader>\[ :Files<CR>
 nmap <Leader>\] :Tags<CR>

@@ -16,6 +16,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'wellle/targets.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-commentary'
+Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'Vimjas/vim-python-pep8-indent'
@@ -53,7 +54,7 @@ augroup AutoSaveFolds
 augroup END
 
 command! CopyPath let @+ = expand('%:p')
-command Delallmarks delmarks A-Z0-9\"[]
+command! Delallmarks delmarks A-Z0-9\"[]
 
 source ~/.vim/custom/abbr.vim
 source ~/.vim/custom/map.vim
