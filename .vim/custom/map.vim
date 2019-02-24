@@ -11,7 +11,7 @@ nmap <Leader>tt :tab split<CR><C-]>
 nmap <Leader>ty :tab split<CR>:YcmCompleter GoTo<CR>
 
 nmap <Leader>\<BS> :echo ''<CR>
-nmap <Leader>\<CR> :noh<CR>
+nmap <Leader>\<CR> :noh<CR>:echo ''<CR>
 nmap <Leader>\[ :Files<CR>
 nmap <Leader>\] :Tags<CR>
 nmap <Leader>\e :CtrlP<CR>
