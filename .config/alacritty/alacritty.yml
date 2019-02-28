@@ -499,6 +499,7 @@ key_bindings:
   - { key: RBracket,     mods: Command|Shift, chars: "\x02\x6e" }
   - { key: Left,     mods: Command|Shift, chars: "\x02\x3c" }
   - { key: Right,    mods: Command|Shift, chars: "\x02\x3e" }
+  - { key: K,        mods: Command, chars: "\x02\x6b"                    }
   - { key: E,        mods: Command, chars: "\x02\x77"                    }
   - { key: T,        mods: Command, chars: "\x02\x63"                    }
   - { key: W,        mods: Command, chars: "\x02\x78"                    }

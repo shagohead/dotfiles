@@ -7,6 +7,9 @@ set pastetoggle=<F2>
 
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
+nnoremap { gT
+nnoremap } gt
+
 nmap <Leader>tt :tab split<CR><C-]>
 nmap <Leader>ty :tab split<CR>:YcmCompleter GoTo<CR>
 
@@ -15,6 +18,7 @@ nmap <Leader>\<CR> :noh<CR>:echo ''<CR>
 nmap <Leader>\[ :Files<CR>
 nmap <Leader>\] :Tags<CR>
 nmap <Leader>\e :CtrlP<CR>
+nmap <Leader>\\ :CtrlP<CR>
 nmap <Leader>\b :YcmCompleter GoTo<CR>
 nmap <Leader>\y :YcmCompleter GoDoc<CR>
 nmap <Leader>\l :YcmCompleter GoToReferences<CR>

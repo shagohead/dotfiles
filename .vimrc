@@ -19,6 +19,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
+Plug 'pangloss/vim-javascript'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'jeetsukumaran/vim-pythonsense'
@@ -54,10 +55,8 @@ augroup AutoSaveFolds
   autocmd BufWinEnter *.* silent! loadview
 augroup END
 
-command! CopyPath let @+ = expand('%:p')
-command! Delallmarks delmarks A-Z0-9\"[]
-
 source ~/.vim/custom/abbr.vim
+source ~/.vim/custom/cmd.vim
 source ~/.vim/custom/map.vim
 source ~/.vim/custom/set.vim
 
