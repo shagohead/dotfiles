@@ -368,11 +368,11 @@ live_config_reload: true
 #   - (Linux/macOS) /bin/bash --login
 #   - (Windows) powershell
 shell:
-  program: /usr/local/bin/fish
+  program: /bin/sh
   args:
     - -l
     - -i
-    - -C
+    - -c
     - 'tmux -u a || tmux -u'
 
 # Windows 10 ConPTY backend (Windows only)
@@ -495,10 +495,11 @@ key_bindings:
   #- { key: Q,        mods: Command, action: Quit                         }
   #- { key: W,        mods: Command, action: Quit                         }
 
-  - { key: LBracket,     mods: Command|Shift, chars: "\x02\x70" }
-  - { key: RBracket,     mods: Command|Shift, chars: "\x02\x6e" }
-  - { key: Left,     mods: Command|Shift, chars: "\x02\x3c" }
-  - { key: Right,    mods: Command|Shift, chars: "\x02\x3e" }
+  - { key: LBracket, mods: Command|Shift, chars: "\x02\x70"              }
+  - { key: RBracket, mods: Command|Shift, chars: "\x02\x6e"              }
+  - { key: Left,     mods: Command|Shift, chars: "\x02\x3c"              }
+  - { key: Right,    mods: Command|Shift, chars: "\x02\x3e"              }
+  - { key: F,        mods: Command, chars: "\x02\x5b"                    }
   - { key: K,        mods: Command, chars: "\x02\x6b"                    }
   - { key: E,        mods: Command, chars: "\x02\x77"                    }
   - { key: T,        mods: Command, chars: "\x02\x63"                    }
