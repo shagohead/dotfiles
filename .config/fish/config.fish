@@ -47,3 +47,27 @@ alias http-prompt '/Users/lastdanmer/.pyenv/versions/http-prompt/bin/http-prompt
 alias yapf '/Users/lastdanmer/.pyenv/versions/yapf/bin/yapf'
 
 pyenv init - | source
+
+if status --is-interactive
+    function __set_tmux_window_title -a title
+        tmux rename-window $title
+        set -g tmux_window_title $title
+    end
+
+    function __fish_preexec_handler -e fish_preexec
+        switch $argv
+            case "./manage.py runserver*"
+                __set_tmux_window_title "django-server"
+            case "http-prompt*"
+                __set_tmux_window_title "rest-client"
+        end
+    end
+
+    function __fish_postexec_handler -e fish_postexec
+        set -q tmux_window_title
+        if test $status -eq 0
+            tmux rename-window "fish"
+            set -e tmux_window_title
+        end
+    end
+end
