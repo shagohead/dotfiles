@@ -3,15 +3,18 @@ set pastetoggle=<F2>
 let mapleader="\<SPACE>"
 
 " One-key (with or w/o modifier) mappigns
-nmap <C-j> :cn<CR>
-nmap <C-k> :cp<CR>
 nnoremap { gT
 nnoremap } gt
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
 inoremap <silent><expr> <c-x> coc#refresh()
 
 " Two-key (with or w/o modifier) mappigns
+nmap <silent> [q :cp<CR>
+nmap <silent> ]q :cn<CR>
+
 nmap <silent> [d <Plug>(coc-diagnostic-prev)<CR>
 nmap <silent> ]d <Plug>(coc-diagnostic-next)<CR>
 
