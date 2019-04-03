@@ -13,7 +13,6 @@ set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
 set -x PYENV_ROOT $HOME/.pyenv
 
 set -x PATH /usr/local/opt/icu4c/bin $PATH
-set -x PATH /usr/local/opt/node@8/bin $PATH
 set -x PATH /usr/local/opt/gnu-getopt/bin $PATH
 set -x PATH /usr/local/opt/gettext/bin $PATH
 set -x PATH /usr/local/opt/ruby/bin $PATH
@@ -36,15 +35,6 @@ abbr -a run ./manage.py runserver
 alias dsa 'docker stop (docker ps -q)'
 alias dps 'docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Status}}"'
 alias top 'top -o cpu'
-
-# environment depends executables
-# TODO: move to pipx
-alias http '/Users/lastdanmer/.pyenv/versions/http-prompt/bin/http'
-alias flake8 '/Users/lastdanmer/.pyenv/versions/flake8/bin/flake8'
-alias pylint '/Users/lastdanmer/.pyenv/versions/pylint/bin/pylint'
-alias johnnydep '/Users/lastdanmer/.pyenv/versions/johnnydep/bin/johnnydep'
-alias http-prompt '/Users/lastdanmer/.pyenv/versions/http-prompt/bin/http-prompt'
-alias yapf '/Users/lastdanmer/.pyenv/versions/yapf/bin/yapf'
 
 pyenv init - | source
 

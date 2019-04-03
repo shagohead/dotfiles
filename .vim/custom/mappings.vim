@@ -5,10 +5,11 @@ let mapleader="\<SPACE>"
 " One-key (with or w/o modifier) mappigns
 nnoremap { gT
 nnoremap } gt
-nnoremap <C-p> "1p
-vnoremap <C-p> "1p
+nnoremap <C-p> "0p
+vnoremap <C-p> "0p
 inoremap <silent><expr> <c-x> coc#refresh()
 
+nmap <C-a> :ALENext<CR>
 nmap <C-j> :cn<CR>
 nmap <C-k> :cp<CR>
 
@@ -40,6 +41,18 @@ function! s:show_documentation()
   endif
 endfunction
 
+" Delete item form QuickFix list
+function! RemoveQFItem()
+  let curqfidx = line('.') - 1
+  let qfall = getqflist()
+  call remove(qfall, curqfidx)
+  call setqflist(qfall, 'r')
+  execute curqfidx + 1 . "cfirst"
+  :copen
+endfunction
+command! RemoveQFItem :call RemoveQFItem()
+autocmd FileType qf map <buffer> dd :RemoveQFItem<cr>
+
 " Leader <a>(ale) prefixed maps
 nmap <Leader>al :ALELint<CR>
 nmap <Leader>ai :ALEInfo<CR>
@@ -54,7 +67,7 @@ nmap <Leader>gt :tab split<CR><C-]>
 nmap <Leader>gd :tab split<CR><Plug>(coc-definition)
 
 " Leader one-key maps
-nmap <Leader><BS> :echo ''<CR>
+nmap <silent> <Leader><BS> :echo ''<CR>
 nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 nmap <Leader>s :syntax sync fromstart<CR>
 nmap <Leader>f :Files<CR>

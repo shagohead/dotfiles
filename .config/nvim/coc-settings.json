@@ -1,0 +1,14 @@
+{
+    "coc.preferences.previewAutoClose": true,
+    "coc.preferences.useQuickfixForLocations": true,
+
+    "python.jediEnabled": true,
+    "python.analysis.openFilesOnly": true,
+    "python.formatting.provider": "yapf",
+
+    "python.linting.pylintArgs": ["--load-plugins=pylint_django"],
+    "python.linting.pylintEnabled": false,
+
+    "python.linting.flake8Path": "/Users/lastdanmer/.local/bin/flake8",
+    "python.linting.flake8Enabled": true
+}
