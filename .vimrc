@@ -68,6 +68,7 @@ inorea <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 command! DirFiles Files %:h
 command! CopyPath let @+ = expand('%:p')
 command! Delallmarks delmarks A-Z0-9\"[]
+command! -nargs=0 Format :call CocAction('format')
 command! -range FormatSQL <line1>,<line2>!sqlformat --reindent --keywords upper --identifiers lower -
 
 source ~/.vim/custom/ale.vim

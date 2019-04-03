@@ -14,6 +14,7 @@ inoremap <silent><expr> <c-x> coc#refresh()
 " Two-key (with or w/o modifier) mappigns
 nmap <silent> [d <Plug>(coc-diagnostic-prev)<CR>
 nmap <silent> ]d <Plug>(coc-diagnostic-next)<CR>
+
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -53,26 +54,36 @@ endfunction
 command! RemoveQFItem :call RemoveQFItem()
 autocmd FileType qf map <buffer> dd :RemoveQFItem<cr>
 
-" Leader <a>(ale) prefixed maps
-nmap <Leader>al :ALELint<CR>
-nmap <Leader>ai :ALEInfo<CR>
-nmap <Leader>ad :ALEDetail<CR>
-nmap <Leader>af :ALEFix<CR>
-nmap <Leader>an :ALENext<CR>
-nmap <Leader>ap :ALEPrevious<CR>
-nmap <Leader>ar :ALEResetBuffer<CR>
-
-" Leader <g>(goto) prefixed maps
-nmap <Leader>gt :tab split<CR><C-]>
-nmap <Leader>gd :tab split<CR><Plug>(coc-definition)
-nmap <leader>rf <Plug>(coc-format-selected)
-vmap <leader>rf <Plug>(coc-format-selected)
-
-" Leader one-key maps
+" Messages cleanup
 nmap <silent> <Leader><BS> :echo ''<CR>
 nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
+" Fix syntax highlighting
 nmap <Leader>s :syntax sync fromstart<CR>
+" Workspace files
 nmap <Leader>f :Files<CR>
-nmap <Leader>d :DirFiles<CR>
+" Directory local files
+nmap <Leader>l :DirFiles<CR>
+" Workspace tags
 nmap <Leader>t :Tags<CR>
+" CtrlP
 nmap <Leader>e :CtrlP<CR>
+
+" GoTo
+nmap <Leader>gt :tab split<CR><C-]>
+nmap <Leader>gd :tab split<CR><Plug>(coc-definition)
+
+" Diagonostics
+nmap <leader>dl :CocList diagnostics<CR>
+nmap <leader>di <Plug>(coc-diagnostic-info)<CR>
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+vmap <leader>a <Plug>(coc-codeaction-selected)
+nmap <leader>a <Plug>(coc-codeaction-selected)
+" Remap for do codeAction of current line
+nmap <leader>ac <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf <Plug>(coc-fix-current)
+"
+" Remap for format selected region
+nmap <leader>rf <Plug>(coc-format-selected)
+vmap <leader>rf <Plug>(coc-format-selected)

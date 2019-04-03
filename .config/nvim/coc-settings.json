@@ -5,6 +5,7 @@
     "python.jediEnabled": true,
     "python.analysis.openFilesOnly": true,
     "python.formatting.provider": "yapf",
+    "python.formatting.yapfPath": "/Users/lastdanmer/.local/bin/yapf",
 
     "python.linting.pylintArgs": ["--load-plugins=pylint_django"],
     "python.linting.pylintEnabled": false,
