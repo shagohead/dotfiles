@@ -14,5 +14,14 @@
     "python.linting.flake8Enabled": true,
 
     "python.jediEnabled": true,
-    "python.sortImports.path": "/Users/lastdanmer/.local/bin/isort"
+    "python.sortImports.path": "/Users/lastdanmer/.local/bin/isort",
+
+    "languageserver": {
+        "golang": {
+            "args": [],
+            "command": "gopls",
+            "filetypes": ["go"],
+            "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"]
+        }
+    }
 }
