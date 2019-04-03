@@ -3,17 +3,17 @@ set pastetoggle=<F2>
 let mapleader="\<SPACE>"
 
 " One-key (with or w/o modifier) mappigns
+nmap <C-j> :cn<CR>
+nmap <C-k> :cp<CR>
 nnoremap { gT
 nnoremap } gt
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
 inoremap <silent><expr> <c-x> coc#refresh()
 
-nmap <C-a> :ALENext<CR>
-nmap <C-j> :cn<CR>
-nmap <C-k> :cp<CR>
-
 " Two-key (with or w/o modifier) mappigns
+nmap <silent> [d <Plug>(coc-diagnostic-prev)<CR>
+nmap <silent> ]d <Plug>(coc-diagnostic-next)<CR>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -65,6 +65,8 @@ nmap <Leader>ar :ALEResetBuffer<CR>
 " Leader <g>(goto) prefixed maps
 nmap <Leader>gt :tab split<CR><C-]>
 nmap <Leader>gd :tab split<CR><Plug>(coc-definition)
+nmap <leader>rf <Plug>(coc-format-selected)
+vmap <leader>rf <Plug>(coc-format-selected)
 
 " Leader one-key maps
 nmap <silent> <Leader><BS> :echo ''<CR>

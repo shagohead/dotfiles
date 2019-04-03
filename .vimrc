@@ -36,13 +36,13 @@ Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 call plug#end()
 
 if !has('nvim')
-    set t_Co=256
-    set guicursor+=a:blinkon0
-    "set mouse=nicr
+  set t_Co=256
+  set guicursor+=a:blinkon0
+  "set mouse=nicr
 
-    let &t_SI.="\e[5 q" " insert
-    let &t_SR.="\e[4 q" " replace
-    let &t_EI.="\e[1 q" " normal
+  let &t_SI.="\e[5 q" " insert
+  let &t_SR.="\e[4 q" " replace
+  let &t_EI.="\e[1 q" " normal
 endif
 
 if exists('+termguicolors')

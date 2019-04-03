@@ -1,2 +1,2 @@
-setlocal noexpandtab
+set noexpandtab
 let b:ale_fixers = ['gofmt']
