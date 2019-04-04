@@ -51,8 +51,12 @@ function! RemoveQFItem()
   let qfall = getqflist()
   call remove(qfall, curqfidx)
   call setqflist(qfall, 'r')
-  execute curqfidx + 1 . "cfirst"
-  :copen
+  if len(qfall) > 0
+    execute curqfidx + 1 . "cfirst"
+    :copen
+  else
+    :cclose
+  endif
 endfunction
 command! RemoveQFItem :call RemoveQFItem()
 autocmd FileType qf map <buffer> dd :RemoveQFItem<cr>
