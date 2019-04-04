@@ -1,11 +1,12 @@
+if test -e .config.tokens.fish
+    source .config.tokens.fish
+end
+
 set -x EDITOR nvim
 set -x BROWSER safari
 
 set -x LANG ru_RU.UTF-8
 set -x LC_CTYPE ru_RU.UTF-8
-set -x HOMEBREW_GITHUB_API_TOKEN ff1bc3fc4f864cc4b21c4d98be89d9ff433997ae
-set -x DRONE_SERVER https://drone.yellow.jetstyle.ru
-set -x DRONE_TOKEN Y491ebASfeo2jzFX56kopRc98SN5PVyH
 set -x GOPATH $HOME/go
 set -x LDFLAGS {$LDFLAGS} -L/usr/local/opt/zlib/lib
 set -x CPPFLAGS {$CPPFLAGS} -I/usr/local/opt/zlib/include
