@@ -13,6 +13,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'jeetsukumaran/vim-pythonsense'
+Plug 'HerringtonDarkholme/yats.vim'
 
 " Formatting
 Plug 'godlygeek/tabular'

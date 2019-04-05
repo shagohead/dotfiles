@@ -52,6 +52,10 @@ if status --is-interactive
                 __set_tmux_window_title "django-server"
             case "http-prompt*"
                 __set_tmux_window_title "rest-client"
+            case "nvim *.tmux.conf"
+                __set_tmux_window_title "tmux.conf"
+            case "nvim *.vimrc"
+                __set_tmux_window_title "vimrc"
         end
     end
 

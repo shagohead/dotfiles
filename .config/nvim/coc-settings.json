@@ -5,16 +5,16 @@
     "python.analysis.openFilesOnly": true,
 
     "python.formatting.provider": "yapf",
-    "python.formatting.yapfPath": "yapf",
+    "python.formatting.yapfPath": "/Users/lastdanmer/.local/bin/yapf",
 
     "python.linting.pylintArgs": ["--load-plugins=pylint_django"],
     "python.linting.pylintEnabled": false,
 
-    "python.linting.flake8Path": "flake8",
+    "python.linting.flake8Path": "/Users/lastdanmer/.local/bin/flake8",
     "python.linting.flake8Enabled": true,
 
     "python.jediEnabled": true,
-    "python.sortImports.path": "isort",
+    "python.sortImports.path": "/Users/lastdanmer/.local/bin/isort",
 
     "languageserver": {
         "golang": {
