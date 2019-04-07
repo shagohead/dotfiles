@@ -1,5 +1,5 @@
-if test -e .config.tokens.fish
-    source .config.tokens.fish
+if test -e "$__fish_config_dir/config.tokens.fish"
+    source "$__fish_config_dir/config.tokens.fish"
 end
 
 set -x EDITOR nvim
@@ -32,6 +32,7 @@ abbr -a gd git diff
 abbr -a gs git status
 abbr -a l ls -la
 abbr -a tm tmux -u
+abbr -a vim nvim
 abbr -a run ./manage.py runserver
 
 alias dsa 'docker stop (docker ps -q)'
