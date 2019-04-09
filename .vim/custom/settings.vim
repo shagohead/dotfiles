@@ -27,7 +27,7 @@ set foldmethod=indent
 set wrap
 set list
 set linebreak
-set listchars=tab:▸\ ,trail:X,nbsp:+
+set listchars=tab:▸\ ,trail:↔,nbsp:+
 
 " Search
 set hlsearch

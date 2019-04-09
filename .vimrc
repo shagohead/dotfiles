@@ -1,6 +1,6 @@
 syntax enable
-colorscheme dracula
 set encoding=utf-8
+colorscheme dracula
 filetype plugin indent on
 highlight CursorLine ctermbg=NONE guibg=#303241
 
@@ -23,7 +23,6 @@ Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-commentary'
 
 " Other
-Plug 'w0rp/ale'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -34,6 +33,9 @@ Plug 'vim-airline/vim-airline'
 " With custom options
 Plug 'dracula/vim', {'as': 'dracula'}
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+
+" Icons
+Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
@@ -54,7 +56,15 @@ if exists('+termguicolors')
 endif
 
 " Variables
-let g:airline#extensions#ale#enabled = 1
+let g:airline_powerline_fonts = 1
+" TODO: autorefresh and show / hide if there exists messages or not
+" let g:airline_skip_empty_sections = 1
+let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+let g:webdevicons_enable_ctrlp = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_airline_statusline = 1
+
 let g:python_host_prog  = '/usr/local/Cellar/python@2/2.7.15_1/bin/python'
 let g:python3_host_prog = '/usr/local/Cellar/python/3.7.2_1/bin/python'
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
@@ -73,7 +83,6 @@ command! Delallmarks delmarks A-Z0-9\"[]
 command! -nargs=0 Format :call CocAction('format')
 command! -range FormatSQL <line1>,<line2>!sqlformat --reindent --keywords upper --identifiers lower -
 
-source ~/.vim/custom/ale.vim
 source ~/.vim/custom/ctrlp.vim
 source ~/.vim/custom/fzf.vim
 source ~/.vim/custom/mappings.vim
