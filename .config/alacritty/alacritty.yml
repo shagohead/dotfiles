@@ -489,6 +489,7 @@ key_bindings:
 
   # Clear buffer and history
   - { key: K,        mods: Command, chars: "\x02\x6b"                    }
+  - { key: R,        mods: Command, command: { program: "/usr/local/bin/tmux", args: ["send-keys", "-R"] } }
 
   # New window
   - { key: T,        mods: Command, chars: "\x02\x63"                    }
