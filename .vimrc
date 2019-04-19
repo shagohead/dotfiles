@@ -72,6 +72,7 @@ set number
 set cursorline
 set splitbelow
 set splitright
+set signcolumn=yes
 
 " Indentation
 set tabstop=4

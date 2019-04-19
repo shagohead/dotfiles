@@ -471,31 +471,31 @@ key_bindings:
   #- { key: W,        mods: Command, action: Quit                         }
 
   # Switch tmux windows
-  - { key: LBracket, mods: Command|Shift, chars: "\x02\x70"              }
-  - { key: RBracket, mods: Command|Shift, chars: "\x02\x6e"              }
+  - { key: LBracket, mods: Command|Shift, chars: "\x01\x70"              }
+  - { key: RBracket, mods: Command|Shift, chars: "\x01\x6e"              }
 
   # Switch to last window
-  - { key: P,        mods: Command|Shift, chars: "\x02\x6c"              }
+  - { key: P,        mods: Command|Shift, chars: "\x01\x6c"              }
 
   # List windows
-  - { key: Backslash,mods: Command|Shift, chars: "\x02\x77"              }
+  - { key: Backslash,mods: Command|Shift, chars: "\x01\x77"              }
 
   # Move tmux windows
-  - { key: Left,     mods: Command|Shift, chars: "\x02\x3c"              }
-  - { key: Right,    mods: Command|Shift, chars: "\x02\x3e"              }
+  - { key: Left,     mods: Command|Shift, chars: "\x01\x3c"              }
+  - { key: Right,    mods: Command|Shift, chars: "\x01\x3e"              }
 
   # Enter copy mode
-  - { key: F,        mods: Command, chars: "\x02\x5b"                    }
+  - { key: F,        mods: Command, chars: "\x01\x5b"                    }
 
   # Clear buffer and history
-  - { key: K,        mods: Command, chars: "\x02\x6b"                    }
+  - { key: K,        mods: Command, chars: "\x01\x6b"                    }
   - { key: R,        mods: Command, command: { program: "/usr/local/bin/tmux", args: ["send-keys", "-R"] } }
 
   # New window
-  - { key: T,        mods: Command, chars: "\x02\x63"                    }
+  - { key: T,        mods: Command, chars: "\x01\x63"                    }
 
   # Kill pane (close window)
-  - { key: W,        mods: Command, chars: "\x02\x78"                    }
+  - { key: W,        mods: Command, chars: "\x01\x78"                    }
 
   - { key: Paste,                   action: Paste                        }
   - { key: Copy,                    action: Copy                         }
