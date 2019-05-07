@@ -14,3 +14,7 @@ let g:fzf_action = {
       \ 'ctrl-v': 'vsplit'}
 
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
+
+autocmd! FileType fzf
+autocmd  FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler

@@ -66,6 +66,13 @@ let mapleader="\<SPACE>"
 set mouse=a
 set timeoutlen=2000
 set updatetime=500
+set guicursor=
+      \n-v-c-sm:block,
+      \i-ci-ve:ver25,
+      \r-cr:hor20,
+      \o:hor50,
+      \a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,
+      \sm:block-blinkwait175-blinkoff150-blinkon175
 
 " Windows UI
 set number
@@ -100,11 +107,14 @@ set ignorecase
 set tags=./.ctags,.ctags
 
 " Variables
+let g:airline_theme='dracula'
 let g:airline_powerline_fonts = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
+
+let g:dracular_colorterm = 1
 
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/3.7.2/bin/python'
@@ -243,6 +253,7 @@ autocmd FileType qf map <buffer> dd :RemoveQFItem<cr>
 " Messages cleanup
 nmap <silent> <Leader><BS> :echo ''<CR>
 nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
+"
 " Fix syntax highlighting
 nmap <Leader>s :syntax sync fromstart<CR>
 " Workspace files
@@ -255,8 +266,7 @@ nmap <Leader>t :Tags<CR>
 nmap <Leader>e :CtrlP<CR>
 
 " GoTo
-nmap <Leader>gt :tab split<CR><C-]>
-nmap <Leader>gd :tab split<CR><Plug>(coc-definition)
+nmap <silent> <Leader>gs :tab split<CR>
 
 " Diagonostics
 nmap <leader>dl :CocList diagnostics<CR>
@@ -267,6 +277,10 @@ vmap <leader>a <Plug>(coc-codeaction-selected)
 nmap <leader>a <Plug>(coc-codeaction-selected)
 " Remap for do codeAction of current line
 nmap <leader>ac <Plug>(coc-codeaction)
+
+" QuickFix related mappings
+nmap <silent> <leader>qo :copen<CR>
+nmap <silent> <leader>qc :cclose<CR>
 " Fix autofix problem of current line
 nmap <leader>qf <Plug>(coc-fix-current)
 "

@@ -17,6 +17,7 @@ set -x PATH /usr/local/opt/icu4c/bin $PATH
 set -x PATH /usr/local/opt/gnu-getopt/bin $PATH
 set -x PATH /usr/local/opt/gettext/bin $PATH
 set -x PATH /usr/local/opt/ruby/bin $PATH
+set -x PATH $HOME/.cargo/bin $PATH
 set -x PATH $HOME/.local/bin $PATH
 set -x PATH $HOME/.poetry/bin $PATH
 set -x PATH $GOPATH/bin $PATH

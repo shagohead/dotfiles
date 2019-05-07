@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "coc-css": "^1.0.7",
-    "coc-json": "^1.0.14",
+    "coc-json": "^1.0.15",
     "coc-python": "^1.1.4",
     "coc-syntax": "^1.2.2",
     "coc-tsserver": "^1.1.33"
