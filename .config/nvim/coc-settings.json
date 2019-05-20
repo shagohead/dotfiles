@@ -25,6 +25,10 @@
             "command": "gopls",
             "filetypes": ["go"],
             "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"]
+        },
+        "lua": {
+            "command": "lua-lsp",
+            "filetypes": ["--lua"]
         }
     }
 }

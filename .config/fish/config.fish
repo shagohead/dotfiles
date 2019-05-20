@@ -5,12 +5,14 @@ end
 set -x EDITOR nvim
 set -x BROWSER safari
 
+set -x GOPATH $HOME/go
 set -x LANG ru_RU.UTF-8
 set -x LC_CTYPE ru_RU.UTF-8
-set -x GOPATH $HOME/go
+set -x FZF_DEFAULT_COMMAND 'fd -i -H'
 set -x LDFLAGS {$LDFLAGS} -L/usr/local/opt/zlib/lib
 set -x CPPFLAGS {$CPPFLAGS} -I/usr/local/opt/zlib/include
 set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
+set -x PYTHONBREAKPOINT ipdb.set_trace
 set -x PYENV_ROOT $HOME/.pyenv
 
 set -x PATH /usr/local/opt/icu4c/bin $PATH
@@ -38,6 +40,7 @@ abbr -a run ./manage.py runserver
 
 alias dsa 'docker stop (docker ps -q)'
 alias dps 'docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Status}}"'
+alias ssh 'env TERM=xterm-256color ssh'
 alias top 'top -o cpu'
 
 pyenv init - | source

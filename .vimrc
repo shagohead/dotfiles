@@ -13,6 +13,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 " File types
 Plug 'dag/vim-fish'
 Plug 'chr4/nginx.vim'
+Plug 'cespare/vim-toml'
 Plug 'pangloss/vim-javascript'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'Vimjas/vim-python-pep8-indent'
@@ -64,6 +65,7 @@ let mapleader="\<SPACE>"
 
 " UI behevior
 set mouse=a
+set scrolloff=5
 set timeoutlen=2000
 set updatetime=500
 set guicursor=
@@ -109,12 +111,27 @@ set tags=./.ctags,.ctags
 " Variables
 let g:airline_theme='dracula'
 let g:airline_powerline_fonts = 1
+
+" use error & warning count of diagnostics form coc.nvim
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 
+" create a part for server status.
+function! GetServerStatus()
+  return get(g:, 'coc_status', '')
+endfunction
+call airline#parts#define_function('coc', 'GetServerStatus')
+function! AirlineInit()
+  let g:airline_section_a = airline#section#create(['coc'])
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
+
+" exclude overwrite statusline of list filetype
+let g:airline_exclude_filetypes = ["list"]
+
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 
-let g:dracular_colorterm = 1
+let g:dracula_colorterm = 1
 
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/3.7.2/bin/python'
@@ -122,6 +139,9 @@ let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/3.7.2/bin/python'
 let g:webdevicons_enable_ctrlp = 1
 let g:webdevicons_enable_airline_tabline = 1
 let g:webdevicons_enable_airline_statusline = 1
+
+" ENV
+let $PYTHONPATH = '/Users/lastdanmer/.pyenv/versions/jedi/lib/python3.7/site-packages'
 
 " Conditional settings
 if !has('nvim')
@@ -164,6 +184,7 @@ function! PythonHighlights()
     hi semshiSelected guibg=#990045
 endfunction
 au FileType python call PythonHighlights()
+au! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 
 
@@ -177,6 +198,7 @@ command! Delallmarks delmarks A-Z0-9\"[]
 command! FormatJSON %!python -m json.tool
 command! -nargs=0 Format :call CocAction('format')
 command! -range FormatSQL <line1>,<line2>!sqlformat --reindent --keywords upper --identifiers lower -
+command! SortImports %!isort -
 
 
 
@@ -185,6 +207,10 @@ command! -range FormatSQL <line1>,<line2>!sqlformat --reindent --keywords upper 
 """"""""""""
 
 " One-key (with or w/o modifier) mappigns
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
 nnoremap { gT
 nnoremap } gt
 nnoremap <C-j> <C-W>j
@@ -194,6 +220,7 @@ nnoremap <C-l> <C-W>l
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
 inoremap <silent><expr> <c-x> coc#refresh()
+" tnoremap <Esc> <C-\><C-n>
 
 " Two-key (with or w/o modifier) mappigns
 nmap <silent> [q :cp<CR>
@@ -218,6 +245,7 @@ inoremap <silent><expr> <TAB>
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -260,6 +288,8 @@ nmap <Leader>s :syntax sync fromstart<CR>
 nmap <Leader>f :Files<CR>
 " Directory local files
 nmap <Leader>l :DirFiles<CR>
+" Marks
+nmap <Leader>` :Marks<CR>
 " Workspace tags
 nmap <Leader>t :Tags<CR>
 " CtrlP

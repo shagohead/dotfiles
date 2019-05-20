@@ -1,4 +1,34 @@
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Find
+      \ call fzf#vim#grep('rg
+      \ --column --line-number
+      \ --no-heading --fixed-strings
+      \ --ignore-case --no-ignore
+      \ --hidden --follow
+      \ --glob "!.git/*" --color "always"
+      \ '.shellescape(<q-args>), 1, <bang>0)
+
+function! s:edit_devicon_prepended_file(item)
+  let l:file_path = a:item[4:-1]
+  execute 'silent e' l:file_path
+endfunction
+
+" TODO: add initial path from argument (DirFiles are broken)
+" TODO: fix broken hotkeys
+command! -bang -nargs=? -complete=dir Files
+      \ call fzf#run({
+      \ 'source': $FZF_DEFAULT_COMMAND.' | devicon-lookup',
+      \ 'sink': function('s:edit_devicon_prepended_file'),
+      \ 'down': '~40%'})
+      " \ call fzf#run(fzf#wrap('files', {
+      " \ 'options': '--expect=ctrl-v,ctrl-x,ctrl-l,ctrl-t', 
+      " \ 'source': $FZF_DEFAULT_COMMAND.' | devicon-lookup',
+      " \ 'sink': function('s:edit_devicon_prepended_file'),
+      " \ '_action': {
+      "   \ 'ctrl-v': 'vsplit',
+      "   \ 'ctrl-x': 'split',
+      "   \ 'ctrl-l': function('<SNR>20_build_quickfix_list'),
+      "   \ 'ctrl-t': 'tab split'}
+      " \ }))
 
 function! s:build_quickfix_list(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
