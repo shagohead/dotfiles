@@ -4,6 +4,8 @@
 
     "python.analysis.openFilesOnly": true,
 
+    "python.disableInstallationCheck": true,
+
     "python.formatting.provider": "yapf",
     "python.formatting.yapfPath": "~/.local/bin/yapf",
 
@@ -17,6 +19,7 @@
     "python.linting.mypyEnabled": true,
 
     "python.jediEnabled": true,
+
     "python.sortImports.path": "~/.local/bin/isort",
 
     "languageserver": {
@@ -24,7 +27,7 @@
             "args": [],
             "command": "gopls",
             "filetypes": ["go"],
-            "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"]
+            "rootPatterns": ["go.mod"]
         },
         "lua": {
             "command": "lua-lsp",

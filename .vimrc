@@ -32,8 +32,11 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-unimpaired'
+Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/limelight.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
+Plug 'junegunn/rainbow_parentheses.vim'
 
 " With custom options
 Plug 'dracula/vim', {'as': 'dracula'}
@@ -133,6 +136,8 @@ let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 
 let g:dracula_colorterm = 1
 
+let g:peekaboo_compact = 1
+
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/3.7.2/bin/python'
 
@@ -184,6 +189,12 @@ function! PythonHighlights()
     hi semshiSelected guibg=#990045
 endfunction
 au FileType python call PythonHighlights()
+
+" coc.nvim root_patterns
+au FileType go let b:coc_root_patterns = ['go.mod', 'go.sum']
+au FileType python let b:coc_root_patterns = ['Pipfile', 'pyproject.toml', 'requirements.txt']
+au FileType javascript let b:coc_root_patterns = ['package.json', 'node_modules']
+
 au! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 
@@ -281,23 +292,25 @@ autocmd FileType qf map <buffer> dd :RemoveQFItem<cr>
 " Messages cleanup
 nmap <silent> <Leader><BS> :echo ''<CR>
 nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
-"
-" Fix syntax highlighting
-nmap <Leader>s :syntax sync fromstart<CR>
-" Workspace files
-nmap <Leader>f :Files<CR>
-" Directory local files
-nmap <Leader>l :DirFiles<CR>
-" Marks
-nmap <Leader>` :Marks<CR>
-" Workspace tags
-nmap <Leader>t :Tags<CR>
-" CtrlP
-nmap <Leader>e :CtrlP<CR>
 
-" GoTo
+" One-key popup lists
+nmap <Leader>b :Buffers<CR>
+nmap <Leader>e :CtrlP<CR>
+nmap <Leader>f :Files<CR>
+nmap <Leader>` :Marks<CR>
+nmap <Leader>t :Tags<CR>
+
+" (G)oTo keys
 nmap <silent> <Leader>gs :tab split<CR>
 
+" (V)iew keys
+nmap <silent> <Leader>vl :Limelight!!<CR>
+nmap <silent> <Leader>vr :RainbowParentheses!!<CR>
+nmap <silent> <Leader>vs :syntax sync fromstart<CR>
+
+"
+" Coc-related stuff
+"
 " Diagonostics
 nmap <leader>dl :CocList diagnostics<CR>
 nmap <leader>di <Plug>(coc-diagnostic-info)<CR>

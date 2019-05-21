@@ -5,6 +5,6 @@
     "coc-python": "^1.1.6",
     "coc-syntax": "^1.2.2",
     "coc-tsserver": "^1.2.1",
-    "coc-vimlsp": "^0.0.2"
+    "coc-vimlsp": "^0.1.5"
   }
 }
