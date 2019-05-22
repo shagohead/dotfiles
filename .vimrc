@@ -301,6 +301,7 @@ nmap <Leader>` :Marks<CR>
 nmap <Leader>t :Tags<CR>
 
 " (G)oTo keys
+nmap <silent> <Leader>gn :tabnew<CR>
 nmap <silent> <Leader>gs :tab split<CR>
 
 " (V)iew keys

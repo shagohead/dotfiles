@@ -2,7 +2,7 @@
   "dependencies": {
     "coc-css": "^1.0.7",
     "coc-json": "^1.0.17",
-    "coc-python": "^1.1.6",
+    "coc-python": "^1.1.7",
     "coc-syntax": "^1.2.2",
     "coc-tsserver": "^1.2.1",
     "coc-vimlsp": "^0.1.5"
