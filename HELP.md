@@ -1,63 +1,78 @@
 # Key mappings
 
 ## fish
-`⌃-T` – find a file
+- `⌃-T` – find a file
+- `⌃-R` – search through command history
+- `⌥-C` – cd into sub-directories (recursively searched)
+- `⌥-⇧-C` – cd into sub-directories, including hidden ones
+- `⌃-O` – open a file/dir using default editor ($EDITOR)
+- `⌃-G` – open a file/dir using xdg-open or open command
 
-`⌃-R` – search through command history
-
-`⌥-C` – cd into sub-directories (recursively searched)
-
-`⌥-⇧-C` – cd into sub-directories, including hidden ones
-
-`⌃-O` – open a file/dir using default editor ($EDITOR)
-
-`⌃-G` – open a file/dir using xdg-open or open command
-
+## tmux
+- `⌃-S` - prefix key
+- `⌘-⇧-[` `]` – switch window
+- `⌘-⇧-P` – switch to last window
+- `⌘-⇧-Left` `Right` – move window
+- `⌘-⇧-\` – window list view
+- `⌘-T` – new window
+- `⌘-W` – close window
+- `⌘-F` – copy mode
+- `⌘-K` – (Alacritty) send k (clear)
+- `⌘-R` – send tmux reset command
 
 ## neovim
 Case-sensetive mappings
 
 ### Normal mode
+
 #### One key mappings
 - `{` `}` – switch tab to left / right
-- `Y` – show documentation (coc.nvim)
+- `Y` – show documentation
 
 ##### ..with modifier (⌃ / ⌥)
 - `⌃-h` `j` `k` `l` – switch pane
 
 #### Two key mappings
-- `]` (forward), `[` (backward) switch through:
+- `:h surround.txt` Surrounding. Targets may be: (, ), {, }, [, ], <, >, ", ', <Tick>, t (xml or html tag), punctuation marks, words, sentences, paragraphs. `<SurroundObject>` may be any single characer; if `t` or `<` is used vim prompts HTML/XML tag to insert (if `C-T` is used tag will appear on a new line); if `f`, `F` or `C-F` is used vim prompts a function name to insert. Actions:
+  - `cs<SurroundObject><SurroundObject>` - change surround object
+  - `ys<MotionOrTextObject><SurroundObject>` - wrap motion or text object with surrounding
+  - `yss<SurroundObject>` - surround current line ignoring leading whitespace
+  - `yS<SurroundObject>` `ySS<SurroundObject>` - indent the surrounded text and place it on a line of its own
+  - `ds<SurroundObject>` - delete surround
+  - [visual mode] `S` - wrap selected
+  - [visual mode] `gS` - wrap selected and place on new line
 
-  - `a` - arguments (files); `A` first / last
-  - `b` - buffers; `B` first / last
+- `:h unimpaired.txt`  `]` (forward), `[` (backward) switch through (uppercased letter means first / last items):
+
+  - `a` `A` - arguments (files)
+  - `b` `B` - buffers
   - `c` - SCM changes
-  - `d` - diagnostics list (coc.nvim)
-  - `l` - location list; `L` first / last
-  - `q` - quickfix list; `Q` first / last
-  - `t` - tags; `T` first / last
+  - `d` - diagnostics list
+  - `l` `L` - location list
+  - `q` `Q` - quickfix list
+  - `t` `T` - tags
   - `e` - move line above or below
   - `<Space>` - add new line above or below
-  - `h` - python highlighted name prev / next (semhi)
-  - `H` - python highlighted name first / last (semhi)
-  - `]` – `]]` beginning of the next Python class; `[]` end of the previous Python class (vim-pythonsense)
-  - `[` – `][` end of the current Python class; `[[` beginning of the current Python class (or beginning of the previous Python class if not currently in a class or already at the beginning of a class) (vim-pythonsense)
-  - `m` - beginning of the next Python method or function; beginning of the current Python method or function (or to the beginning of the previous method or function if not currently in a method/function or already at the beginning of a method/function) (vim-pythonsense)
-  - `M` - end of the current Python method or function; end of the previous Python method or function (vim-pythonsense)
+  - `h` `H` - python highlighted name
+  - `]` – `]]` beginning of the next Python class; `[]` end of the previous Python class
+  - `[` – `][` end of the current Python class; `[[` beginning of the current Python class (or beginning of the previous Python class if not currently in a class or already at the beginning of a class)
+  - `m` - beginning of the next Python method or function; beginning of the current Python method or function (or to the beginning of the previous method or function if not currently in a method/function or already at the beginning of a method/function)
+  - `M` - end of the current Python method or function; end of the previous Python method or function
 
 - `g` GoTo:
-  - `d` – definition (coc.nvim)
-  - `y` – type definition (coc.nvim)
-  - `l` – implementations (coc.nvim)
-  - `r` – references (coc.nvim)
+  - `d` – definition
+  - `y` – type definition
+  - `l` – implementations
+  - `r` – references
 
 #### `<Leader>` prefixed mappings
 - `<Delete>` – echo empty message (cleanup message string) 
 - `<Enter>` – cleanup search highlights
-- `<Tick>` - marks (fzf)
-- `b` – buffers (fzf)
-- `e` – MRU files (CtrlP)
-- `f` – files (fzf)
-- `t` - tags (fzf)
+- `<Tick>` - marks
+- `e` – MRU files
+- `b` – buffers
+- `f` – files
+- `t` - tags
 
 - `g` GoTo:
   - `n` - new tab
@@ -68,14 +83,14 @@ Case-sensetive mappings
   - `r` - toggle RainbowParentheses
   - `s` – syncronize syntax
 
-- `d` Diagnostics (coc.nvim):
+- `d` Diagnostics:
   - `l` - list
   - `i` - info
 
 - `q` (Quick)fix:
   - `o` - open quickfix window
   - `c` – close quickfix window
-  - `f` - fix current (coc.nvim)
+  - `f` - fix current
 
 ### Insert mode
 - `⌃-x` - completion-menu
@@ -85,29 +100,9 @@ Case-sensetive mappings
   - `dd` – delete item
 
 ### Text objects
-- `ac` – outer class (vim-pythonsense)
-- `ic` – inner class (vim-pythonsense)
-- `af` – outer function (vim-pythonsense)
-- `if` – inner function (vim-pythonsense)
-- `ad` – outer docstring (vim-pythonsense)
-- `id` – inner docstring (vim-pythonsense)
-
-
-## tmux
-`⌘-⇧-[` `]` – switch window
-
-`⌘-⇧-P` – switch to last window
-
-`⌘-⇧-Left` `Right` – move window
-
-`⌘-⇧-\` – window list view
-
-`⌘-T` – new window
-
-`⌘-W` – close window
-
-`⌘-F` – copy mode
-
-`⌘-K` – (Alacritty) send k (clear)
-
-`⌘-R` – send tmux reset command
+- `ac` – outer class
+- `ic` – inner class
+- `af` – outer function
+- `if` – inner function
+- `ad` – outer docstring
+- `id` – inner docstring

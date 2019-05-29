@@ -1,6 +1,5 @@
 syntax enable
 filetype plugin indent on
-colorscheme dracula
 
 
 
@@ -56,6 +55,8 @@ source ~/.vim/custom/fzf.vim
 """"""""""""
 " SETTINGS "
 """"""""""""
+
+colorscheme dracula
 
 " IO
 set undofile
@@ -222,14 +223,23 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
+
 nnoremap { gT
 nnoremap } gt
+
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
+
+inoremap <C-k> <Up>
+inoremap <C-j> <Down>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
+
 inoremap <silent><expr> <c-x> coc#refresh()
 " tnoremap <Esc> <C-\><C-n>
 
