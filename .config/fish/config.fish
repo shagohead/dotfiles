@@ -9,8 +9,9 @@ set -x GOPATH $HOME/go
 set -x LANG ru_RU.UTF-8
 set -x LC_CTYPE ru_RU.UTF-8
 set -x FZF_DEFAULT_COMMAND 'fd -i -H'
-set -x LDFLAGS {$LDFLAGS} -L/usr/local/opt/zlib/lib
+set -x CFLAGS {$CFLAGS} -I(xcrun --show-sdk-path)/usr/include/
 set -x CPPFLAGS {$CPPFLAGS} -I/usr/local/opt/zlib/include
+set -x LDFLAGS {$LDFLAGS} -L/usr/local/opt/zlib/lib
 set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
 set -x PYTHONBREAKPOINT ipdb.set_trace
 set -x PYENV_ROOT $HOME/.pyenv

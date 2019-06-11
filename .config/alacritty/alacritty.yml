@@ -140,12 +140,15 @@ key_bindings:
   # Enter copy mode
   - { key: F,        mods: Command, chars: "\x13\x5b"                    }
 
-  # Clear buffer and history
+  # Clear buffer and history (k)
   - { key: K,        mods: Command, chars: "\x13\x6b"                    }
   - { key: R,        mods: Command, command: { program: "/usr/local/bin/tmux", args: ["send-keys", "-R"] } }
 
-  # New window
+  # New window (c)
   - { key: T,        mods: Command, chars: "\x13\x63"                    }
+
+  # New session (S)
+  - { key: N,        mods: Command, chars: "\x13\x53"              }
 
   # Kill pane (close window)
   - { key: W,        mods: Command, chars: "\x13\x78"                    }

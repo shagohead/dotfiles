@@ -98,6 +98,18 @@ Case-sensetive mappings
 ### Special-cases (in menu shortcuts)
 - quickfix
   - `dd` – delete item
+- crtl.p
+  - `⌃-f/b` - cycle between modes
+  - `⌃-d` - filename mode or full path
+  - `⌃-r` - regexp mode
+  - `⌃-t/v/x` - open in new tab or split
+  - `⌃-n/p` - cycle prompt history
+  - `⌃-y` - create new file and its parents dirs
+  - `⌃-z` - mark/unmark files to open with `⌃-o`
+- commentary.vim
+  - `gcc` - comment line
+  - `gc` - comment target of motion (like `gcap`)
+  - [visual mode] `gc` - comment selected
 
 ### Text objects
 - `ac` – outer class
@@ -106,3 +118,6 @@ Case-sensetive mappings
 - `if` – inner function
 - `ad` – outer docstring
 - `id` – inner docstring
+
+# VIM Functions
+`Commentary` - comment (like `:7,17Commentary` or `:g/TODO/Commentary`)
