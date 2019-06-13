@@ -112,12 +112,13 @@ Case-sensetive mappings
   - [visual mode] `gc` - comment selected
 
 ### Text objects
-- `ac` – outer class
-- `ic` – inner class
-- `af` – outer function
-- `if` – inner function
-- `ad` – outer docstring
-- `id` – inner docstring
+- pair of braces: `(`, `{`(`B`), `[`, `<`, or tag: `t`
+- pair of quotes: `'`, `"`, ````, `q` (any quote)
+- separators: `, . ; : + - = ~ _ * # / | \ & $`
+- arguments: `a`
+- any of blocks above: `b`
+
+Seeking: `l`, `n` for last and next object.
 
 # VIM Functions
 `Commentary` - comment (like `:7,17Commentary` or `:g/TODO/Commentary`)

@@ -30,6 +30,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/limelight.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
+Plug 'michaeljsmith/vim-indent-object'
 Plug 'junegunn/rainbow_parentheses.vim'
 
 " With custom options
@@ -105,7 +106,9 @@ set ignorecase
 " Tags
 set tags=./.ctags,.ctags
 
-" Variables
+" }}}
+" Variables {{{
+
 let g:airline_theme='dracula'
 let g:airline_powerline_fonts = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
@@ -119,12 +122,14 @@ let g:webdevicons_enable_airline_statusline = 1
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 let g:dracula_colorterm = 1
 let g:peekaboo_compact = 1
+let g:semshi#update_delay_factor = 0.001
 
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/3.7.2/bin/python'
 let $PYTHONPATH = '/Users/lastdanmer/.pyenv/versions/jedi/lib/python3.7/site-packages'
 
-" Conditional settings
+" }}}
+" Conditional options {{{
 if !has('nvim')
   set t_Co=256
   set guicursor+=a:blinkon0
@@ -149,7 +154,9 @@ if exists('+termguicolors')
   set termguicolors
 endif
 
-" Highlights
+" }}}
+" Highlights {{{
+
 hi CursorLine ctermbg=NONE guibg=#303241
 
 " }}}
@@ -162,6 +169,7 @@ inorea <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 " Autocommands {{{
 
 au BufNewFile,BufRead flake8 setf dosini
+au ColorScheme * call PythonHighlights()
 au FileType python call PythonHighlights()
 au FileType qf map <buffer> dd :RemoveQFItem<cr>
 au User AirlineAfterInit call AirlineInit()
