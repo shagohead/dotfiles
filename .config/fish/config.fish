@@ -3,7 +3,6 @@ if test -e "$__fish_config_dir/config.tokens.fish"
 end
 
 set -x EDITOR nvim
-set -x BROWSER safari
 
 set -x GOPATH $HOME/go
 set -x LANG ru_RU.UTF-8
@@ -16,14 +15,27 @@ set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
 set -x PYTHONBREAKPOINT ipdb.set_trace
 set -x PYENV_ROOT $HOME/.pyenv
 
-set -x PATH /usr/local/opt/icu4c/bin $PATH
-set -x PATH /usr/local/opt/gnu-getopt/bin $PATH
-set -x PATH /usr/local/opt/gettext/bin $PATH
-set -x PATH /usr/local/opt/ruby/bin $PATH
-set -x PATH $HOME/.cargo/bin $PATH
-set -x PATH $HOME/.local/bin $PATH
-set -x PATH $HOME/.poetry/bin $PATH
-set -x PATH $GOPATH/bin $PATH
+pyenv init - | source
+
+set _PATH_PREPEND \
+    /usr/local/opt/icu4c/bin \
+    /usr/local/opt/gnu-getopt/bin \
+    /usr/local/opt/gettext/bin \
+    /usr/local/opt/ruby/bin \
+    $HOME/.cargo/bin \
+    $HOME/.local/bin \
+    $HOME/.poetry/bin \
+    $GOPATH/bin \
+    /Users/lastdanmer/.pyenv/shims
+
+if test -n $VIRTUAL_ENV
+    set -gx _PATH_PREPEND $_PATH_PREPEND $VIRTUAL_ENV/bin
+end
+
+for item in $_PATH_PREPEND
+    set -gx PATH (string match -v $item $PATH)
+    set -gx PATH $item $PATH
+end
 
 abbr -a dc docker-compose
 abbr -a dex docker exec -it
@@ -43,8 +55,7 @@ alias dsa 'docker stop (docker ps -q)'
 alias dps 'docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Status}}"'
 alias ssh 'env TERM=xterm-256color ssh'
 alias top 'top -o cpu'
-
-pyenv init - | source
+alias tldr 'tldr -t ocean'
 
 if status --is-interactive
     function __set_tmux_window_title -a title

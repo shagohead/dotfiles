@@ -148,7 +148,7 @@ key_bindings:
   - { key: T,        mods: Command, chars: "\x13\x63"                    }
 
   # New session (S)
-  - { key: N,        mods: Command, chars: "\x13\x53"              }
+  - { key: N,        mods: Command, chars: "\x13\x53"                    }
 
   # Kill pane (close window)
   - { key: W,        mods: Command, chars: "\x13\x78"                    }

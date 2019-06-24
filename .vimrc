@@ -168,17 +168,19 @@ inorea <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 " }}}
 " Autocommands {{{
 
-au BufNewFile,BufRead flake8 setf dosini
-au ColorScheme * call PythonHighlights()
-au FileType python call PythonHighlights()
-au FileType qf map <buffer> dd :RemoveQFItem<cr>
-au User AirlineAfterInit call AirlineInit()
-au! CompleteDone * if pumvisible() == 0 | pclose | endif
+augroup VimRc
+  au BufNewFile,BufRead flake8 setf dosini
+  au ColorScheme * call PythonHighlights()
+  au FileType python call PythonHighlights()
+  au FileType qf map <buffer> dd :RemoveQFItem<cr>
+  au User AirlineAfterInit call AirlineInit()
+  au! CompleteDone * if pumvisible() == 0 | pclose | endif
 
-" coc.nvim root_patterns
-au FileType go let b:coc_root_patterns = ['go.mod', 'go.sum']
-au FileType python let b:coc_root_patterns = ['Pipfile', 'pyproject.toml', 'requirements.txt']
-au FileType javascript let b:coc_root_patterns = ['package.json', 'node_modules']
+  " coc.nvim root_patterns
+  au FileType go let b:coc_root_patterns = ['go.mod', 'go.sum']
+  au FileType python let b:coc_root_patterns = ['Pipfile', 'pyproject.toml', 'requirements.txt']
+  au FileType javascript let b:coc_root_patterns = ['package.json', 'node_modules']
+augroup END
 
 " }}}
 " Commands {{{
@@ -256,6 +258,8 @@ nmap <silent> <Leader>vl :Limelight!!<CR>
 nmap <silent> <Leader>vn :call ToggleNumber()<CR>
 nmap <silent> <Leader>vr :RainbowParentheses!!<CR>
 nmap <silent> <Leader>vs :syntax sync fromstart<CR>
+
+nmap <silent> <Leader>rs :SortImports<CR>
 
 "
 " Coc-related stuff
