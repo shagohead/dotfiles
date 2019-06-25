@@ -6,8 +6,10 @@
 
     "python.disableInstallationCheck": true,
 
-    "python.formatting.provider": "yapf",
-    "python.formatting.yapfPath": "~/.local/bin/yapf",
+    "python.formatting.provider": "black",
+
+    "python.formatting.blackPath": "~/.local/bin/black",
+    "python.formatting.blackArgs": ["-l", "120"],
 
     "python.linting.pylintArgs": ["--load-plugins=pylint_django"],
     "python.linting.pylintEnabled": false,
@@ -21,6 +23,8 @@
     "python.jediEnabled": true,
 
     "python.sortImports.path": "~/.local/bin/isort",
+
+    "python.workspaceSymbols.ctagsPath": "ctags.sh",
 
     "languageserver": {
         "golang": {

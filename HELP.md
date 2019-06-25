@@ -65,6 +65,8 @@ Case-sensetive mappings
   - `l` – implementations
   - `r` – references
 
+  - `n` – definition at new tab
+
 #### `<Leader>` prefixed mappings
 - `<Delete>` – echo empty message (cleanup message string) 
 - `<Enter>` – cleanup search highlights

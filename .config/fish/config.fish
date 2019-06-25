@@ -8,10 +8,13 @@ set -x GOPATH $HOME/go
 set -x LANG ru_RU.UTF-8
 set -x LC_CTYPE ru_RU.UTF-8
 set -x FZF_DEFAULT_COMMAND 'fd -i -H'
+
+# TODO: append only if there is no value like with _PATH_PREPEND
 set -x CFLAGS {$CFLAGS} -I(xcrun --show-sdk-path)/usr/include/
 set -x CPPFLAGS {$CPPFLAGS} -I/usr/local/opt/zlib/include
 set -x LDFLAGS {$LDFLAGS} -L/usr/local/opt/zlib/lib
 set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
+
 set -x PYTHONBREAKPOINT ipdb.set_trace
 set -x PYENV_ROOT $HOME/.pyenv
 
@@ -28,11 +31,11 @@ set _PATH_PREPEND \
     $GOPATH/bin \
     /Users/lastdanmer/.pyenv/shims
 
-if test -n $VIRTUAL_ENV
+if test -n $VIRTUAL_ENV # append virtual env /bin path
     set -gx _PATH_PREPEND $_PATH_PREPEND $VIRTUAL_ENV/bin
 end
 
-for item in $_PATH_PREPEND
+for item in $_PATH_PREPEND # (re) prepend PATH
     set -gx PATH (string match -v $item $PATH)
     set -gx PATH $item $PATH
 end
@@ -58,6 +61,10 @@ alias top 'top -o cpu'
 alias tldr 'tldr -t ocean'
 
 if status --is-interactive
+    if test \( "$POETRY_ACTIVE" = "1" \) -a \( -f .env \)
+        posix_source # source .env on poetry shell activate
+    end
+
     function __set_tmux_window_title -a title
         tmux rename-window $title
         set -g tmux_window_title $title

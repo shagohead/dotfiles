@@ -53,7 +53,9 @@ colorscheme dracula
 
 " IO
 set undofile
+set nobackup
 set noswapfile
+set nowritebackup
 set encoding=utf-8
 
 " Mappings
@@ -63,6 +65,7 @@ let mapleader="\<SPACE>"
 " UI behevior
 set mouse=a
 set scrolloff=5
+set shortmess+=c
 set timeoutlen=2000
 set updatetime=500
 set guicursor=
@@ -170,10 +173,16 @@ inorea <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 
 augroup VimRc
   au BufNewFile,BufRead flake8 setf dosini
+
   au ColorScheme * call PythonHighlights()
+
   au FileType python call PythonHighlights()
-  au FileType qf map <buffer> dd :RemoveQFItem<cr>
+  au FileType python call coc#config('python.pythonPath', systemlist('which python')[0])
+  au FileType qf map <buffer> dd :RemoveQFItem<CR>
+
   au User AirlineAfterInit call AirlineInit()
+	au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
   au! CompleteDone * if pumvisible() == 0 | pclose | endif
 
   " coc.nvim root_patterns
@@ -199,96 +208,89 @@ command! SortImports %!isort -
 " }}}
 " Mappings {{{
 
+" General one-key mappings
 noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
-
 nnoremap { gT
 nnoremap } gt
-
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
-
 inoremap <C-k> <Up>
 inoremap <C-j> <Down>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
-
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
-
 nnoremap <silent>Y :call <SID>show_documentation()<CR>
-inoremap <silent><expr> <c-x> coc#refresh()
+inoremap <silent><expr> <C-x> coc#refresh()
+inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
 " tnoremap <Esc> <C-\><C-n>
 
+" [] Brackets movings
 nmap <silent> [q :cp<CR>
 nmap <silent> ]q :cn<CR>
-
 nmap <silent> [d <Plug>(coc-diagnostic-prev)<CR>
 nmap <silent> ]d <Plug>(coc-diagnostic-next)<CR>
 
-nmap <silent> gd <Plug>(coc-definition)
+" [G]oTo's
+nmap <silent> gd :call CocActionAsync("jumpDefinition")<CR>
+nmap <silent> gn :call CocActionAsync("jumpDefinition", "tabe")<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gl <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Tab & S-Tab for completion menu navigation
-inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-inoremap <expr><cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
+inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 " Messages cleanup
 nmap <silent> <Leader><BS> :echo ''<CR>
 nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 
+" <Leader> mappings
+" General lists
 nmap <Leader>b :Buffers<CR>
 nmap <Leader>e :CtrlP<CR>
 nmap <Leader>f :Files<CR>
 nmap <Leader>` :Marks<CR>
 nmap <Leader>t :Tags<CR>
 
-nmap <silent> <Leader>gn :tabnew<CR>
-nmap <silent> <Leader>gs :tab split<CR>
+" [T]ab actions
+nmap <silent> <Leader>tn :tabnew<CR>
+nmap <silent> <Leader>ts :tab split<CR>
 
+" [V]isuals (views) & messages
 nmap <silent> <Leader>vg :GitGutter<CR>
 nmap <silent> <Leader>vl :Limelight!!<CR>
 nmap <silent> <Leader>vn :call ToggleNumber()<CR>
 nmap <silent> <Leader>vr :RainbowParentheses!!<CR>
-nmap <silent> <Leader>vs :syntax sync fromstart<CR>
+" nmap <silent> <Leader>vs :syntax sync fromstart<CR>
+nmap <Leader>vs :call CocActionAsync('showSignatureHelp')<CR>
 
+" [R]efactorings & reformats
 nmap <silent> <Leader>rs :SortImports<CR>
+nmap <leader>rf <Plug>(coc-format-selected)
+vmap <leader>rf <Plug>(coc-format-selected)
 
-"
-" Coc-related stuff
-"
-" Diagonostics
+" [D]iagonostics
 nmap <leader>dl :CocList diagnostics<CR>
 nmap <leader>di <Plug>(coc-diagnostic-info)<CR>
 
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-vmap <leader>a <Plug>(coc-codeaction-selected)
-nmap <leader>a <Plug>(coc-codeaction-selected)
-" Remap for do codeAction of current line
-nmap <leader>ac <Plug>(coc-codeaction)
-
-" QuickFix related mappings
+" [Q]uickFix related mappings
 nmap <silent> <leader>qo :copen<CR>
 nmap <silent> <leader>qc :cclose<CR>
-" Fix autofix problem of current line
 nmap <leader>qf <Plug>(coc-fix-current)
-"
-" Remap for format selected region
-nmap <leader>rf <Plug>(coc-format-selected)
-vmap <leader>rf <Plug>(coc-format-selected)
 
 " }}}
 " Functions {{{
 
 function! s:show_documentation()
-  if &filetype == 'vim'
+  if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
   else
     call CocAction('doHover')
