@@ -9,7 +9,7 @@
     "python.formatting.provider": "black",
 
     "python.formatting.blackPath": "~/.local/bin/black",
-    "python.formatting.blackArgs": ["-l", "120"],
+    "python.formatting.blackArgs": ["-l", "120", "--skip-string-normalization"],
 
     "python.linting.pylintArgs": ["--load-plugins=pylint_django"],
     "python.linting.pylintEnabled": false,

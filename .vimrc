@@ -228,6 +228,8 @@ vnoremap <C-p> "0p
 nnoremap <silent>Y :call <SID>show_documentation()<CR>
 inoremap <silent><expr> <C-x> coc#refresh()
 inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
+noremap <C-w>e <C-W>z
+noremap <C-w><C-e> <C-W>z
 " tnoremap <Esc> <C-\><C-n>
 
 " [] Brackets movings
@@ -237,7 +239,7 @@ nmap <silent> [d <Plug>(coc-diagnostic-prev)<CR>
 nmap <silent> ]d <Plug>(coc-diagnostic-next)<CR>
 
 " [G]oTo's
-nmap <silent> gd :call CocActionAsync("jumpDefinition")<CR>
+nmap <silent> gd :call CocActionAsync("jumpDefinition", "drop")<CR>
 nmap <silent> gn :call CocActionAsync("jumpDefinition", "tabe")<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gl <Plug>(coc-implementation)
@@ -254,37 +256,38 @@ nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 
 " <Leader> mappings
 " General lists
-nmap <Leader>b :Buffers<CR>
 nmap <Leader>e :CtrlP<CR>
 nmap <Leader>f :Files<CR>
 nmap <Leader>` :Marks<CR>
-nmap <Leader>t :Tags<CR>
 
-" [T]ab actions
-nmap <silent> <Leader>tn :tabnew<CR>
-nmap <silent> <Leader>ts :tab split<CR>
-
-" [V]isuals (views) & messages
-nmap <silent> <Leader>vg :GitGutter<CR>
-nmap <silent> <Leader>vl :Limelight!!<CR>
-nmap <silent> <Leader>vn :call ToggleNumber()<CR>
-nmap <silent> <Leader>vr :RainbowParentheses!!<CR>
-" nmap <silent> <Leader>vs :syntax sync fromstart<CR>
-nmap <Leader>vs :call CocActionAsync('showSignatureHelp')<CR>
+" [L]lists (that can be closed with Esc)
+nmap <Leader>ld :CocList diagnostics<CR>
+nmap <Leader>lb :Buffers<CR>
+nmap <Leader>lh :History<CR>
+nmap <Leader>lm :Maps<CR>
+nmap <Leader>lq :call ToggleQuickFix()<CR>
+nmap <Leader>lt :Tags<CR>
 
 " [R]efactorings & reformats
-nmap <silent> <Leader>rs :SortImports<CR>
-nmap <leader>rf <Plug>(coc-format-selected)
-vmap <leader>rf <Plug>(coc-format-selected)
+nmap <Leader>rs :SortImports<CR>
+nmap <Leader>rf <Plug>(coc-fix-current)
+nmap <Leader>rr :Format<CR>
+nmap <Leader>rv <Plug>(coc-format-selected)
+vmap <Leader>rv <Plug>(coc-format-selected)
 
-" [D]iagonostics
-nmap <leader>dl :CocList diagnostics<CR>
-nmap <leader>di <Plug>(coc-diagnostic-info)<CR>
+" [V]iews
+nmap <Leader>vd <Plug>(coc-diagnostic-info)
+nmap <Leader>vg :GitGutter<CR>
+nmap <Leader>vl :Limelight!!<CR>
+nmap <Leader>vn :call ToggleNumber()<CR>
+nmap <Leader>vr :RainbowParentheses!!<CR>
+nmap <Leader>vs :call CocActionAsync('showSignatureHelp')<CR>
 
-" [Q]uickFix related mappings
-nmap <silent> <leader>qo :copen<CR>
-nmap <silent> <leader>qc :cclose<CR>
-nmap <leader>qf <Plug>(coc-fix-current)
+" [W]indows (and tabs)
+nmap <silent> <Leader>wh :split<CR>
+nmap <silent> <Leader>wn :tabnew<CR>
+nmap <silent> <Leader>ws :tab split<CR>
+nmap <silent> <Leader>wv :vsplit<CR>
 
 " }}}
 " Functions {{{
@@ -335,6 +338,14 @@ function! ToggleNumber()
     set number
   else
     set relativenumber
+  endif
+endfunction
+
+function! ToggleQuickFix()
+  if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist')) > 0
+    :cclose
+  else
+    :copen
   endif
 endfunction
 

@@ -4,7 +4,7 @@
     "coc-json": "^1.2.2",
     "coc-python": "^1.2.1",
     "coc-syntax": "^1.2.3",
-    "coc-tsserver": "^1.3.10",
-    "coc-vimlsp": "^0.1.11"
+    "coc-tsserver": ">=1.3.12",
+    "coc-vimlsp": ">=0.1.12"
   }
 }

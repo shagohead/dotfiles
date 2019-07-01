@@ -18,6 +18,8 @@ set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
 set -x PYTHONBREAKPOINT ipdb.set_trace
 set -x PYENV_ROOT $HOME/.pyenv
 
+set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}"
+
 pyenv init - | source
 
 set _PATH_PREPEND \

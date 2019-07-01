@@ -73,10 +73,16 @@ Case-sensetive mappings
 - `<Tick>` - marks
 - `e` – MRU files
 - `b` – buffers
+- `w` – history
 - `f` – files
 - `t` - tags
 
-- `g` GoTo:
+- `h` git hunk:
+  - `p` - preview
+  - `s` - stage
+  - `u` - undo
+
+- `t` Tab:
   - `n` - new tab
   - `s` - tab split
 
@@ -84,6 +90,10 @@ Case-sensetive mappings
   - `l` - toggle Limelight
   - `r` - toggle RainbowParentheses
   - `s` – syncronize syntax
+
+- `r` Refactorings & reformats:
+  - `s` - sort python imports
+  - `f` - format selected
 
 - `d` Diagnostics:
   - `l` - list
@@ -119,6 +129,7 @@ Case-sensetive mappings
 - separators: `, . ; : + - = ~ _ * # / | \ & $`
 - arguments: `a`
 - any of blocks above: `b`
+- git changes: `c`
 
 Seeking: `l`, `n` for last and next object.
 
