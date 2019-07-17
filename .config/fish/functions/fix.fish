@@ -1,4 +1,4 @@
-# Defined in /var/folders/gg/s159wbtx1014w775zwkbdx4r0000gn/T//fish.tiKqtu/fix.fish @ line 2
+# Defined in /var/folders/gg/s159wbtx1014w775zwkbdx4r0000gn/T//fish.JTc2Yf/fix.fish @ line 2
 function fix
 	function colored_echo
         set_color $argv[1]
@@ -20,4 +20,6 @@ function fix
     if test $status -eq 0
         colored_echo green "Done"
     end
+
+    functions -e colored_echo
 end

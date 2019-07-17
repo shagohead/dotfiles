@@ -18,7 +18,7 @@ command! -bang -nargs=? -complete=dir Files
       \ call fzf#run({
       \ 'source': $FZF_DEFAULT_COMMAND.' | devicon-lookup',
       \ 'sink': function('s:edit_devicon_prepended_file'),
-      \ 'down': '~40%'})
+      \ 'window': '13new'})
       " \ call fzf#run(fzf#wrap('files', {
       " \ 'options': '--expect=ctrl-v,ctrl-x,ctrl-l,ctrl-t', 
       " \ 'source': $FZF_DEFAULT_COMMAND.' | devicon-lookup',
@@ -37,6 +37,7 @@ function! s:build_quickfix_list(lines)
 endfunction
 
 let g:fzf_tags_command = 'ctags.sh'
+let g:fzf_layout = {'window': '13new'}
 let g:fzf_action = {
       \ 'ctrl-l': function('s:build_quickfix_list'),
       \ 'ctrl-t': 'tab split',

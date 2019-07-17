@@ -1,4 +1,4 @@
-# Defined in /var/folders/gg/s159wbtx1014w775zwkbdx4r0000gn/T//fish.HMN1lA/update_all.fish @ line 2
+# Defined in /var/folders/gg/s159wbtx1014w775zwkbdx4r0000gn/T//fish.aV5TJR/update_all.fish @ line 2
 function update_all --description 'Update all packages'
 	function colored_echo
         set_color green
@@ -19,6 +19,9 @@ function update_all --description 'Update all packages'
 
     colored_echo "Updating global npm packages "
     npm -g update
+
+    colored_echo "Updating go packages "
+    go get -u github.com/rakyll/hey golang.org/x/lint/golint golang.org/x/tools/cmd/gopls
 
     functions -e colored_echo
 end

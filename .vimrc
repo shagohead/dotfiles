@@ -230,7 +230,6 @@ inoremap <silent><expr> <C-x> coc#refresh()
 inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
 noremap <C-w>e <C-W>z
 noremap <C-w><C-e> <C-W>z
-" tnoremap <Esc> <C-\><C-n>
 
 " [] Brackets movings
 nmap <silent> [q :cp<CR>
@@ -239,11 +238,17 @@ nmap <silent> [d <Plug>(coc-diagnostic-prev)<CR>
 nmap <silent> ]d <Plug>(coc-diagnostic-next)<CR>
 
 " [G]oTo's
+nmap <silent> ge :call CocActionAsync("jumpDefinition", "edit")<CR>
 nmap <silent> gd :call CocActionAsync("jumpDefinition", "drop")<CR>
 nmap <silent> gn :call CocActionAsync("jumpDefinition", "tabe")<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gl <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+" " Select ranges with <Tab> (by coc.nvim)
+" nmap <silent> <Tab> <Plug>(coc-range-select)
+" xmap <silent> <Tab> <Plug>(coc-range-select)
+" xmap <silent> <S-Tab> <Plug>(coc-range-select-backword)
 
 " Tab & S-Tab for completion menu navigation
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
@@ -271,6 +276,7 @@ nmap <Leader>lt :Tags<CR>
 " [R]efactorings & reformats
 nmap <Leader>rs :SortImports<CR>
 nmap <Leader>rf <Plug>(coc-fix-current)
+nmap <Leader>rn <Plug>(coc-rename)
 nmap <Leader>rr :Format<CR>
 nmap <Leader>rv <Plug>(coc-format-selected)
 vmap <Leader>rv <Plug>(coc-format-selected)
@@ -285,7 +291,7 @@ nmap <Leader>vs :call CocActionAsync('showSignatureHelp')<CR>
 
 " [W]indows (and tabs)
 nmap <silent> <Leader>wh :split<CR>
-nmap <silent> <Leader>wn :tabnew<CR>
+nmap <silent> <Leader>wt :tabnew<CR>
 nmap <silent> <Leader>ws :tab split<CR>
 nmap <silent> <Leader>wv :vsplit<CR>
 
