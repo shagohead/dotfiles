@@ -95,7 +95,7 @@ set foldmethod=indent
 set foldlevelstart=5
 
 " Text
-set wrap
+set nowrap
 set list
 set linebreak
 set listchars=tab:▸\ ,trail:↔,nbsp:+
@@ -124,7 +124,7 @@ let g:webdevicons_enable_airline_statusline = 1
 
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 let g:dracula_colorterm = 1
-let g:peekaboo_compact = 1
+let g:peekaboo_compact = 0
 let g:semshi#update_delay_factor = 0.001
 
 let g:python_host_prog  = '/usr/local/bin/python2'
