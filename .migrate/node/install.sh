@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+# TODO: install node & yarn & nvm
 npm -g install tldr
 
 # /usr/local/lib
