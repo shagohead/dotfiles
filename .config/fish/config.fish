@@ -42,6 +42,8 @@ for item in $_PATH_PREPEND # (re) prepend PATH
     set -gx PATH $item $PATH
 end
 
+set -g pure_threshold_command_duration 2
+
 abbr -a dc docker-compose
 abbr -a dex docker exec -it
 abbr -a dig dig +short

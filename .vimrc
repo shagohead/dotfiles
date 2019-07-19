@@ -124,6 +124,7 @@ let g:webdevicons_enable_airline_statusline = 1
 
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 let g:dracula_colorterm = 1
+let g:gitgutter_enabled = 0
 let g:peekaboo_compact = 0
 let g:semshi#update_delay_factor = 0.001
 
@@ -283,7 +284,7 @@ vmap <Leader>rv <Plug>(coc-format-selected)
 
 " [V]iews
 nmap <Leader>vd <Plug>(coc-diagnostic-info)
-nmap <Leader>vg :GitGutter<CR>
+nmap <Leader>vg :GitGutterToggle<CR>
 nmap <Leader>vl :Limelight!!<CR>
 nmap <Leader>vn :call ToggleNumber()<CR>
 nmap <Leader>vr :RainbowParentheses!!<CR>
