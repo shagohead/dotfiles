@@ -6,40 +6,37 @@ filetype plugin indent on
 call plug#begin('~/.local/share/nvim/plugged')
 
 " File types
-Plug 'dag/vim-fish'
-Plug 'chr4/nginx.vim'
 Plug 'cespare/vim-toml'
-Plug 'pangloss/vim-javascript'
+Plug 'chr4/nginx.vim'
+Plug 'dag/vim-fish'
 Plug 'Glench/Vim-Jinja2-Syntax'
-Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'HerringtonDarkholme/yats.vim'
-
-" Formatting
-Plug 'godlygeek/tabular'
-Plug 'wellle/targets.vim'
-Plug 'tpope/vim-surround'
-Plug 'Yggdroot/indentLine'
-Plug 'tpope/vim-commentary'
+Plug 'pangloss/vim-javascript'
+Plug 'Vimjas/vim-python-pep8-indent'
 
 " Other
 Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tpope/vim-unimpaired'
-Plug 'junegunn/vim-peekaboo'
-Plug 'junegunn/limelight.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'vim-airline/vim-airline'
-Plug 'michaeljsmith/vim-indent-object'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'chriskempson/base16-vim'
+Plug 'dominikduda/vim_current_word'
+Plug 'godlygeek/tabular'
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/limelight.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'junegunn/vim-peekaboo'
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'wellle/targets.vim'
+Plug 'Yggdroot/indentLine'
 
 " With custom options
-Plug 'dracula/vim', {'as': 'dracula'}
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-
-" Icons
-Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
@@ -49,7 +46,10 @@ source ~/.vim/custom/fzf.vim
 " }}}
 " Settings {{{
 
-colorscheme dracula
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
 
 " IO
 set undofile
@@ -112,24 +112,23 @@ set tags=./.ctags,.ctags
 " }}}
 " Variables {{{
 
-let g:airline_theme='dracula'
 let g:airline_powerline_fonts = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 let g:airline_exclude_filetypes = ["list"]
-
-let g:webdevicons_enable_ctrlp = 1
-let g:webdevicons_enable_airline_tabline = 1
-let g:webdevicons_enable_airline_statusline = 1
-
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 let g:dracula_colorterm = 1
 let g:gitgutter_enabled = 0
 let g:peekaboo_compact = 0
-let g:semshi#update_delay_factor = 0.001
-
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/3.7.2/bin/python'
+let g:vim_current_word#delay_highlight = 0
+let g:vim_current_word#highlight_current_word = 1
+let g:vim_current_word#highlight_only_in_focused_window = 1
+let g:webdevicons_enable_ctrlp = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_airline_statusline = 1
+
 let $PYTHONPATH = '/Users/lastdanmer/.pyenv/versions/jedi/lib/python3.7/site-packages'
 
 " }}}
@@ -161,7 +160,7 @@ endif
 " }}}
 " Highlights {{{
 
-hi CursorLine ctermbg=NONE guibg=#303241
+hi CurrentWord gui=undercurl
 
 " }}}
 " Abbreviations {{{
@@ -175,16 +174,13 @@ inorea <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 augroup VimRc
   au BufNewFile,BufRead flake8 setf dosini
 
-  au ColorScheme * call PythonHighlights()
+  au! CompleteDone * if pumvisible() == 0 | pclose | endif
 
-  au FileType python call PythonHighlights()
   au FileType python call coc#config('python.pythonPath', systemlist('which python')[0])
   au FileType qf map <buffer> dd :RemoveQFItem<CR>
 
   au User AirlineAfterInit call AirlineInit()
 	au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-  au! CompleteDone * if pumvisible() == 0 | pclose | endif
 
   " coc.nvim root_patterns
   au FileType go let b:coc_root_patterns = ['go.mod', 'go.sum']
@@ -203,7 +199,6 @@ command! FormatJSON %!python -m json.tool
 command! -nargs=0 Format :call CocAction('format')
 command! -range FormatSQL <line1>,<line2>!sqlformat --reindent --keywords upper --identifiers lower -
 command! RemoveQFItem :call RemoveQFItem()
-" command! ToggleNumber :call ToggleNumber()
 command! SortImports %!isort -
 
 " }}}
@@ -305,11 +300,6 @@ function! s:show_documentation()
   else
     call CocAction('doHover')
   endif
-endfunction
-
-function! PythonHighlights()
-    hi semshiImported gui=NONE cterm=NONE
-    hi semshiSelected guibg=#990045
 endfunction
 
 function! GetServerStatus()

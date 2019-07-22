@@ -4,6 +4,7 @@
 .vim/*
 
 !.vim/custom
+!.vim/guide
 
 !.config/
 .config/*

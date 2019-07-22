@@ -2,23 +2,21 @@ if test -e "$__fish_config_dir/config.tokens.fish"
     source "$__fish_config_dir/config.tokens.fish"
 end
 
+set -x BAT_THEME 'base16'
+set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}"
 set -x EDITOR nvim
-
+set -x FZF_DEFAULT_COMMAND 'fd -i -H'
 set -x GOPATH $HOME/go
 set -x LANG ru_RU.UTF-8
 set -x LC_CTYPE ru_RU.UTF-8
-set -x FZF_DEFAULT_COMMAND 'fd -i -H'
+set -x PYTHONBREAKPOINT ipdb.set_trace
+set -x PYENV_ROOT $HOME/.pyenv
 
 # TODO: append only if there is no value like with _PATH_PREPEND
 set -x CFLAGS {$CFLAGS} -I(xcrun --show-sdk-path)/usr/include/
 set -x CPPFLAGS {$CPPFLAGS} -I/usr/local/opt/zlib/include
 set -x LDFLAGS {$LDFLAGS} -L/usr/local/opt/zlib/lib
 set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
-
-set -x PYTHONBREAKPOINT ipdb.set_trace
-set -x PYENV_ROOT $HOME/.pyenv
-
-set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}"
 
 pyenv init - | source
 
@@ -65,6 +63,9 @@ alias top 'top -o cpu'
 alias tldr 'tldr -t ocean'
 
 if status --is-interactive
+    set BASE16_SHELL "$HOME/.config/base16-shell/"
+    source "$BASE16_SHELL/profile_helper.fish"
+
     if test \( "$POETRY_ACTIVE" = "1" \) -a \( -f .env \)
         posix_source # source .env on poetry shell activate
     end
