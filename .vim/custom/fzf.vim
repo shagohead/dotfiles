@@ -14,6 +14,10 @@ endfunction
 
 " TODO: add initial path from argument (DirFiles are broken)
 " TODO: fix broken hotkeys
+" try:
+"   - call wrap to get sink function and options
+"   - call custom sink with wrapper data
+"
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#run({
       \ 'source': $FZF_DEFAULT_COMMAND.' | devicon-lookup',

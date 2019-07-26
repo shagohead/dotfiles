@@ -17,15 +17,18 @@ Plug 'Vimjas/vim-python-pep8-indent'
 " Other
 Plug '/usr/local/opt/fzf'
 Plug 'airblade/vim-gitgutter'
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'dominikduda/vim_current_word'
-Plug 'godlygeek/tabular'
+" Plug 'godlygeek/tabular'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/vim-peekaboo'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'michaeljsmith/vim-indent-object'
+Plug 'mgedmin/python-imports.vim'
+Plug 'pbogut/fzf-mru.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
@@ -36,11 +39,11 @@ Plug 'wellle/targets.vim'
 Plug 'Yggdroot/indentLine'
 
 " With custom options
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
 
 call plug#end()
 
-source ~/.vim/custom/ctrlp.vim
+" source ~/.vim/custom/ctrlp.vim
 source ~/.vim/custom/fzf.vim
 
 " }}}
@@ -106,7 +109,8 @@ set incsearch
 set smartcase
 set ignorecase
 
-" Tags
+" Tags, files..
+set grepprg=rg\ --vimgrep
 set tags=./.ctags,.ctags
 
 " }}}
@@ -116,9 +120,13 @@ let g:airline_powerline_fonts = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 let g:airline_exclude_filetypes = ["list"]
+let g:airline#extensions#wordcount#enabled = 0
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 let g:dracula_colorterm = 1
+let g:fzf_mru_relative = 1
 let g:gitgutter_enabled = 0
+let g:gutentags_ctags_tagfile = '.ctags'
+let g:gutentags_file_list_command = 'ctags.fish'
 let g:peekaboo_compact = 0
 let g:python_host_prog  = '/usr/local/bin/python2'
 let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/3.7.2/bin/python'
@@ -180,7 +188,7 @@ augroup VimRc
   au FileType qf map <buffer> dd :RemoveQFItem<CR>
 
   au User AirlineAfterInit call AirlineInit()
-	au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
   " coc.nvim root_patterns
   au FileType go let b:coc_root_patterns = ['go.mod', 'go.sum']
@@ -191,10 +199,11 @@ augroup END
 " }}}
 " Commands {{{
 
-command! DirFiles Files %:h
 command! CopyPath let @+ = expand('%:p')
-command! EchoPath :echo(expand('%:p'))
 command! Delallmarks delmarks A-Z0-9\"[]
+command! DirFiles Files %:h
+command! EchoPath :echo(expand('%:p'))
+command! GoDefTab :call CocActionAsync("jumpDefinition", "tabe")<CR>
 command! FormatJSON %!python -m json.tool
 command! -nargs=0 Format :call CocAction('format')
 command! -range FormatSQL <line1>,<line2>!sqlformat --reindent --keywords upper --identifiers lower -
@@ -222,8 +231,9 @@ inoremap <C-l> <Right>
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
 nnoremap <silent>Y :call <SID>show_documentation()<CR>
-inoremap <silent><expr> <C-x> coc#refresh()
+inoremap <silent><expr> <C-z> coc#refresh()
 inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
+xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 noremap <C-w>e <C-W>z
 noremap <C-w><C-e> <C-W>z
 
@@ -235,8 +245,8 @@ nmap <silent> ]d <Plug>(coc-diagnostic-next)<CR>
 
 " [G]oTo's
 nmap <silent> ge :call CocActionAsync("jumpDefinition", "edit")<CR>
-nmap <silent> gd :call CocActionAsync("jumpDefinition", "drop")<CR>
-nmap <silent> gn :call CocActionAsync("jumpDefinition", "tabe")<CR>
+" TODO: conditional split (vert or hor)
+nmap <silent> gd :call CocActionAsync("jumpDefinition", "vsplit")<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gl <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -257,7 +267,7 @@ nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 
 " <Leader> mappings
 " General lists
-nmap <Leader>e :CtrlP<CR>
+nmap <Leader>e :FZFMru<CR>
 nmap <Leader>f :Files<CR>
 nmap <Leader>` :Marks<CR>
 
@@ -270,6 +280,7 @@ nmap <Leader>lq :call ToggleQuickFix()<CR>
 nmap <Leader>lt :Tags<CR>
 
 " [R]efactorings & reformats
+nmap <Leader>ri :ImportName<CR>
 nmap <Leader>rs :SortImports<CR>
 nmap <Leader>rf <Plug>(coc-fix-current)
 nmap <Leader>rn <Plug>(coc-rename)
@@ -286,13 +297,16 @@ nmap <Leader>vr :RainbowParentheses!!<CR>
 nmap <Leader>vs :call CocActionAsync('showSignatureHelp')<CR>
 
 " [W]indows (and tabs)
-nmap <silent> <Leader>wh :split<CR>
 nmap <silent> <Leader>wt :tabnew<CR>
 nmap <silent> <Leader>ws :tab split<CR>
-nmap <silent> <Leader>wv :vsplit<CR>
 
 " }}}
 " Functions {{{
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -302,17 +316,17 @@ function! s:show_documentation()
   endif
 endfunction
 
+function! AirlineInit()
+  let g:airline_section_z = airline#section#create(['coc'])
+endfunction
+
+function! ExecuteMacroOverVisualRange()
+  echo "@".getcmdline()
+  execute ":'<,'>normal @".nr2char(getchar())
+endfunction
+
 function! GetServerStatus()
   return get(g:, 'coc_status', '')
-endfunction
-
-function! AirlineInit()
-  let g:airline_section_a = airline#section#create(['coc'])
-endfunction
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Delete item form QuickFix list
