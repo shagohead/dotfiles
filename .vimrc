@@ -116,10 +116,34 @@ set tags=./.ctags,.ctags
 " }}}
 " Variables {{{
 
+" let g:airline_mode_map = {
+"   \ '__'     : '-',
+"   \ 'c'      : 'C',
+"   \ 'ix'     : 'I',
+"   \ 'multi'  : 'M',
+"   \ 'ni'     : 'N',
+"   \ 'no'     : 'N',
+"   \ 'R'      : 'R',
+"   \ 'Rv'     : 'R',
+"   \ 's'      : 'S',
+"   \ 'S'      : 'S',
+"   \ ''     : 'S',
+"   \ 't'      : 'T',
+"   \ }
+let g:airline_mode_map = {
+  \ 'i'      : 'I',
+  \ 'ic'     : 'I COMPL',
+  \ 'n'      : 'N',
+  \ 'c'      : '>',
+  \ 'v'      : 'V',
+  \ 'V'      : '↑ V',
+  \ ''     : '^ V',
+  \ }
 let g:airline_powerline_fonts = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 let g:airline_exclude_filetypes = ["list"]
+let g:airline#extensions#virtualenv#enabled = 0
 let g:airline#extensions#wordcount#enabled = 0
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 let g:dracula_colorterm = 1
@@ -317,7 +341,14 @@ function! s:show_documentation()
 endfunction
 
 function! AirlineInit()
-  let g:airline_section_z = airline#section#create(['coc'])
+  " let g:airline_section_x = ""
+  "   \ %{airline#util#prepend("",0)}"
+  "   \ %{airline#util#prepend(airline#extensions#vista#currenttag(),0)}"
+  "   \ %{airline#util#prepend(airline#extensions#gutentags#status(),0)}"
+  "   \ %{airline#util#prepend("",0)}"
+  "   \ %{airline#util#wrap(airline#parts#filetype(),0)}"
+  " let g:airline_section_z = airline#section#create(['coc'])
+  let g:airline_section_z = '%{airline#util#wrap(GetServerStatus(),0)}'
 endfunction
 
 function! ExecuteMacroOverVisualRange()
@@ -326,7 +357,14 @@ function! ExecuteMacroOverVisualRange()
 endfunction
 
 function! GetServerStatus()
-  return get(g:, 'coc_status', '')
+  let l:status = get(g:, 'coc_status', '')
+  if l:status =~ 'Python *'
+    let l:status = substitute(l:status, 'Python ', '', '')
+  endif
+  if l:status =~ '.* 64-bit'
+    let l:status = substitute(l:status, ' 64-bit', '', '')
+  endif
+  return l:status
 endfunction
 
 " Delete item form QuickFix list

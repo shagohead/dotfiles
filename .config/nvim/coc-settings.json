@@ -2,6 +2,12 @@
     "coc.preferences.previewAutoClose": true,
     "coc.preferences.useQuickfixForLocations": true,
 
+    "coc.source.syntax.priority": 30,
+    "coc.source.jedi.priority": 20,
+    "coc.source.file.priority": 10,
+    "coc.source.buffer.priority": 5,
+    "coc.source.around.priority": 1,
+
     "python.analysis.openFilesOnly": true,
 
     "python.disableInstallationCheck": true,
@@ -24,7 +30,8 @@
 
     "python.sortImports.path": "~/.local/bin/isort",
 
-    "python.workspaceSymbols.ctagsPath": "ctags.sh",
+    "python.workspaceSymbols.ctagsPath": "ctags.fish",
+    "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/.ctags",
 
     "languageserver": {
         "golang": {
