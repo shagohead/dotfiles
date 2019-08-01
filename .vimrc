@@ -67,7 +67,7 @@ let mapleader="\<SPACE>"
 
 " UI behevior
 set mouse=a
-set scrolloff=5
+set scrolloff=1
 set shortmess+=c
 set timeoutlen=2000
 set updatetime=500
@@ -81,6 +81,7 @@ set guicursor=
 
 " Windows UI
 set number
+set noruler
 set cursorline
 set splitbelow
 set splitright
@@ -264,8 +265,8 @@ noremap <C-w><C-e> <C-W>z
 " [] Brackets movings
 nmap <silent> [q :cp<CR>
 nmap <silent> ]q :cn<CR>
-nmap <silent> [d <Plug>(coc-diagnostic-prev)<CR>
-nmap <silent> ]d <Plug>(coc-diagnostic-next)<CR>
+nmap <silent> [d <Plug>(coc-diagnostic-prev)
+nmap <silent> ]d <Plug>(coc-diagnostic-next)
 
 " [G]oTo's
 nmap <silent> ge :call CocActionAsync("jumpDefinition", "edit")<CR>
@@ -290,39 +291,49 @@ nmap <silent> <Leader><BS> :echo ''<CR>
 nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 
 " <Leader> mappings
-" General lists
+"
+" currently available:
+" a
+" g
+" i
+" j
+" k
+" l - TODO: filetype relative lint
+" q
+" r
+" u
+" x
+" y
+" z
+"
+nmap <Leader>` :Marks<CR>
+nmap <Leader>= :Format<CR>
+nmap <Leader>b :Buffers<CR>
+nmap <Leader>c :call ToggleQuickFix()<CR>
+nmap <Leader>d :CocList diagnostics<CR>
 nmap <Leader>e :FZFMru<CR>
 nmap <Leader>f :Files<CR>
-nmap <Leader>` :Marks<CR>
+nmap <Leader>h :History<CR>
+nmap <Leader>m :Maps<CR>
+nmap <Leader>n <Plug>(coc-rename)
 
-" [L]lists (that can be closed with Esc)
-nmap <Leader>ld :CocList diagnostics<CR>
-nmap <Leader>lb :Buffers<CR>
-nmap <Leader>lh :History<CR>
-nmap <Leader>lm :Maps<CR>
-nmap <Leader>lq :call ToggleQuickFix()<CR>
-nmap <Leader>lt :Tags<CR>
+nmap <Leader>og :GitGutterToggle<CR>
+nmap <Leader>ol :Limelight!!<CR>
+nmap <Leader>on :call ToggleNumber()<CR>
+nmap <Leader>or :RainbowParentheses!!<CR>
 
-" [R]efactorings & reformats
-nmap <Leader>ri :ImportName<CR>
-nmap <Leader>rs :SortImports<CR>
-nmap <Leader>rf <Plug>(coc-fix-current)
-nmap <Leader>rn <Plug>(coc-rename)
-nmap <Leader>rr :Format<CR>
-nmap <Leader>rv <Plug>(coc-format-selected)
-vmap <Leader>rv <Plug>(coc-format-selected)
+nmap <Leader>pi :ImportName<CR>
+nmap <Leader>pl :CocCommand python.runLinting<CR>
+nmap <Leader>ps :SortImports<CR>
 
-" [V]iews
-nmap <Leader>vd <Plug>(coc-diagnostic-info)
-nmap <Leader>vg :GitGutterToggle<CR>
-nmap <Leader>vl :Limelight!!<CR>
-nmap <Leader>vn :call ToggleNumber()<CR>
-nmap <Leader>vr :RainbowParentheses!!<CR>
-nmap <Leader>vs :call CocActionAsync('showSignatureHelp')<CR>
+nmap <Leader>s :call CocActionAsync('showSignatureHelp')<CR>
+nmap <Leader>t :Tags<CR>
+nmap <Leader>v <Plug>(coc-diagnostic-info)
+nmap <Leader>w :write<CR>
 
-" [W]indows (and tabs)
-nmap <silent> <Leader>wt :tabnew<CR>
-nmap <silent> <Leader>ws :tab split<CR>
+" nmap <Leader>rf <Plug>(coc-fix-current)
+" nmap <Leader>rv <Plug>(coc-format-selected)
+" vmap <Leader>rv <Plug>(coc-format-selected)
 
 " }}}
 " Functions {{{
