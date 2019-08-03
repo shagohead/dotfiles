@@ -1,4 +1,3 @@
-# Defined in /var/folders/gg/s159wbtx1014w775zwkbdx4r0000gn/T//fish.kY07nr/update_all.fish @ line 2
 function update_all --description 'Update all packages'
 	function colored_echo
         set_color green
@@ -11,17 +10,40 @@ function update_all --description 'Update all packages'
         end
     end
 
-    colored_echo "Updating Homebrew "
-    brew update
+    set --local option_provided 0
 
-    colored_echo "Upgrading pipx packages "
-    pipx upgrade-all
+    for arg in -b --brew --git --go -n --npm -p --pipx
+        if contains -- $arg $argv
+            set option_provided 1
+        end
+    end
 
-    colored_echo "Updating global npm packages "
-    npm -g update
+    if test $option_provided -eq 0; or contains -- -b $argv; or contains -- --brew $argv
+        colored_echo "Updating Homebrew "
+        brew update
+    end
 
-    colored_echo "Updating go packages "
-    go get -u github.com/rakyll/hey golang.org/x/lint/golint golang.org/x/tools/cmd/gopls
+    if test $option_provided -eq 0; or contains -- --git $argv
+        colored_echo "Pulling git repositories "
+        if test -e ~/.local/share/nvim/site/pack/bundle/start/cheat40
+            cd ~/.local/share/nvim/site/pack/bundle/start/cheat40; and git pull
+        end
+    end
+
+    if test $option_provided -eq 0; or contains -- --go $argv
+        colored_echo "Updating go packages "
+        go get -u github.com/rakyll/hey golang.org/x/lint/golint golang.org/x/tools/cmd/gopls
+    end
+
+    if test $option_provided -eq 0; or contains -- -n $argv; or contains -- --npm $argv
+        colored_echo "Updating global npm packages "
+        npm -g update
+    end
+
+    if test $option_provided -eq 0; or contains -- -p $argv; or contains -- --pipx $argv
+        colored_echo "Upgrading pipx packages "
+        pipx upgrade-all
+    end
 
     # TODO: fish section (fisher self-update; fisher)
 

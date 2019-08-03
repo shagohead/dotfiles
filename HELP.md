@@ -1,10 +1,10 @@
 # Key mappings
 
-## fish
-- `⌃-T` – find a file
+## fish fzf
+- `⌃-F` – find a file
 - `⌃-R` – search through command history
-- `⌥-C` – cd into sub-directories (recursively searched)
-- `⌥-⇧-C` – cd into sub-directories, including hidden ones
+- `⌥-O` – cd into sub-directories (recursively searched)
+- `⌥-⇧-O` – cd into sub-directories, including hidden ones
 - `⌃-O` – open a file/dir using default editor ($EDITOR)
 - `⌃-G` – open a file/dir using xdg-open or open command
 
