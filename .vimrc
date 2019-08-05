@@ -95,6 +95,11 @@ set splitbelow
 set splitright
 set signcolumn=yes
 
+" Titles
+set title
+set titleold=
+set titlestring=%t%(\ %M%)%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
+
 " Indentation
 set tabstop=4
 set expandtab
@@ -220,7 +225,11 @@ function! GetHighlight(group)
     endif
   endfor
   return dict
-endfunction<Paste>
+endfunction
+
+function! SearchMatchText()
+    return @/[2:-3]
+endfunction
 
 " Delete item form QuickFix list
 function! RemoveQFItem()
@@ -431,6 +440,7 @@ noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
+" noremap <C-,> :call SearchMatchText()
 
 nnoremap { gT
 nnoremap } gt
@@ -459,18 +469,18 @@ noremap <C-w>e <C-W>z
 noremap <C-w><C-e> <C-W>z
 
 " [] Brackets movings
-nmap <silent> [q :cp<CR>
-nmap <silent> ]q :cn<CR>
-nmap <silent> [d <Plug>(coc-diagnostic-prev)
-nmap <silent> ]d <Plug>(coc-diagnostic-next)
+nnoremap <silent> [q :cp<CR>
+nnoremap <silent> ]q :cn<CR>
+nnoremap <silent> [d <Plug>(coc-diagnostic-prev)
+nnoremap <silent> ]d <Plug>(coc-diagnostic-next)
 
 " [G]oTo's
-nmap <silent> ge :call CocActionAsync("jumpDefinition", "edit")<CR>
+nnoremap <silent> ge :call CocActionAsync("jumpDefinition", "edit")<CR>
 " TODO: conditional split (vert or hor)
-nmap <silent> gd :call CocActionAsync("jumpDefinition", "vsplit")<CR>
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gl <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> gd :call CocActionAsync("jumpDefinition", "vsplit")<CR>
+nnoremap <silent> gy <Plug>(coc-type-definition)
+nnoremap <silent> gl <Plug>(coc-implementation)
+nnoremap <silent> gr <Plug>(coc-references)
 
 " Tab & S-Tab for completion menu navigation
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
@@ -478,8 +488,8 @@ inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <expr><CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 " Messages cleanup
-nmap <silent> <Leader><BS> :echo ''<CR>
-nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
+nnoremap <silent> <Leader><BS> :echo ''<CR>
+nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 
 " <Leader> mappings
 "
@@ -489,38 +499,36 @@ nmap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 " i
 " j
 " k
-" l - TODO: filetype relative lint
+" l
+" p
 " q
-" r
 " u
 " x
 " y
 " z
 "
-nmap <Leader>` :Marks<CR>
-nmap <Leader>= :Format<CR>
-nmap <Leader>b :Buffers<CR>
-nmap <Leader>c :call ToggleQuickFix()<CR>
-nmap <Leader>d :CocList diagnostics<CR>
-nmap <Leader>e :FZFMru<CR>
-nmap <Leader>f :Files<CR>
-nmap <Leader>h :History<CR>
-nmap <Leader>m :Maps<CR>
-nmap <Leader>n <Plug>(coc-rename)
+nnoremap <Leader>` :Marks<CR>
+nnoremap <Leader>= :Format<CR>
+nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>c :call ToggleQuickFix()<CR>
+nnoremap <Leader>d :CocList diagnostics<CR>
+nnoremap <Leader>e :FZFMru<CR>
+nnoremap <Leader>f :Files<CR>
+nnoremap <Leader>h :History<CR>
+nnoremap <Leader>m :Maps<CR>
+nnoremap <Leader>n <Plug>(coc-rename)
 
-nmap <Leader>og :GitGutterToggle<CR>
-nmap <Leader>ol :Limelight!!<CR>
-nmap <Leader>on :call ToggleNumber()<CR>
-nmap <Leader>or :RainbowParentheses!!<CR>
+nnoremap <Leader>og :GitGutterToggle<CR>
+nnoremap <Leader>ol :Limelight!!<CR>
+nnoremap <Leader>on :call ToggleNumber()<CR>
+nnoremap <Leader>or :RainbowParentheses!!<CR>
 
-nmap <Leader>pi :ImportName<CR>
-nmap <Leader>pl :CocCommand python.runLinting<CR>
-nmap <Leader>ps :SortImports<CR>
-
-nmap <Leader>s :call CocActionAsync('showSignatureHelp')<CR>
-nmap <Leader>t :Tags<CR>
-nmap <Leader>v <Plug>(coc-diagnostic-info)
-nmap <Leader>w :write<CR>
+nnoremap <Leader>r :%s//g<Left><Left>
+xnoremap <Leader>r :s//g<Left><Left>
+nnoremap <Leader>s :call CocActionAsync('showSignatureHelp')<CR>
+nnoremap <Leader>t :Tags<CR>
+nnoremap <Leader>v <Plug>(coc-diagnostic-info)
+nnoremap <Leader>w :write<CR>
 
 " }}}
 " Conditional options {{{
