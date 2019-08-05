@@ -67,6 +67,7 @@ set encoding=utf-8
 " Mappings
 set pastetoggle=<F2>
 let mapleader="\<SPACE>"
+let maplocalleader="\<SPACE>\<SPACE>"
 
 " UI behevior
 set mouse=a
@@ -88,7 +89,7 @@ set guicursor=
       \sm:block-blinkwait175-blinkoff150-blinkon175
 
 " Windows UI
-set noruler
+" set noruler
 set nonumber
 set cursorline
 set splitbelow
@@ -298,6 +299,7 @@ function! AirlineInit()
   "   \ %{airline#util#prepend("",0)}"
   "   \ %{airline#util#wrap(airline#parts#filetype(),0)}"
   " let g:airline_section_z = airline#section#create(['coc'])
+  let g:airline_section_y = '%#__accent_bold#%4l/%L%#__restore__#:%2v'
   let g:airline_section_z = '%{airline#util#wrap(GetServerStatus(),0)}'
 endfunction
 
@@ -332,7 +334,7 @@ let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_er
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 let g:airline_theme_patch_func = 'AirlineThemePatch'
 let g:airline_exclude_filetypes = ["list"]
-let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'z', 'warning', 'error']]
+let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'y', 'z', 'warning', 'error']]
 let g:airline#extensions#virtualenv#enabled = 0
 let g:airline#extensions#wordcount#enabled = 0
 
@@ -377,26 +379,6 @@ function! s:edit_devicon_prepended_file(item)
 endfunction
 
 command! DirFiles Files %:h
-" TODO: add initial path from argument (DirFiles are broken)
-" TODO: fix broken hotkeys
-" try:
-"   - call wrap to get sink function and options
-"   - call custom sink with wrapper data
-" command! -bang -nargs=? -complete=dir Files
-"       \ call fzf#run({
-"       \ 'source': $FZF_DEFAULT_COMMAND.' | devicon-lookup',
-"       \ 'sink': function('s:edit_devicon_prepended_file'),
-"       \ 'window': '13new'})
-"       " \ call fzf#run(fzf#wrap('files', {
-"       " \ 'options': '--expect=ctrl-v,ctrl-x,ctrl-l,ctrl-t', 
-"       " \ 'source': $FZF_DEFAULT_COMMAND.' | devicon-lookup',
-"       " \ 'sink': function('s:edit_devicon_prepended_file'),
-"       " \ '_action': {
-"       "   \ 'ctrl-v': 'vsplit',
-"       "   \ 'ctrl-x': 'split',
-"       "   \ 'ctrl-l': function('<SNR>20_build_quickfix_list'),
-"       "   \ 'ctrl-t': 'tab split'}
-"       " \ }))
 command! -bang -nargs=* Find
       \ call fzf#vim#grep('rg
       \ --column --line-number
@@ -433,6 +415,94 @@ let g:webdevicons_enable_airline_statusline = 1
 " }}}
 
 " }}}
+" Filetype Specific {{{
+
+" fish {{{
+
+augroup filetype_fish
+  au!
+  au FileType fish setlocal tabstop=4
+  au FileType fish setlocal shiftwidth=4
+  au FileType fish setlocal expandtab
+  au FileType fish setlocal foldmethod=indent
+augroup END
+
+" }}}
+" GO {{{
+
+augroup filetype_go
+  au!
+  au FileType go setlocal noexpandtab
+  au FileType go let b:ale_fixers = ['gofmt']
+augroup END
+
+" }}}
+" HTML {{{
+
+augroup filetype_html
+  au!
+  au FileType html setlocal tabstop=2
+  au FileType html setlocal shiftwidth=2
+  au FileType html setlocal softtabstop=2
+  au FileType html setlocal expandtab
+augroup END
+
+" }}}
+" JavaScript {{{
+
+augroup filetype_js
+  au!
+  au FileType javascript setlocal tabstop=2
+  au FileType javascript setlocal shiftwidth=2
+
+  au FileType javascript let b:ale_linters = ['eslint', 'standard']
+  au FileType javascript let b:ale_fixers = ['eslint', 'standard']
+  au FileType javascript let b:ale_javascript_xo_options = '--space --global=$'
+  au FileType javascript let b:ale_javascript_standard_options = '--global $ --global WebSocket'
+augroup END
+
+" }}}
+" Python {{{
+
+augroup filetype_py
+  au!
+  au FileType python setlocal tabstop=4
+  au FileType python setlocal shiftwidth=4
+  au FileType python setlocal expandtab
+
+  au FileType python let b:ale_linters = ['flake8', 'pylint']
+
+  au FileType python iab <buffer> pdb import pdb; pdb.set_trace()
+  au FileType python iab <buffer> ipdb import ipdb; ipdb.set_trace()
+
+  au FileType python nnoremap <buffer> <LocalLeader>i :ImportName<CR>
+  au FileType python nnoremap <buffer> <LocalLeader>l :CocCommand python.runLinting<CR>
+  au FileType python nnoremap <buffer> <LocalLeader>s :SortImports<CR>
+augroup END
+
+" }}}
+" VimL {{{
+
+augroup filetype_vim
+  au!
+  au FileType vim setlocal tabstop=2
+  au FileType vim setlocal shiftwidth=2
+augroup END
+
+" }}}
+" YAML {{{
+
+augroup filetype_yaml
+  au!
+  au FileType yaml setlocal tabstop=2
+  au FileType yaml setlocal shiftwidth=2
+  au FileType yaml setlocal softtabstop=2
+  au FileType yaml setlocal expandtab
+augroup END
+
+" }}}
+
+" }}}
 " Mappings {{{
 
 " General one-key mappings
@@ -457,6 +527,7 @@ inoremap <C-j> <Down>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
+nnoremap <C-g> :echo line('.') . ' / ' . line('$')<CR>
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
 
