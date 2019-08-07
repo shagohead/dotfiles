@@ -23,6 +23,7 @@ Plug 'airblade/vim-gitgutter'
 " Plug 'ctrlpvim/ctrlp.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'dominikduda/vim_current_word'
+Plug 'easymotion/vim-easymotion'
 " Plug 'godlygeek/tabular'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/limelight.vim'
@@ -33,6 +34,7 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'mgedmin/python-imports.vim'
 Plug 'pbogut/fzf-mru.vim'
 Plug 'ryanoasis/vim-devicons'
+Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
@@ -67,7 +69,7 @@ set encoding=utf-8
 " Mappings
 set pastetoggle=<F2>
 let mapleader="\<SPACE>"
-let maplocalleader="\<SPACE>\<SPACE>"
+let maplocalleader="\<SPACE>l"
 
 " UI behevior
 set mouse=a

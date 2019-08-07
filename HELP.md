@@ -53,59 +53,70 @@ Case-sensetive mappings
   - `t` `T` - tags
   - `e` - move line above or below
   - `<Space>` - add new line above or below
-  - `h` `H` - python highlighted name
   - `]` – `]]` beginning of the next Python class; `[]` end of the previous Python class
   - `[` – `][` end of the current Python class; `[[` beginning of the current Python class (or beginning of the previous Python class if not currently in a class or already at the beginning of a class)
   - `m` - beginning of the next Python method or function; beginning of the current Python method or function (or to the beginning of the previous method or function if not currently in a method/function or already at the beginning of a method/function)
   - `M` - end of the current Python method or function; end of the previous Python method or function
 
 - `g` GoTo:
-  - `d` – definition
+  - `e` – definition (edit)
+  - `d` – definition (split)
   - `y` – type definition
   - `l` – implementations
   - `r` – references
 
-  - `n` – definition at new tab
-
-#### `<Leader>` prefixed mappings
+#### `<Leader>` (`<Space>`) prefixed mappings
 - `<Delete>` – echo empty message (cleanup message string) 
 - `<Enter>` – cleanup search highlights
 - `<Tick>` - marks
-- `e` – MRU files
+- `=` - format
 - `b` – buffers
-- `w` – history
-- `f` – files
+- `c` – quickfix
+- `d` – diagnostics
+- `e` – MRU files
+- `f` – project files
+- `h` – history
+- `m` – maps
+- `n` - rename
+- `o<char>` - toggle:
+    - `og` - gitgutter
+    - `ol` - limelight
+    - `on` - number option
+    - `or` - rainbow parentheses
+- `r` - replace
+- `s` - show signature
 - `t` - tags
-
-- `h` git hunk:
-  - `p` - preview
-  - `s` - stage
-  - `u` - undo
-
-- `t` Tab:
-  - `n` - new tab
-  - `s` - tab split
-
-- `v` View:
-  - `l` - toggle Limelight
-  - `r` - toggle RainbowParentheses
-  - `s` – syncronize syntax
+- `v` - view coc info
+- `w` - write
 
 - `r` Refactorings & reformats:
   - `s` - sort python imports
   - `f` - format selected
 
-- `d` Diagnostics:
-  - `l` - list
-  - `i` - info
+#### `<LocalLeader>` (`<Space>l`) prefixed mappings
+- python:
+  - `i` - import name
+  - `l` - lint
+  - `s` - sort imports
 
-- `q` (Quick)fix:
-  - `o` - open quickfix window
-  - `c` – close quickfix window
-  - `f` - fix current
-
-### Insert mode
-- `⌃-x` - completion-menu
+#### EasyMotion `<Leader><Leader>` (`<Space><Space>`) prefixed mappings
+- `<Leader>f{char}` - Find {char} to the right. See |f|.
+- `<Leader>F{char}` - Find {char} to the left. See |F|.
+- `<Leader>t{char}` - Till before the {char} to the right. See |t|.
+- `<Leader>T{char}` - Till after the {char} to the left. See |T|.
+- `<Leader>w` - Beginning of word forward. See |w|.
+- `<Leader>W` - Beginning of WORD forward. See |W|.
+- `<Leader>b` - Beginning of word backward. See |b|.
+- `<Leader>B` - Beginning of WORD backward. See |B|.
+- `<Leader>e` - End of word forward. See |e|.
+- `<Leader>E` - End of WORD forward. See |E|.
+- `<Leader>ge` - End of word backward. See |ge|.
+- `<Leader>gE` - End of WORD backward. See |gE|.
+- `<Leader>j` - Line downward. See |j|.
+- `<Leader>k` - Line upward. See |k|.
+- `<Leader>n` - Jump to latest "/" or "?" forward. See |n|.
+- `<Leader>N` - Jump to latest "/" or "?" backward. See |N|.
+- `<Leader>s` - Find(Search) {char} forward and backward. | See |f| and |F|.
 
 ### Special-cases (in menu shortcuts)
 - quickfix
