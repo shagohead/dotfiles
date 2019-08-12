@@ -507,53 +507,65 @@ augroup END
 " }}}
 " Mappings {{{
 
-" General one-key mappings
+" Disabling arrow movings
 noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
 " noremap <C-,> :call SearchMatchText()
 
+" Tabpage movings
 nnoremap { gT
 nnoremap } gt
 " nnoremap # #N
 " nnoremap * *N
 
+" Window jumps
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
 
+" Insert mode one-char movings
 inoremap <C-k> <Up>
 inoremap <C-j> <Down>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
+" Current line number
 nnoremap <C-g> :echo line('.') . ' / ' . line('$')<CR>
+
+" Paste yank register
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
 
+" Documentation preview window
 nnoremap <silent>Y :call <SID>show_documentation()<CR>
+
+" Refresh CoC.nvim completion sources
 inoremap <silent><expr> <C-z> coc#refresh()
-inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
+" inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
+
+" Execute macro over selected lines range
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
-noremap <C-w>e <C-W>z
-noremap <C-w><C-e> <C-W>z
+" Close preview window
+noremap <C-w>e :pclose<CR>
+noremap <C-w><C-e> :pclose<CR>
 
-" [] Brackets movings
+" Brackets jumps
+nmap <silent> [d <Plug>(coc-diagnostic-prev)
+nmap <silent> ]d <Plug>(coc-diagnostic-next)
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
-nnoremap <silent> [d <Plug>(coc-diagnostic-prev)
-nnoremap <silent> ]d <Plug>(coc-diagnostic-next)
 
-" [G]oTo's
+" Definition jumps & lists
 nnoremap <silent> ge :call CocActionAsync("jumpDefinition", "edit")<CR>
 " TODO: conditional split (vert or hor)
 nnoremap <silent> gd :call CocActionAsync("jumpDefinition", "vsplit")<CR>
-nnoremap <silent> gy <Plug>(coc-type-definition)
-nnoremap <silent> gl <Plug>(coc-implementation)
-nnoremap <silent> gr <Plug>(coc-references)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gl <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
 " Tab & S-Tab for completion menu navigation
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
@@ -600,7 +612,7 @@ nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Left><Left>
 nnoremap <Leader>s :call CocActionAsync('showSignatureHelp')<CR>
 nnoremap <Leader>t :Tags<CR>
-nnoremap <Leader>v <Plug>(coc-diagnostic-info)
+nmap <Leader>v <Plug>(coc-diagnostic-info)
 nnoremap <Leader>w :write<CR>
 
 " }}}
