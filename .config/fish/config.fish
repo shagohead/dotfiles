@@ -95,4 +95,8 @@ if status --is-interactive
             set -e tmux_window_title
         end
     end
+
+    if type -q register-python-argcomplete
+        register-python-argcomplete --shell fish pipx | .
+    end
 end

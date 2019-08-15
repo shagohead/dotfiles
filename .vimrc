@@ -91,7 +91,7 @@ set guicursor=
       \sm:block-blinkwait175-blinkoff150-blinkon175
 
 " Windows UI
-" set noruler
+set noruler
 set nonumber
 set cursorline
 set splitbelow
@@ -119,6 +119,7 @@ set nowrap
 set list
 set linebreak
 set listchars=tab:▸\ ,trail:↔,nbsp:+,extends:⟩,precedes:⟨
+set fillchars=vert:\|
 
 " Search
 set hlsearch
@@ -133,8 +134,8 @@ set tags=./.ctags,.ctags
 " }}}
 " Variables {{{
 
-let g:python_host_prog  = '/usr/local/bin/python2'
-let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/3.7.2/bin/python'
+let g:python_host_prog  = '/Users/lastdanmer/.pyenv/versions/pynvim-2.7/bin/python'
+let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/pynvim/bin/python'
 
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
 let $PYTHONPATH = '/Users/lastdanmer/.pyenv/versions/jedi/lib/python3.7/site-packages'
@@ -143,6 +144,10 @@ let $PYTHONPATH = '/Users/lastdanmer/.pyenv/versions/jedi/lib/python3.7/site-pac
 " Highlights {{{
 
 hi CurrentWord gui=undercurl
+hi TabLine guibg=NONE
+hi TabLineFill guibg=NONE
+hi TabLineSel guibg=NONE
+hi VertSplit guibg=NONE
 
 " Highlight VCS conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -185,18 +190,10 @@ augroup VimRc
 
   au CompleteDone * if pumvisible() == 0 | pclose | endif
 
-  au FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-  au FileType python call coc#config('python.pythonPath', systemlist('which python')[0])
   au FileType qf map <buffer> dd :RemoveQFItem<CR>
 
   au User AirlineAfterInit call AirlineInit()
   au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-  " coc.nvim root_patterns
-  au FileType go let b:coc_root_patterns = ['go.mod', 'go.sum']
-  au FileType python let b:coc_root_patterns = ['Pipfile', 'pyproject.toml', 'requirements.txt']
-  au FileType javascript let b:coc_root_patterns = ['package.json', 'node_modules']
 augroup END
 
 " }}}
@@ -249,11 +246,10 @@ function! RemoveQFItem()
 endfunction
 
 function! ToggleNumber()
-  if(&relativenumber == 1)
-    set norelativenumber
-    set number
+  if(&number == 1)
+    set nonumber
   else
-    set relativenumber
+    set number
   endif
 endfunction
 
@@ -282,46 +278,44 @@ command! SortImports %!isort -
 
 " Airline {{{
 
-function! AirlineThemePatch(palette)
-  let l:normal = GetHighlight('Normal')['guifg']
-  for key in keys(a:palette)
-      if key != 'accents'
-          let a:palette[key].airline_c[1] = 'NONE'
-          let a:palette[key].airline_c[0] = l:normal
-          let a:palette[key].airline_x[0] = l:normal
-      endif
-  endfor
+function! AirlineInactiveStatus(...)
+  let builder = a:1
+  let context = a:2
+  call builder.add_section('file', '%f')
+  return 1
 endfunction
 
 function! AirlineInit()
-  " let g:airline_section_x = ""
-  "   \ %{airline#util#prepend("",0)}"
-  "   \ %{airline#util#prepend(airline#extensions#vista#currenttag(),0)}"
-  "   \ %{airline#util#prepend(airline#extensions#gutentags#status(),0)}"
-  "   \ %{airline#util#prepend("",0)}"
-  "   \ %{airline#util#wrap(airline#parts#filetype(),0)}"
-  " let g:airline_section_z = airline#section#create(['coc'])
-  let g:airline_section_y = '%#__accent_bold#%4l/%L%#__restore__#:%2v'
   let g:airline_section_z = '%{airline#util#wrap(GetServerStatus(),0)}'
 endfunction
 
+function! AirlineThemePatch(palette)
+  let l:normal_fg = GetHighlight('Normal')['guifg']
+  let l:normal_bg = GetHighlight('Normal')['guibg']
+  " let g:test_palette = a:palette
+
+  for section in keys(a:palette.inactive)
+    let a:palette.inactive[section][0] = l:normal_fg
+    let a:palette.inactive[section][1] = l:normal_bg
+    if len(a:palette.inactive[section]) > 4
+      let a:palette.inactive[section][4] = substitute(a:palette.inactive[section][4], 'reverse', '', '')
+    endif
+  endfor
+endfunction
+
+call airline#add_inactive_statusline_func('AirlineInactiveStatus')
 call airline#parts#define_function('coc', 'GetServerStatus')
 
+let g:airline_exclude_filetypes = ["list"]
 let g:airline_highlighting_cache = 1
-" let g:airline_mode_map = {
-"   \ '__'     : '-',
-"   \ 'c'      : 'C',
-"   \ 'ix'     : 'I',
-"   \ 'multi'  : 'M',
-"   \ 'ni'     : 'N',
-"   \ 'no'     : 'N',
-"   \ 'R'      : 'R',
-"   \ 'Rv'     : 'R',
-"   \ 's'      : 'S',
-"   \ 'S'      : 'S',
-"   \ ''     : 'S',
-"   \ 't'      : 'T',
-"   \ }
+let g:airline_powerline_fonts = 1
+let g:airline_theme_patch_func = 'AirlineThemePatch'
+
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+
 let g:airline_mode_map = {
   \ 'i'      : 'I',
   \ 'ic'     : 'I COMPL',
@@ -331,14 +325,15 @@ let g:airline_mode_map = {
   \ 'V'      : '↑ V',
   \ ''     : '^ V',
   \ }
-let g:airline_powerline_fonts = 1
+
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
-let g:airline_theme_patch_func = 'AirlineThemePatch'
-let g:airline_exclude_filetypes = ["list"]
+
 let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'y', 'z', 'warning', 'error']]
 let g:airline#extensions#virtualenv#enabled = 0
 let g:airline#extensions#wordcount#enabled = 0
+
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
 " }}}
 " COC {{{
@@ -400,12 +395,17 @@ let g:fzf_mru_relative = 1
 let g:fzf_tags_command = 'ctags.sh'
 
 " }}}
+" Gutentags {{{
+
+let g:gutentags_ctags_tagfile = '.ctags'
+let g:gutentags_exclude_filetypes = ['gitcommit', 'gitrebase']
+let g:gutentags_file_list_command = 'ctags.fish'
+
+" }}}
 " Other {{{
 
 let g:dracula_colorterm = 1
 let g:gitgutter_enabled = 0
-let g:gutentags_ctags_tagfile = '.ctags'
-let g:gutentags_file_list_command = 'ctags.fish'
 let g:peekaboo_compact = 0
 let g:vim_current_word#delay_highlight = 0
 let g:vim_current_word#highlight_current_word = 1
@@ -436,6 +436,7 @@ augroup filetype_go
   au!
   au FileType go setlocal noexpandtab
   au FileType go let b:ale_fixers = ['gofmt']
+  au FileType go let b:coc_root_patterns = ['go.mod', 'go.sum']
 augroup END
 
 " }}}
@@ -461,6 +462,7 @@ augroup filetype_js
   au FileType javascript let b:ale_fixers = ['eslint', 'standard']
   au FileType javascript let b:ale_javascript_xo_options = '--space --global=$'
   au FileType javascript let b:ale_javascript_standard_options = '--global $ --global WebSocket'
+  au FileType javascript let b:coc_root_patterns = ['package.json', 'node_modules']
 augroup END
 
 " }}}
@@ -473,6 +475,8 @@ augroup filetype_py
   au FileType python setlocal expandtab
 
   au FileType python let b:ale_linters = ['flake8', 'pylint']
+  au FileType python let b:coc_root_patterns = ['Pipfile', 'pyproject.toml', 'requirements.txt']
+  au FileType python call coc#config('python.pythonPath', systemlist('which python')[0])
 
   au FileType python iab <buffer> pdb import pdb; pdb.set_trace()
   au FileType python iab <buffer> ipdb import ipdb; ipdb.set_trace()
@@ -521,8 +525,8 @@ nnoremap } gt
 " nnoremap * *N
 
 " Window jumps
-nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
+nnoremap <C-j> <C-W>j
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
 
@@ -532,8 +536,10 @@ inoremap <C-j> <Down>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
-" Current line number
-nnoremap <C-g> :echo line('.') . ' / ' . line('$')<CR>
+nnoremap zkk z10k
+nnoremap zjj z10j
+nnoremap zhh z10h
+nnoremap zll z10l
 
 " Paste yank register
 nnoremap <C-p> "0p
@@ -586,7 +592,6 @@ nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 " k
 " l
 " p
-" q
 " u
 " x
 " y
@@ -608,6 +613,7 @@ nnoremap <Leader>ol :Limelight!!<CR>
 nnoremap <Leader>on :call ToggleNumber()<CR>
 nnoremap <Leader>or :RainbowParentheses!!<CR>
 
+nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Left><Left>
 nnoremap <Leader>s :call CocActionAsync('showSignatureHelp')<CR>

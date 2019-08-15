@@ -35,7 +35,7 @@ font:
   italic:
     style: Italic
 
-  size: 12.0
+  size: 13.0
 
   offset:
     x: 0
@@ -178,7 +178,7 @@ key_bindings:
   - { key: W, mods: Command, chars: "\x13\x78" }
 
   # Open specific programs
-  - { key: Slash, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["new-window", "-n Help", "bat ~/HELP.md"] } }
+  - { key: Slash, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["new-window", "-n Help", "bat ~/.HELP.md"] } }
   - { key: Semicolon, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["new-window", "-n Monitor", "glances"] } }
 
   - { key: Paste,                   action: Paste                        }

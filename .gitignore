@@ -2,8 +2,6 @@
 
 !.vim/
 .vim/*
-
-!.vim/custom
 !.vim/guide
 
 !.config/
@@ -11,12 +9,10 @@
 
 !.config/fish
 .config/fish/*
-
 !.config/fish/functions
 
 !.config/nvim
 .config/nvim/*
-
 !.config/nvim/ftplugin
 !.config/nvim/init.vim
 
@@ -25,12 +21,10 @@
 
 !.ipython/profile_default
 .ipython/profile_default/*
-
 !.ipython/profile_default/ipython_config.py
 
-!.migrate
+!.install
 
 !/Library
 /Library/*
-
 !/Library/QuickLook
