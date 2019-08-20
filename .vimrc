@@ -32,7 +32,6 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'mgedmin/python-imports.vim'
-Plug 'pbogut/fzf-mru.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-commentary'
@@ -204,12 +203,6 @@ function! ApplyColors() abort
 endfunction
 call ApplyColors()
 
-function! BuildQuickfixList(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
-endfunction
-
 function! ExecuteMacroOverVisualRange()
   echo "@".getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
@@ -370,11 +363,43 @@ let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 " }}}
 " FZF {{{
 
+function! BuildQuickfixList(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
 function! s:edit_devicon_prepended_file(item)
   let l:file_path = a:item[4:-1]
   execute 'silent e' l:file_path
 endfunction
 
+function! s:buffsink(lines)
+  if len(a:lines) < 2
+    return
+  endif
+
+  let Cmd = get(get(g:, 'fzf_action'), a:lines[0])
+  if type(Cmd) == type('')
+    execute 'silent' Cmd
+  elseif a:lines[0] == 'alt-d'
+    let buffers = []
+    for line in a:lines[1:]
+      call add(buffers, matchstr(line, '\[\zs[0-9]*\ze\]'))
+    endfor
+    execute 'bdelete' join(buffers, ' ')
+    return
+  else
+    let b = matchstr(a:lines[1], '\[\zs[0-9]*\ze\]')
+    execute 'buffer' b
+  endif
+endfunction
+
+command! -bar -bang -nargs=? -complete=buffer Buffers
+      \ call fzf#vim#buffers(<q-args>, {
+      \ 'sink*': function('s:buffsink'),
+      \ 'options': '--multi --expect alt-d',
+      \ }, <bang>0)
 command! DirFiles Files %:h
 command! -bang -nargs=* Find
       \ call fzf#vim#grep('rg
@@ -391,7 +416,6 @@ let g:fzf_action = {
       \ 'ctrl-x': 'split',
       \ 'ctrl-v': 'vsplit'}
 let g:fzf_layout = {'window': '13new'}
-let g:fzf_mru_relative = 1
 let g:fzf_tags_command = 'ctags.sh'
 
 " }}}
@@ -587,13 +611,13 @@ nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 " currently available:
 " a
 " g
+" h (GitGutter uses it)
 " i
 " j
 " k
 " l
 " p
 " u
-" x
 " y
 " z
 "
@@ -602,9 +626,8 @@ nnoremap <Leader>= :Format<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>c :call ToggleQuickFix()<CR>
 nnoremap <Leader>d :CocList diagnostics<CR>
-nnoremap <Leader>e :FZFMru<CR>
+nnoremap <Leader>e :History<CR>
 nnoremap <Leader>f :Files<CR>
-nnoremap <Leader>h :History<CR>
 nnoremap <Leader>m :Maps<CR>
 nnoremap <Leader>n <Plug>(coc-rename)
 
@@ -620,6 +643,7 @@ nnoremap <Leader>s :call CocActionAsync('showSignatureHelp')<CR>
 nnoremap <Leader>t :Tags<CR>
 nmap <Leader>v <Plug>(coc-diagnostic-info)
 nnoremap <Leader>w :write<CR>
+nnoremap <Leader>x :bd<CR>
 
 " }}}
 " Conditional options {{{
