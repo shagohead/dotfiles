@@ -22,7 +22,7 @@ Plug '/usr/local/opt/fzf'
 Plug 'airblade/vim-gitgutter'
 " Plug 'ctrlpvim/ctrlp.vim'
 Plug 'chriskempson/base16-vim'
-Plug 'dominikduda/vim_current_word'
+" Plug 'dominikduda/vim_current_word'
 Plug 'easymotion/vim-easymotion'
 " Plug 'godlygeek/tabular'
 Plug 'junegunn/fzf.vim'
@@ -51,7 +51,10 @@ call plug#end()
 " Options {{{
 
 " Colors
-syntax enable
+if !&diff
+  syntax enable
+endif
+
 if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
   source ~/.vimrc_background
@@ -92,7 +95,7 @@ set guicursor=
 " Windows UI
 set noruler
 set nonumber
-set cursorline
+set nocursorline
 set splitbelow
 set splitright
 set signcolumn=yes
@@ -162,17 +165,17 @@ inorea <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 " }}}
 " Autocommands {{{
 
-" Only show cursorline in the current window and in normal mode.
 augroup Colors
   au!
   au ColorScheme * call ApplyColors()
 augroup END
 
-augroup CursorLine
-    au!
-    au WinLeave,InsertEnter * set nocursorline
-    au WinEnter,InsertLeave * set cursorline
-augroup END
+" Only show cursorline in the current window and in normal mode.
+" augroup CursorLine
+"     au!
+"     au WinLeave,InsertEnter * set nocursorline
+"     au WinEnter,InsertLeave * set cursorline
+" augroup END
 
 " Make sure Vim returns to the same line when you reopen a file.
 augroup LineReturn
@@ -200,6 +203,7 @@ augroup END
 
 function! ApplyColors() abort
   hi LineNr guibg=NONE
+  hi MatchParen gui=bold,underline guifg=LightCyan guibg=NONE
 endfunction
 call ApplyColors()
 
@@ -507,7 +511,7 @@ augroup filetype_py
 
   au FileType python nnoremap <buffer> <LocalLeader>i :ImportName<CR>
   au FileType python nnoremap <buffer> <LocalLeader>l :CocCommand python.runLinting<CR>
-  au FileType python nnoremap <buffer> <LocalLeader>s :SortImports<CR>
+  au FileType python nnoremap <buffer> <LocalLeader>s :CocCommand python.sortImports<CR>
 augroup END
 
 " }}}

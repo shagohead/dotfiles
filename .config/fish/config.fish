@@ -80,11 +80,13 @@ if status --is-interactive
             case "./manage.py runserver*"
                 __set_tmux_window_title "django-server"
             case "http-prompt*"
-                __set_tmux_window_title "rest-client"
+                __set_tmux_window_title "http-prompt"
             case "nvim *.tmux.conf"
-                __set_tmux_window_title "tmux.conf"
+                __set_tmux_window_title ".tmux.conf"
             case "nvim *.vimrc"
-                __set_tmux_window_title "vimrc"
+                __set_tmux_window_title ".vimrc"
+            case "poetry shell"
+                __set_tmux_window_title "poetry-shell"
         end
     end
 

@@ -309,7 +309,7 @@ c.InteractiveShellApp.extensions = ['autoreload', 'memory_profiler']
 #c.TerminalInteractiveShell.handle_return = None
 
 ## Highlight matching brackets.
-#c.TerminalInteractiveShell.highlight_matching_brackets = True
+c.TerminalInteractiveShell.highlight_matching_brackets = True
 
 ## The name or class of a Pygments style to use for syntax highlighting. To see
 #  available styles, run `pygmentize -L styles`.

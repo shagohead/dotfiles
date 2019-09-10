@@ -28,7 +28,7 @@
 
     "python.jediEnabled": true,
 
-    "python.sortImports.path": "~/.local/bin/isort",
+    "python.sortImports.path": "/Users/lastdanmer/.local/bin/isort",
 
     "python.workspaceSymbols.ctagsPath": "ctags.fish",
     "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/.ctags",
