@@ -4,34 +4,49 @@
 
 filetype plugin indent on
 
+" Variables {{{
+
+" Neo/vim system variables
+let g:python_host_prog  = '/Users/lastdanmer/.pyenv/versions/pynvim-2.7/bin/python'
+let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/pynvim/bin/python'
+
+" Conditional plugins
+" TODO: set by filetype (use coc_nvim for vimscript)
+let g:plug_coc_nvim = 1
+" TODO: add lang servers for viml & js
+" TODO: try to get previews with syntax highlights (like coc for py and viml)
+let g:plug_lang_client = 0
+
+" Environment variables
+let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
+let $PYTHONPATH = '/Users/lastdanmer/.pyenv/versions/jedi/lib/python3.7/site-packages'
+
+" }}}
 " Plugins {{{
 
 call plug#begin('~/.local/share/nvim/plugged')
 
-" File types
-Plug 'cespare/vim-toml'
-Plug 'chr4/nginx.vim'
-Plug 'dag/vim-fish'
-Plug 'Glench/Vim-Jinja2-Syntax'
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'pangloss/vim-javascript'
-Plug 'Vimjas/vim-python-pep8-indent'
-
-" Other
 Plug '/usr/local/opt/fzf'
 Plug 'airblade/vim-gitgutter'
-" Plug 'ctrlpvim/ctrlp.vim'
+Plug 'cespare/vim-toml'
+Plug 'chr4/nginx.vim'
 Plug 'chriskempson/base16-vim'
-" Plug 'dominikduda/vim_current_word'
+Plug 'dag/vim-fish'
 Plug 'easymotion/vim-easymotion'
 " Plug 'godlygeek/tabular'
+Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'HerringtonDarkholme/yats.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'junegunn/vim-peekaboo'
+" Plug 'junegunn/vim-peekaboo'
+" TDOO: try to replace with LSP symbol navigation
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'michaeljsmith/vim-indent-object'
-Plug 'mgedmin/python-imports.vim'
+" FIX: spawn python process on every vim process
+" Plug 'mgedmin/python-imports.vim'
+" try to use LSP for autoimports
+Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
 Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-commentary'
@@ -41,9 +56,15 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'wellle/targets.vim'
 Plug 'Yggdroot/indentLine'
+Plug 'Vimjas/vim-python-pep8-indent'
 
-" With custom options
-Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
+if g:plug_coc_nvim
+  Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
+endif
+
+if g:plug_lang_client
+  Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
+endif
 
 call plug#end()
 
@@ -133,14 +154,8 @@ set ignorecase
 set grepprg=rg\ --vimgrep
 set tags=./.ctags,.ctags
 
-" }}}
-" Variables {{{
-
-let g:python_host_prog  = '/Users/lastdanmer/.pyenv/versions/pynvim-2.7/bin/python'
-let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/pynvim/bin/python'
-
-let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
-let $PYTHONPATH = '/Users/lastdanmer/.pyenv/versions/jedi/lib/python3.7/site-packages'
+" Completion
+set completeopt=noinsert,menuone,noselect
 
 " }}}
 " Highlights {{{
@@ -170,14 +185,8 @@ augroup Colors
   au ColorScheme * call ApplyColors()
 augroup END
 
-" Only show cursorline in the current window and in normal mode.
-" augroup CursorLine
-"     au!
-"     au WinLeave,InsertEnter * set nocursorline
-"     au WinEnter,InsertLeave * set cursorline
-" augroup END
-
 " Make sure Vim returns to the same line when you reopen a file.
+" TODO: exclude commit messages
 augroup LineReturn
     au!
     au BufReadPost *
@@ -188,12 +197,9 @@ augroup END
 
 augroup VimRc
   au!
-  au BufNewFile,BufRead flake8 setf dosini
-
+  au BufNewFile,BufRead flake8,pycodestyle setf dosini
   au CompleteDone * if pumvisible() == 0 | pclose | endif
-
   au FileType qf map <buffer> dd :RemoveQFItem<CR>
-
   au User AirlineAfterInit call AirlineInit()
   au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup END
@@ -224,8 +230,39 @@ function! GetHighlight(group)
   return dict
 endfunction
 
-function! SearchMatchText()
-    return @/[2:-3]
+function! JumpToSign(names, go_back)
+  let l:next = 0
+  let l:line = line('.')
+
+  for l:buffer_signs in sign_getplaced(bufname())
+    if a:go_back == 1
+      call reverse(l:buffer_signs.signs)
+    endif
+
+    for l:sign in l:buffer_signs.signs
+      if index(a:names, l:sign.name) == -1
+        continue
+      endif
+
+      if a:go_back == 1
+        if l:sign.lnum < l:line
+          let l:next = l:sign.id
+          break
+        endif
+      else
+        if l:sign.lnum > l:line
+          let l:next = l:sign.id
+          break
+        endif
+      endif
+    endfor
+  endfor
+
+  if l:next == 0
+    echo 'There is no (visible) signs to go'
+  else
+    execute 'sign jump '.l:next
+  endif
 endfunction
 
 " Delete item form QuickFix list
@@ -360,7 +397,6 @@ function! s:show_documentation()
 endfunction
 
 command! GoDefTab :call CocActionAsync("jumpDefinition", "tabe")<CR>
-command! -nargs=0 Format :call CocAction('format')
 
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
 
@@ -429,6 +465,34 @@ let g:gutentags_ctags_tagfile = '.ctags'
 let g:gutentags_exclude_filetypes = ['gitcommit', 'gitrebase']
 let g:gutentags_file_list_command = 'ctags.fish'
 
+" " }}}
+" LanguageClient {{{
+
+set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+
+let g:LanguageClient_hoverPreview = 'Always'
+" let g:LanguageClient_loggingLevel = 'INFO'
+" let g:LanguageClient_loggingFile =  expand('~/.local/share/nvim/LanguageClient.log')
+" let g:LanguageClient_serverStderr = expand('~/.local/share/nvim/LanguageServer.log')
+let g:LanguageClient_rootMarkers = {
+      \ 'javascript': ['project.json'],
+      \ 'python': ['Pipfile', 'pyproject.toml', 'requirements.txt'],
+      \ 'rust': ['Cargo.toml'],
+      \ }
+let g:lsp_python_mspls = ['dotnet', 'exec', '/Users/lastdanmer/Sources/opensource/python-language-server/output/bin/Release/Microsoft.Python.LanguageServer.dll']
+let g:lsp_python_pyls = ['pyls']
+let g:LanguageClient_serverCommands = {
+      \ 'python': g:lsp_python_pyls,
+      \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+      \ }
+
+augroup LanguageClient_config
+    au!
+    " au User LanguageClientStarted setlocal signcolumn=yes
+    " au User LanguageClientStopped setlocal signcolumn=auto
+    " au User LanguageClientDiagnosticsChanged
+  augroup END
+
 " }}}
 " Other {{{
 
@@ -485,7 +549,6 @@ augroup filetype_js
   au!
   au FileType javascript setlocal tabstop=2
   au FileType javascript setlocal shiftwidth=2
-
   au FileType javascript let b:ale_linters = ['eslint', 'standard']
   au FileType javascript let b:ale_fixers = ['eslint', 'standard']
   au FileType javascript let b:ale_javascript_xo_options = '--space --global=$'
@@ -501,17 +564,21 @@ augroup filetype_py
   au FileType python setlocal tabstop=4
   au FileType python setlocal shiftwidth=4
   au FileType python setlocal expandtab
-
-  au FileType python let b:ale_linters = ['flake8', 'pylint']
+  au FileType python let b:ale_linters = ['flake8']
   au FileType python let b:coc_root_patterns = ['Pipfile', 'pyproject.toml', 'requirements.txt']
-  au FileType python call coc#config('python.pythonPath', systemlist('which python')[0])
-
   au FileType python iab <buffer> pdb import pdb; pdb.set_trace()
   au FileType python iab <buffer> ipdb import ipdb; ipdb.set_trace()
+  " au FileType python nnoremap <buffer> <LocalLeader>i :ImportName<CR>
 
-  au FileType python nnoremap <buffer> <LocalLeader>i :ImportName<CR>
-  au FileType python nnoremap <buffer> <LocalLeader>l :CocCommand python.runLinting<CR>
-  au FileType python nnoremap <buffer> <LocalLeader>s :CocCommand python.sortImports<CR>
+  if g:plug_coc_nvim
+    " au FileType python call coc#config('python.pythonPath', systemlist('which python')[0])
+    " au FileType python nnoremap <buffer> <LocalLeader>l :CocCommand python.runLinting<CR>
+    " au FileType python nnoremap <buffer> <LocalLeader>s :CocCommand editor.action.organizeImport<CR>
+  endif
+
+  if g:plug_lang_client
+    " au FileType python let $PYTHONPATH = systemlist('python -c \"import sys; print(sys.path[-1])\"')[0]
+  endif
 augroup END
 
 " }}}
@@ -539,115 +606,96 @@ augroup END
 " }}}
 " Mappings {{{
 
-" Disabling arrow movings
 noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
-" noremap <C-,> :call SearchMatchText()
 
-" Tabpage movings
-nnoremap { gT
-nnoremap } gt
-" nnoremap # #N
-" nnoremap * *N
-
-" Window jumps
 nnoremap <C-k> <C-W>k
 nnoremap <C-j> <C-W>j
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
-
-" Insert mode one-char movings
 inoremap <C-k> <Up>
 inoremap <C-j> <Down>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
-nnoremap zkk z10k
-nnoremap zjj z10j
-nnoremap zhh z10h
-nnoremap zll z10l
-
-" Paste yank register
+nnoremap { gT
+nnoremap } gt
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
 
-" Documentation preview window
-nnoremap <silent>Y :call <SID>show_documentation()<CR>
-
-" Refresh CoC.nvim completion sources
-inoremap <silent><expr> <C-z> coc#refresh()
-" inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
+nnoremap <silent> [q :cp<CR>
+nnoremap <silent> ]q :cn<CR>
+nnoremap <silent> <C-w>e :pclose<CR>
+nnoremap <silent> <C-w><C-e> :pclose<CR>
+nnoremap <silent> <Leader><BS> :echo ''<CR>
+nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 
 " Execute macro over selected lines range
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
-" Close preview window
-noremap <C-w>e :pclose<CR>
-noremap <C-w><C-e> :pclose<CR>
-
-" Brackets jumps
-nmap <silent> [d <Plug>(coc-diagnostic-prev)
-nmap <silent> ]d <Plug>(coc-diagnostic-next)
-nnoremap <silent> [q :cp<CR>
-nnoremap <silent> ]q :cn<CR>
-
-" Definition jumps & lists
-nnoremap <silent> ge :call CocActionAsync("jumpDefinition", "edit")<CR>
-" TODO: conditional split (vert or hor)
-nnoremap <silent> gd :call CocActionAsync("jumpDefinition", "vsplit")<CR>
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gl <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Tab & S-Tab for completion menu navigation
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
-inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-inoremap <expr><CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
-
-" Messages cleanup
-nnoremap <silent> <Leader><BS> :echo ''<CR>
-nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
-
-" <Leader> mappings
-"
-" currently available:
-" a
-" g
-" h (GitGutter uses it)
-" i
-" j
-" k
-" l
-" p
-" u
-" y
-" z
-"
+" <Leader> mappings, free keys: a g j k p s u z
 nnoremap <Leader>` :Marks<CR>
-nnoremap <Leader>= :Format<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>c :call ToggleQuickFix()<CR>
-nnoremap <Leader>d :CocList diagnostics<CR>
 nnoremap <Leader>e :History<CR>
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>m :Maps<CR>
-nnoremap <Leader>n <Plug>(coc-rename)
+nnoremap <Leader>q :quit<CR>
+nnoremap <Leader>r :%s//g<Left><Left>
+xnoremap <Leader>r :s//g<Left><Left>
+nnoremap <Leader>t :Tags<CR>
+nnoremap <Leader>w :write<CR>
+nnoremap <Leader>x :bd<CR>
 
+" Options toggle
 nnoremap <Leader>og :GitGutterToggle<CR>
 nnoremap <Leader>ol :Limelight!!<CR>
 nnoremap <Leader>on :call ToggleNumber()<CR>
 nnoremap <Leader>or :RainbowParentheses!!<CR>
 
-nnoremap <Leader>q :quit<CR>
-nnoremap <Leader>r :%s//g<Left><Left>
-xnoremap <Leader>r :s//g<Left><Left>
-nnoremap <Leader>s :call CocActionAsync('showSignatureHelp')<CR>
-nnoremap <Leader>t :Tags<CR>
-nmap <Leader>v <Plug>(coc-diagnostic-info)
-nnoremap <Leader>w :write<CR>
-nnoremap <Leader>x :bd<CR>
+" S-Tab for completion menu navigation
+inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+if g:plug_coc_nvim
+  " Refresh CoC.nvim completion sources
+  " inoremap <silent><expr> <C-z> coc#refresh()
+  nnoremap <silent> Y :call <SID>show_documentation()<CR>
+  nnoremap <silent> [d :call CocActionAsync('diagnosticPrevious')<CR>
+  nnoremap <silent> ]d :call CocActionAsync('diagnosticNext')<CR>
+  nnoremap <silent> ge :call CocActionAsync('jumpDefinition', 'edit')<CR>
+  nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
+  nnoremap <silent> gr :call CocAction('jumpReferences')<CR>
+  nnoremap <silent> <Leader>= :call CocAction('format')<CR>
+  nnoremap <silent> <Leader>d :call CocActionAsync('diagnosticInfo')<CR>
+  nnoremap <silent> <Leader>i :CocCommand editor.action.organizeImport<CR>
+  nnoremap <silent> <Leader>n :call CocActionAsync('rename')<CR>
+  nnoremap <silent> <Leader>y :call CocActionAsync('showSignatureHelp')<CR>
+  inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
+
+  " Tab for completion menu navigation
+  inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
+  inoremap <expr><CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+else
+  " Tab for completion menu navigation
+  inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : "\<C-x>\<C-o>"
+  inoremap <expr><CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+if g:plug_lang_client && g:plug_coc_nvim == 0
+  nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+  nnoremap <silent> Y :call LanguageClient#textDocument_hover()<CR>
+  nnoremap <silent> [d :call JumpToSign(['LanguageClientWarning', 'LanguageClientError'], 1)<CR>
+  nnoremap <silent> ]d :call JumpToSign(['LanguageClientWarning', 'LanguageClientError'], 0)<CR>
+  nnoremap <silent> ge :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <silent> gd :call LanguageClient#textDocument_definition({'gotoCmd': 'vsplit'})<CR>
+  nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
+  nnoremap <silent> <Leader>= :call LanguageClient#textDocument_formatting()<CR>
+  nnoremap <silent> <Leader>d :call LanguageClient#explainErrorAtPoint()<CR>
+  nnoremap <silent> <Leader>n :call LanguageClient#textDocument_rename()<CR>
+  nnoremap <silent> <Leader>y :call LanguageClient#textDocument_signatureHelp()<CR>
+endif
 
 " }}}
 " Conditional options {{{

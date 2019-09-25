@@ -10,7 +10,9 @@ set -x GOPATH $HOME/go
 set -x LANG ru_RU.UTF-8
 set -x LC_CTYPE ru_RU.UTF-8
 set -x PYTHONBREAKPOINT ipdb.set_trace
+set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
+set -x PYTEST_ADDOPTS -x --ff --pdb --pdbcls=IPython.terminal.debugger:TerminalPdb
 
 # TODO: append only if there is no value like with _PATH_PREPEND
 set -x CFLAGS {$CFLAGS} -I(xcrun --show-sdk-path)/usr/include/
@@ -85,8 +87,8 @@ if status --is-interactive
                 __set_tmux_window_title ".tmux.conf"
             case "nvim *.vimrc"
                 __set_tmux_window_title ".vimrc"
-            case "poetry shell"
-                __set_tmux_window_title "poetry-shell"
+            # case "poetry shell"
+            #     __set_tmux_window_title "poetry-shell"
         end
     end
 
