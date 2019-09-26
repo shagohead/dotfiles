@@ -43,9 +43,6 @@ Plug 'junegunn/rainbow_parentheses.vim'
 " TDOO: try to replace with LSP symbol navigation
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'michaeljsmith/vim-indent-object'
-" FIX: spawn python process on every vim process
-" Plug 'mgedmin/python-imports.vim'
-" try to use LSP for autoimports
 Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
 Plug 'terryma/vim-expand-region'
@@ -398,7 +395,7 @@ endfunction
 
 command! GoDefTab :call CocActionAsync("jumpDefinition", "tabe")<CR>
 
-let g:coc_node_path = '/Users/lastdanmer/.config/nvm/11.13.0/bin/node'
+let g:coc_node_path = '/Users/lastdanmer/.config/nvm/12.10.0/bin/node'
 
 " }}}
 " FZF {{{

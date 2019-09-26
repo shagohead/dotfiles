@@ -147,21 +147,25 @@ key_bindings:
   # Switch to next pane (o)
   - { key: O, mods: Command|Shift, chars: "\x13\x6f" }
 
-  # Switch tmux windows
+  # Switch tmux sessions (())
+  - { key: LBracket, mods: Command, chars: "\x13\x28" }
+  - { key: RBracket, mods: Command, chars: "\x13\x29" }
+
+  # Switch tmux windows ([])
   - { key: LBracket, mods: Command|Shift, chars: "\x13\x70" }
   - { key: RBracket, mods: Command|Shift, chars: "\x13\x6e" }
 
   # Switch to last window
   - { key: P, mods: Command|Shift, chars: "\x13\x6c" }
 
-  # List windows
+  # List windows (w)
   - { key: Backslash, mods: Command|Shift, chars: "\x13\x77" }
 
   # Move tmux windows (<>)
   - { key: Left, mods: Command|Shift, chars: "\x13\x3c" }
   - { key: Right, mods: Command|Shift, chars: "\x13\x3e" }
 
-  # Enter copy mode
+  # Enter copy mode ([)
   - { key: F, mods: Command, chars: "\x13\x5b" }
 
   # Clear buffer and history (k)
@@ -174,7 +178,7 @@ key_bindings:
   # New session (S)
   - { key: N, mods: Command, chars: "\x13\x53" }
 
-  # Kill pane (close window)
+  # Kill pane (close window) (x)
   - { key: W, mods: Command, chars: "\x13\x78" }
 
   # Open specific programs
