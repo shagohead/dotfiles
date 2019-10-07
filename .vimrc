@@ -24,6 +24,13 @@ let $PYTHONPATH = '/Users/lastdanmer/.pyenv/versions/jedi/lib/python3.7/site-pac
 " }}}
 " Plugins {{{
 
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" TODO: optimize startup https://github.com/junegunn/vim-plug/wiki/tips
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug '/usr/local/opt/fzf'
@@ -39,16 +46,24 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
-" Plug 'junegunn/vim-peekaboo'
+Plug 'justinmk/vim-sneak'
+"
 " TDOO: try to replace with LSP symbol navigation
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'mbbill/undotree'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'pangloss/vim-javascript'
+" Plug 'ripxorip/aerojump.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'ryanoasis/vim-devicons'
 Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
+"
+" TODO: try to replace with another *line plugin
+" TODO: or set minimal airline config
+" TODO: or set own minimal statusline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'wellle/targets.vim'
@@ -69,8 +84,14 @@ call plug#end()
 " Options {{{
 
 " Colors
-if !&diff
-  syntax enable
+if has('syntax')
+  if !exists('g:syntax_on')
+    syntax enable
+  endif
+
+  if &diff
+    syntax diff
+  endif
 endif
 
 if filereadable(expand("~/.vimrc_background"))
@@ -94,6 +115,7 @@ let maplocalleader="\<SPACE>l"
 " UI behevior
 set mouse=a
 set scrolloff=1
+set sidescrolloff=5
 set synmaxcol=800
 set shortmess+=c
 set updatetime=500
@@ -109,10 +131,13 @@ set guicursor=
       \o:hor50,
       \a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,
       \sm:block-blinkwait175-blinkoff150-blinkon175
+set sessionoptions-=options
+set viewoptions-=options
 
 " Windows UI
 set noruler
 set nonumber
+set noshowcmd
 set nocursorline
 set splitbelow
 set splitright
@@ -180,7 +205,7 @@ inorea <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 augroup Colors
   au!
   au ColorScheme * call ApplyColors()
-augroup END
+augroup end
 
 " Make sure Vim returns to the same line when you reopen a file.
 " TODO: exclude commit messages
@@ -190,7 +215,7 @@ augroup LineReturn
         \ if line("'\"") > 0 && line("'\"") <= line("$") |
         \     execute 'normal! g`"zvzz' |
         \ endif
-augroup END
+augroup end
 
 augroup VimRc
   au!
@@ -199,7 +224,7 @@ augroup VimRc
   au FileType qf map <buffer> dd :RemoveQFItem<CR>
   au User AirlineAfterInit call AirlineInit()
   au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup END
+augroup end
 
 " }}}
 " Functions {{{
@@ -225,6 +250,26 @@ function! GetHighlight(group)
     endif
   endfor
   return dict
+endfunction
+
+" Переключение на предыдущий буфер
+function! JumpToPrevBuffer()
+  let l:jumps = getjumplist()
+  let l:list = l:jumps[0]
+  let l:pos = l:jumps[1]
+  let l:bufnum = bufnr()
+  let l:idx = 0
+
+  " TODO: start from previous item not first
+  for l:jump in reverse(l:list)
+    let l:idx += 1
+    if l:jump.bufnr != l:bufnum
+      execute "normal " . l:idx . "\<C-o>"
+      return
+    endif
+  endfor
+
+  echo 'There is no previous buffers to jump'
 endfunction
 
 function! JumpToSign(names, go_back)
@@ -284,12 +329,76 @@ function! ToggleNumber()
   endif
 endfunction
 
-function! ToggleQuickFix()
+let g:quickfixlists = {}
+
+function! QuickFixToggle()
   if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist')) > 0
     :cclose
   else
     :copen
   endif
+endfunction
+
+function! QuickFixClear()
+  cclose
+  call setqflist([], 'r')
+endfunction
+
+function! QuickFixErase()
+  cclose
+endfunction
+
+function! QuickFixSave()
+  let l:initial = input("Save QF list with key (in form: `key:[message]`): ")
+  if len(l:initial) < 1
+    return
+  endif
+
+  let l:initial_list = split(l:initial, ":")
+  let l:key = l:initial_list[0]
+  let l:message = ""
+  if len(l:initial_list) > 1
+    let l:message = l:initial_list[1]
+  endif
+
+  let g:quickfixlists[l:key] = {'message': l:message, 'list': getqflist()}
+  echo "\n"
+  echom "QuickFix list saved at key " . l:key
+endfunction
+
+function! QuickFixLoad()
+  cclose
+  let l:available = []
+
+  for key in keys(g:quickfixlists)
+    let l:message = g:quickfixlists[l:key].message
+    if l:message
+      let l:title = " - " . l:key . ":" . l:message
+    else
+      let l:title = " - " . l:key
+    endif
+    call add(l:available, l:title)
+  endfor
+
+  if len(l:available) < 1
+    echo "There is no save QuickFix lists"
+    return
+  endif
+
+  let l:available_str = join(l:available, "\n")
+  let l:key = input("Available lists:\n" . l:available_str . "\nEnter list key: ")
+  if len(l:key) < 1
+    echo "\nQuickFixLoad aborted"
+    return
+  endif
+
+  if !has_key(g:quickfixlists, l:key)
+    echo "\nThere is no saved list with key: " . l:key
+    return
+  endif
+
+  call setqflist(g:quickfixlists[l:key].list, 'r')
+  copen
 endfunction
 
 
@@ -395,6 +504,17 @@ endfunction
 
 command! GoDefTab :call CocActionAsync("jumpDefinition", "tabe")<CR>
 
+augroup CoC_config
+  au!
+  au FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  au FileType typescript xmap <buffer> if <Plug>(coc-funcobj-i)
+  au FileType typescript xmap <buffer> af <Plug>(coc-funcobj-a)
+  au FileType typescript omap <buffer> if <Plug>(coc-funcobj-i)
+  au FileType typescript omap <buffer> af <Plug>(coc-funcobj-a)
+  au FileType typescript,python nmap <buffer> <silent> <LocalLeader>v <Plug>(coc-range-select)
+  au FileType typescript,python xmap <buffer> <silent> <LocalLeader>v <Plug>(coc-range-select)
+augroup end
+
 let g:coc_node_path = '/Users/lastdanmer/.config/nvm/12.10.0/bin/node'
 
 " }}}
@@ -465,7 +585,9 @@ let g:gutentags_file_list_command = 'ctags.fish'
 " " }}}
 " LanguageClient {{{
 
-set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+if g:plug_lang_client
+  set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+endif
 
 let g:LanguageClient_hoverPreview = 'Always'
 " let g:LanguageClient_loggingLevel = 'INFO'
@@ -488,7 +610,7 @@ augroup LanguageClient_config
     " au User LanguageClientStarted setlocal signcolumn=yes
     " au User LanguageClientStopped setlocal signcolumn=auto
     " au User LanguageClientDiagnosticsChanged
-  augroup END
+  augroup end
 
 " }}}
 " Other {{{
@@ -516,7 +638,7 @@ augroup filetype_fish
   au FileType fish setlocal shiftwidth=4
   au FileType fish setlocal expandtab
   au FileType fish setlocal foldmethod=indent
-augroup END
+augroup end
 
 " }}}
 " GO {{{
@@ -526,7 +648,7 @@ augroup filetype_go
   au FileType go setlocal noexpandtab
   au FileType go let b:ale_fixers = ['gofmt']
   au FileType go let b:coc_root_patterns = ['go.mod', 'go.sum']
-augroup END
+augroup end
 
 " }}}
 " HTML {{{
@@ -537,7 +659,7 @@ augroup filetype_html
   au FileType html setlocal shiftwidth=2
   au FileType html setlocal softtabstop=2
   au FileType html setlocal expandtab
-augroup END
+augroup end
 
 " }}}
 " JavaScript {{{
@@ -551,7 +673,7 @@ augroup filetype_js
   au FileType javascript let b:ale_javascript_xo_options = '--space --global=$'
   au FileType javascript let b:ale_javascript_standard_options = '--global $ --global WebSocket'
   au FileType javascript let b:coc_root_patterns = ['package.json', 'node_modules']
-augroup END
+augroup end
 
 " }}}
 " Python {{{
@@ -576,7 +698,7 @@ augroup filetype_py
   if g:plug_lang_client
     " au FileType python let $PYTHONPATH = systemlist('python -c \"import sys; print(sys.path[-1])\"')[0]
   endif
-augroup END
+augroup end
 
 " }}}
 " VimL {{{
@@ -585,7 +707,7 @@ augroup filetype_vim
   au!
   au FileType vim setlocal tabstop=2
   au FileType vim setlocal shiftwidth=2
-augroup END
+augroup end
 
 " }}}
 " YAML {{{
@@ -596,7 +718,7 @@ augroup filetype_yaml
   au FileType yaml setlocal shiftwidth=2
   au FileType yaml setlocal softtabstop=2
   au FileType yaml setlocal expandtab
-augroup END
+augroup end
 
 " }}}
 
@@ -632,19 +754,41 @@ nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 " Execute macro over selected lines range
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
-" <Leader> mappings, free keys: a g j k p s u z
 nnoremap <Leader>` :Marks<CR>
+" nmap <Leader>as <Plug>(AerojumpSpace)
+" nmap <Leader>ab <Plug>(AerojumpBolt)
+" nmap <Leader>aa <Plug>(AerojumpFromCursorBolt)
+" nmap <Leader>ad <Plug>(AerojumpDefault)
+nnoremap <Leader>a <Nop>
 nnoremap <Leader>b :Buffers<CR>
-nnoremap <Leader>c :call ToggleQuickFix()<CR>
+nnoremap <Leader>cc :call QuickFixToggle()<CR>
+nnoremap <Leader>cd :call QuickFixClear()<CR>
+nnoremap <Leader>ce :call QuickFixErase()<CR>
+nnoremap <Leader>cs :call QuickFixSave()<CR>
+nnoremap <Leader>cl :call QuickFixLoad()<CR>
 nnoremap <Leader>e :History<CR>
 nnoremap <Leader>f :Files<CR>
-nnoremap <Leader>m :Maps<CR>
+nnoremap <Leader>g <Nop>
+" <Leader>h* mappings in use by GitGutter
+nnoremap <Leader>j <Nop>
+nnoremap <Leader>k <Nop>
+nnoremap <Leader>l <Nop>
+nnoremap <Leader>p <Nop>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Left><Left>
+nnoremap <Leader>s <Nop>
 nnoremap <Leader>t :Tags<CR>
+nnoremap <Leader>u <Nop>
+nnoremap <Leader>v <Nop>
 nnoremap <Leader>w :write<CR>
 nnoremap <Leader>x :bd<CR>
+nnoremap <Leader>z <Nop>
+
+" Mappings & macros
+nnoremap <Leader>mm :Maps<CR>
+" Edit register
+nnoremap <Leader>mr :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
 
 " Options toggle
 nnoremap <Leader>og :GitGutterToggle<CR>
@@ -661,12 +805,12 @@ if g:plug_coc_nvim
   nnoremap <silent> Y :call <SID>show_documentation()<CR>
   nnoremap <silent> [d :call CocActionAsync('diagnosticPrevious')<CR>
   nnoremap <silent> ]d :call CocActionAsync('diagnosticNext')<CR>
-  nnoremap <silent> ge :call CocActionAsync('jumpDefinition', 'edit')<CR>
-  nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
+  nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'edit')<CR>
+  nnoremap <silent> gs :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
   nnoremap <silent> gr :call CocAction('jumpReferences')<CR>
   nnoremap <silent> <Leader>= :call CocAction('format')<CR>
   nnoremap <silent> <Leader>d :call CocActionAsync('diagnosticInfo')<CR>
-  nnoremap <silent> <Leader>i :CocCommand editor.action.organizeImport<CR>
+  nnoremap <silent> <Leader>i :call CocAction('runCommand', 'editor.action.organizeImport')<CR>
   nnoremap <silent> <Leader>n :call CocActionAsync('rename')<CR>
   nnoremap <silent> <Leader>y :call CocActionAsync('showSignatureHelp')<CR>
   inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
@@ -685,8 +829,8 @@ if g:plug_lang_client && g:plug_coc_nvim == 0
   nnoremap <silent> Y :call LanguageClient#textDocument_hover()<CR>
   nnoremap <silent> [d :call JumpToSign(['LanguageClientWarning', 'LanguageClientError'], 1)<CR>
   nnoremap <silent> ]d :call JumpToSign(['LanguageClientWarning', 'LanguageClientError'], 0)<CR>
-  nnoremap <silent> ge :call LanguageClient#textDocument_definition()<CR>
-  nnoremap <silent> gd :call LanguageClient#textDocument_definition({'gotoCmd': 'vsplit'})<CR>
+  nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <silent> gs :call LanguageClient#textDocument_definition({'gotoCmd': 'vsplit'})<CR>
   nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
   nnoremap <silent> <Leader>= :call LanguageClient#textDocument_formatting()<CR>
   nnoremap <silent> <Leader>d :call LanguageClient#explainErrorAtPoint()<CR>

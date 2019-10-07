@@ -6,7 +6,7 @@
         "variable": "\ue79b",
         "value": "\uf89f",
         "operator": "\u03a8",
-        "function": "\u0192",
+        "function": "\uf794",
         "reference": "\ufa46",
         "constant": "\uf8fe",
         "method": "\uf09a",
@@ -28,11 +28,6 @@
         "typeParameter": "\uf728",
         "default": "\uf29c"
     },
-    "coc.source.jedi.priority": 30,
-    "coc.source.syntax.priority": 20,
-    "coc.source.file.priority": 10,
-    "coc.source.buffer.priority": 5,
-    "coc.source.around.priority": 1,
     "python.analysis.openFilesOnly": true,
     "python.disableInstallationCheck": true,
     "python.formatting.provider": "black",
@@ -54,6 +49,7 @@
     "python.sortImports.path": "/Users/lastdanmer/.local/bin/isort",
     "python.workspaceSymbols.ctagsPath": "ctags.fish",
     "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/.ctags",
+    "typescript.suggestionActions.enabled": true,
     "languageserver": {
         "golang": {
             "args": [],

@@ -45,6 +45,11 @@ function cleanup -d "System cleanup utility"
         set -a files_to_delete (find ~/Library/iTunes/iPhone\ Software\ Updates -name '*.ipsw')
     end
 
+    if contains -- --mobile-backups $argv; or test $all_provided -eq 1
+        set source_provided 1
+        set -a files_to_delete (find ~/Library/Application\ Support/MobileSync/Backup -type d -d 1)
+    end
+
     if contains -- --external $argv; or test $all_provided -eq 1
         set source_provided 1
         set external_provided 1

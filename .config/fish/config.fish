@@ -47,6 +47,7 @@ set -g pure_threshold_command_duration 2
 abbr -a dc docker-compose
 abbr -a dex docker exec -it
 abbr -a dig dig +short
+abbr -a do docker
 abbr -a ga git add
 abbr -a gc git commit
 abbr -a gca git commit --amend

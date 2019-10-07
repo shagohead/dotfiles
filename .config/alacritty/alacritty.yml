@@ -158,9 +158,6 @@ key_bindings:
   # Switch to last window
   - { key: P, mods: Command|Shift, chars: "\x13\x6c" }
 
-  # List windows (w)
-  - { key: Backslash, mods: Command|Shift, chars: "\x13\x77" }
-
   # Move tmux windows (<>)
   - { key: Left, mods: Command|Shift, chars: "\x13\x3c" }
   - { key: Right, mods: Command|Shift, chars: "\x13\x3e" }
