@@ -56,6 +56,11 @@ function cleanup -d "System cleanup utility"
         set -a files_to_delete (find ~/Library/Application\ Support/MobileSync/Backup -type d -d 1)
     end
 
+    if contains -- --poetry-caches $argv; or test $all_provided -eq 1
+        set source_provided 1
+        set -a files_to_delete (find ~/Library/Caches -name pypoetry -type d -d 1)
+    end
+
     if contains -- --xcode-devices $argv; or test $all_provided -eq 1
         set source_provided 1
         set external_provided 1
