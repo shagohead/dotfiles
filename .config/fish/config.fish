@@ -27,11 +27,12 @@ set _PATH_PREPEND \
     /usr/local/opt/gnu-getopt/bin \
     /usr/local/opt/gettext/bin \
     /usr/local/opt/ruby/bin \
+    $HOME/Library/Python/3.7/bin \
     $HOME/.cargo/bin \
     $HOME/.local/bin \
     $HOME/.poetry/bin \
     $GOPATH/bin \
-    /Users/lastdanmer/.pyenv/shims
+    $HOME/.pyenv/shims
 
 if test -n $VIRTUAL_ENV # append virtual env /bin path
     set -gx _PATH_PREPEND $_PATH_PREPEND $VIRTUAL_ENV/bin

@@ -139,10 +139,10 @@ mouse_bindings:
 
 key_bindings:
   # Switch panes (Arrows)
-  - { key: Left, mods: Command, chars: "\x13\x1b[D"}
-  - { key: Right, mods: Command, chars: "\x13\x1b[C"}
   - { key: Up, mods: Command, chars: "\x13\x1b[A"}
   - { key: Down, mods: Command, chars: "\x13\x1b[B"}
+  - { key: Left, mods: Command, chars: "\x13\x1b[D"}
+  - { key: Right, mods: Command, chars: "\x13\x1b[C"}
 
   # Switch to next pane (o)
   - { key: O, mods: Command|Shift, chars: "\x13\x6f" }

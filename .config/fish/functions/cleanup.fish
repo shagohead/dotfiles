@@ -20,7 +20,7 @@ function cleanup -d "System cleanup utility"
     end
 
     set --local files_to_delete
-    set --local external_commands 'xcrun simctl delete unavailable'
+    set --local external_commands
 
     set --local all_provided 0
     set --local source_provided 0
@@ -40,6 +40,12 @@ function cleanup -d "System cleanup utility"
         end
     end
 
+    if contains -- --brew-stale-downloads $argv; or test $all_provided -eq 1
+        set source_provided 1
+        set external_provided 1
+        set -a external_commands 'brew cleanup 2>/dev/null'
+    end
+
     if contains -- --itunes-updates $argv; or test $all_provided -eq 1
         set source_provided 1
         set -a files_to_delete (find ~/Library/iTunes/iPhone\ Software\ Updates -name '*.ipsw')
@@ -50,9 +56,10 @@ function cleanup -d "System cleanup utility"
         set -a files_to_delete (find ~/Library/Application\ Support/MobileSync/Backup -type d -d 1)
     end
 
-    if contains -- --external $argv; or test $all_provided -eq 1
+    if contains -- --xcode-devices $argv; or test $all_provided -eq 1
         set source_provided 1
         set external_provided 1
+        set -a external_commands 'xcrun simctl delete unavailable'
     end
 
     # check source provided

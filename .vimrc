@@ -743,6 +743,8 @@ nnoremap { gT
 nnoremap } gt
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
+nnoremap <M-p> "+p
+vnoremap <M-p> "+p
 
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>

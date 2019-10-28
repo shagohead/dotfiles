@@ -1,3 +1,4 @@
+# Defined in /var/folders/gg/s159wbtx1014w775zwkbdx4r0000gn/T//fish.TqF13G/update_all.fish @ line 2
 function update_all --description 'Update all packages'
 	function colored_echo
         set_color green
@@ -26,7 +27,7 @@ function update_all --description 'Update all packages'
     if test $option_provided -eq 0; or contains -- --git $argv
         colored_echo "Pulling git repositories "
         if test -e ~/.local/share/nvim/site/pack/bundle/start/cheat40
-            cd ~/.local/share/nvim/site/pack/bundle/start/cheat40; and git pull
+            cd ~/.local/share/nvim/site/pack/bundle/start/cheat40; and git pull; and cd -
         end
     end
 
