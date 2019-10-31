@@ -72,6 +72,9 @@ if status --is-interactive
 
     if test \( "$POETRY_ACTIVE" = "1" \) -a \( -f .env \)
         posix_source # source .env on poetry shell activate
+        if test -f .env.local
+            posix_source .env.local
+        end
     end
 
     function __set_tmux_window_title -a title
@@ -89,8 +92,6 @@ if status --is-interactive
                 __set_tmux_window_title ".tmux.conf"
             case "nvim *.vimrc"
                 __set_tmux_window_title ".vimrc"
-            # case "poetry shell"
-            #     __set_tmux_window_title "poetry-shell"
         end
     end
 
