@@ -33,42 +33,53 @@ endif
 " TODO: optimize startup https://github.com/junegunn/vim-plug/wiki/tips
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug '/usr/local/opt/fzf'
-Plug 'airblade/vim-gitgutter'
+" GROUP: filetypes
 Plug 'cespare/vim-toml'
 Plug 'chr4/nginx.vim'
-Plug 'chriskempson/base16-vim'
 Plug 'dag/vim-fish'
-Plug 'easymotion/vim-easymotion'
-" Plug 'godlygeek/tabular'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'HerringtonDarkholme/yats.vim'
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/limelight.vim'
-Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'justinmk/vim-sneak'
-"
-" TDOO: try to replace with LSP symbol navigation
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'mbbill/undotree'
-Plug 'michaeljsmith/vim-indent-object'
 Plug 'pangloss/vim-javascript'
+
+" GROUP: navigation file/buffer
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-unimpaired'
+
+" GROUP: motions through buffer/window
+Plug 'easymotion/vim-easymotion'
+Plug 'justinmk/vim-sneak'
 " Plug 'ripxorip/aerojump.nvim', {'do': ':UpdateRemotePlugins'}
-Plug 'ryanoasis/vim-devicons'
+
+" GROUP: code selection & text objects
+Plug 'michaeljsmith/vim-indent-object'
 Plug 'terryma/vim-expand-region'
+Plug 'wellle/targets.vim'
+
+" GROUP: code formatting
+" Plug 'godlygeek/tabular'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-unimpaired'
-"
+Plug 'Vimjas/vim-python-pep8-indent'
+
+" GROUP: changetree, git, tags
+Plug 'airblade/vim-gitgutter'
+" TDOO: try to replace with LSP symbol navigation
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'mbbill/undotree'
+
+" GROUP: UI
+Plug 'junegunn/limelight.vim'
+Plug 'chriskempson/base16-vim'
+Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'ryanoasis/vim-devicons'
 " TODO: try to replace with another *line plugin
 " TODO: or set minimal airline config
 " TODO: or set own minimal statusline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'wellle/targets.vim'
 Plug 'Yggdroot/indentLine'
-Plug 'Vimjas/vim-python-pep8-indent'
 
 if g:plug_coc_nvim
   Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
@@ -110,7 +121,7 @@ set encoding=utf-8
 " Mappings
 set pastetoggle=<F2>
 let mapleader="\<SPACE>"
-let maplocalleader="\<SPACE>l"
+let maplocalleader="\<SPACE>\<SPACE>"
 
 " UI behevior
 set mouse=a
@@ -659,6 +670,7 @@ augroup filetype_html
   au FileType html setlocal shiftwidth=2
   au FileType html setlocal softtabstop=2
   au FileType html setlocal expandtab
+  au FileType html,jinja.html setlocal wrap
 augroup end
 
 " }}}
@@ -673,6 +685,17 @@ augroup filetype_js
   au FileType javascript let b:ale_javascript_xo_options = '--space --global=$'
   au FileType javascript let b:ale_javascript_standard_options = '--global $ --global WebSocket'
   au FileType javascript let b:coc_root_patterns = ['package.json', 'node_modules']
+augroup end
+
+" }}}
+" LESS {{{
+
+augroup filetype_less
+  au!
+  au FileType less setlocal tabstop=2
+  au FileType less setlocal shiftwidth=2
+  au FileType less setlocal softtabstop=2
+  au FileType less setlocal expandtab
 augroup end
 
 " }}}
@@ -691,7 +714,7 @@ augroup filetype_py
 
   if g:plug_coc_nvim
     " au FileType python call coc#config('python.pythonPath', systemlist('which python')[0])
-    " au FileType python nnoremap <buffer> <LocalLeader>l :CocCommand python.runLinting<CR>
+    au FileType python nnoremap <buffer> <LocalLeader>l :CocCommand python.runLinting<CR>
     " au FileType python nnoremap <buffer> <LocalLeader>s :CocCommand editor.action.organizeImport<CR>
   endif
 
@@ -748,8 +771,8 @@ vnoremap <M-p> "+p
 
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
-nnoremap <silent> <C-w>e :pclose<CR>
-nnoremap <silent> <C-w><C-e> :pclose<CR>
+nnoremap <silent> <C-w>w :pclose<CR>
+nnoremap <silent> <C-w><C-w> :pclose<CR>
 nnoremap <silent> <Leader><BS> :echo ''<CR>
 nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 
