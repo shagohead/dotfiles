@@ -5,22 +5,11 @@ env:
 
 window:
   dimensions:
-    columns: 164
+    columns: 170
     lines: 40
-
-  padding:
-    x: 2
-    y: 2
-
-  dynamic_padding: false
-  decorations: full
-  startup_mode: Windowed
 
 scrolling:
   history: 15000
-  multiplier: 3
-  faux_multiplier: 3
-  auto_scroll: false
 
 tabspaces: 4
 
@@ -29,38 +18,19 @@ font:
     family: Iosevka Nerd Font
     style: Regular
 
-  bold:
-    style: Bold
-
-  italic:
-    style: Italic
-
   size: 13.0
-
-  offset:
-    x: 0
-    y: 0
-
-  glyph_offset:
-    x: 0
-    y: 0
 
   use_thin_strokes: true
 
-draw_bold_text_with_bright_colors: true
-
 colors:
-  # Default colors
   primary:
     background: '0x181818'
     foreground: '0xd8d8d8'
 
-  # Colors the cursor will use if `custom_cursor_colors` is true
   cursor:
     text: '0x181818'
     cursor: '0xd8d8d8'
 
-  # Normal colors
   normal:
     black:   '0x181818'
     red:     '0xab4642'
@@ -71,7 +41,6 @@ colors:
     cyan:    '0x86c1b9'
     white:   '0xd8d8d8'
 
-  # Bright colors
   bright:
     black:   '0x585858'
     red:     '0xab4642'
@@ -90,25 +59,6 @@ colors:
     - { index: 20, color: '0xb8b8b8' }
     - { index: 21, color: '0xe8e8e8' }
 
-visual_bell:
-  animation: EaseOutExpo
-  duration: 0
-  color: '0xffffff'
-
-background_opacity: 1.0
-
-selection:
-  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
-  save_to_clipboard: false
-
-dynamic_title: true
-
-cursor:
-  style: Block
-  unfocused_hollow: true
-
-live_config_reload: true
-
 shell:
   program: /bin/sh
   args:
@@ -122,17 +72,10 @@ enable_experimental_conpty_backend: false
 alt_send_esc: true
 
 mouse:
-  double_click: { threshold: 300 }
-  triple_click: { threshold: 300 }
-
   hide_when_typing: true
 
   url:
     launcher: open
-    modifiers: None
-
-mouse_bindings:
-  - { mouse: Middle, action: PasteSelection }
 
 # Avaiable keys:
 # `Scancode`, `Key1`, `Key2`, `Key3`, `Key4`, `Key5`, `Key6`, `Key7`, `Key8`, `Key9`, `Key0`, `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L`, `M`, `N`, `O`, `P`, `Q`, `R`, `S`, `T`, `U`, `V`, `W`, `X`, `Y`, `Z`, `Escape`, `F1`, `F2`, `F3`, `F4`, `F5`, `F6`, `F7`, `F8`, `F9`, `F10`, `F11`, `F12`, `F13`, `F14`, `F15`, `F16`, `F17`, `F18`, `F19`, `F20`, `F21`, `F22`, `F23`, `F24`, `Snapshot`, `Scroll`, `Pause`, `Insert`, `Home`, `Delete`, `End`, `PageDown`, `PageUp`, `Left`, `Up`, `Right`, `Down`, `Back`, `Return`, `Space`, `Compose`, `Numlock`, `Numpad0`, `Numpad1`, `Numpad2`, `Numpad3`, `Numpad4`, `Numpad5`, `Numpad6`, `Numpad7`, `Numpad8`, `Numpad9`, `AbntC1`, `AbntC2`, `Add`, `Apostrophe`, `Apps`, `At`, `Ax`, `Backslash`, `Calculator`, `Capital`, `Colon`, `Comma`, `Convert`, `Decimal`, `Divide`, `Equals`, `Grave`, `Kana`, `Kanji`, `LAlt`, `LBracket`, `LControl`, `LShift`, `LWin`, `Mail`, `MediaSelect`, `MediaStop`, `Minus`, `Multiply`, `Mute`, `MyComputer`, `NavigateForward`, `NavigateBackward`, `NextTrack`, `NoConvert`, `NumpadComma`, `NumpadEnter`, `NumpadEquals`, `OEM102`, `Period`, `PlayPause`, `Power`, `PrevTrack`, `RAlt`, `RBracket`, `RControl`, `RShift`, `RWin`, `Semicolon`, `Slash`, `Sleep`, `Stop`, `Subtract`, `Sysrq`, `Tab`, `Underline`, `Unlabeled`, `VolumeDown`, `VolumeUp`, `Wake`, `WebBack`, `WebFavorites`, `WebForward`, `WebHome`, `WebRefresh`, `WebSearch`, `WebStop`, `Yen`, `Caret`, `Copy`, `Paste`, `Cut`
@@ -182,8 +125,6 @@ key_bindings:
   - { key: Slash, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["new-window", "-n Help", "bat ~/.HELP.md"] } }
   - { key: Semicolon, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["new-window", "-n Monitor", "glances"] } }
 
-  - { key: Paste,                   action: Paste                        }
-  - { key: Copy,                    action: Copy                         }
   - { key: L,        mods: Control, action: ClearLogNotice               }
   - { key: L,        mods: Control, chars: "\x0c"                        }
   - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }

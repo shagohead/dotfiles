@@ -1,6 +1,5 @@
-# Defined in /var/folders/gg/s159wbtx1014w775zwkbdx4r0000gn/T//fish.TqF13G/update_all.fish @ line 2
 function update_all --description 'Update all packages'
-	function colored_echo
+    function colored_echo
         set_color green
         echo -n $argv[1]
         set_color normal

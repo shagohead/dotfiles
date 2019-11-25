@@ -555,6 +555,7 @@ function! s:buffsink(lines)
     for line in a:lines[1:]
       call add(buffers, matchstr(line, '\[\zs[0-9]*\ze\]'))
     endfor
+    " TODO: only non-active buffers: execute('buffers a')
     execute 'bdelete' join(buffers, ' ')
     return
   else
@@ -641,6 +642,14 @@ let g:webdevicons_enable_airline_statusline = 1
 " }}}
 " Filetype Specific {{{
 
+" Multiple {{{
+
+augroup filetype_multiple
+  au!
+  au FileType html,jinja.html,python setlocal wrap
+augroup end
+
+" }}}
 " fish {{{
 
 augroup filetype_fish
@@ -670,7 +679,6 @@ augroup filetype_html
   au FileType html setlocal shiftwidth=2
   au FileType html setlocal softtabstop=2
   au FileType html setlocal expandtab
-  au FileType html,jinja.html setlocal wrap
 augroup end
 
 " }}}
