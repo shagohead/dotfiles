@@ -7,8 +7,8 @@ set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{
 set -x EDITOR nvim
 set -x FZF_DEFAULT_COMMAND 'fd -i -H'
 set -x GOPATH $HOME/go
-set -x LANG ru_RU.UTF-8
-set -x LC_CTYPE ru_RU.UTF-8
+set -x LANG en_US.UTF-8
+set -x LC_CTYPE en_US.UTF-8
 set -x PYTHONBREAKPOINT ipdb.set_trace
 set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
@@ -27,10 +27,8 @@ set _PATH_PREPEND \
     /usr/local/opt/gnu-getopt/bin \
     /usr/local/opt/gettext/bin \
     /usr/local/opt/ruby/bin \
-    $HOME/Library/Python/3.7/bin \
     $HOME/.cargo/bin \
     $HOME/.local/bin \
-    $HOME/.poetry/bin \
     $GOPATH/bin \
     $HOME/.pyenv/shims
 

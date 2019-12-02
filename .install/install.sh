@@ -16,11 +16,15 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # fisher for fish
 curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
 
-mkdir -p ~/Sources/opensource/
-mkdir -p ~/Sources/projects/
-
 # rust compiler
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# TODO: activate python version
+pipx install poetry
+poetry config settings.virtualenvs.in-project true
+
+mkdir -p ~/Sources/opensource/
+mkdir -p ~/Sources/projects/
 
 qlmanage -r
 
