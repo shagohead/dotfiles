@@ -4,16 +4,24 @@
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 # Must-have stuff
-brew install fish fzf go neovim node pipenv pyenv ripgrep telnet tmux yarn
+brew install bat fd fish fzf git go neovim node pipenv pyenv ripgrep telnet tmux yarn
+
+# vim-plug
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# tmux plugin manager
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+# fisher for fish
+curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
 
 mkdir -p ~/Sources/opensource/
 mkdir -p ~/Sources/projects/
 
-# install rust & cargo
-# install alacritty
-
-# TODO: config system
-# TODO: organize install dir (or migrate dir)
-# TODO: install pyenv (with versions; with virtualenvs for versions; with pip install in virtualenvs)
+# rust compiler
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 qlmanage -r
+
+# install alacritty

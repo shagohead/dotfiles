@@ -7,8 +7,8 @@ filetype plugin indent on
 " Variables {{{
 
 " Neo/vim system variables
-let g:python_host_prog  = '/Users/lastdanmer/.virtualenvs/pynvim-2/bin/python'
-let g:python3_host_prog = '/Users/lastdanmer/.virtualenvs/pynvim/bin/python'
+let g:python_host_prog  = '/Users/shagohead/.virtualenvs/pynvim-2/bin/python'
+let g:python3_host_prog = '/Users/shagohead/.virtualenvs/pynvim/bin/python'
 
 " Conditional plugins
 " TODO: set by filetype (use coc_nvim for vimscript)
@@ -19,7 +19,7 @@ let g:plug_lang_client = 0
 
 " Environment variables
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
-let $PYTHONPATH = '/Users/lastdanmer/.virtualenvs/jedi/lib/python3.8/site-packages'
+let $PYTHONPATH = '/Users/shagohead/.virtualenvs/jedi/lib/python3.8/site-packages'
 
 " }}}
 " Plugins {{{
@@ -526,7 +526,7 @@ augroup CoC_config
   au FileType typescript,python xmap <buffer> <silent> <LocalLeader>v <Plug>(coc-range-select)
 augroup end
 
-let g:coc_node_path = '/Users/lastdanmer/.config/nvm/12.10.0/bin/node'
+let g:coc_node_path = '/Users/shagohead/.config/nvm/13.2.0/bin/node'
 
 " }}}
 " FZF {{{
@@ -610,7 +610,7 @@ let g:LanguageClient_rootMarkers = {
       \ 'python': ['Pipfile', 'pyproject.toml', 'requirements.txt'],
       \ 'rust': ['Cargo.toml'],
       \ }
-let g:lsp_python_mspls = ['dotnet', 'exec', '/Users/lastdanmer/Sources/opensource/python-language-server/output/bin/Release/Microsoft.Python.LanguageServer.dll']
+let g:lsp_python_mspls = ['dotnet', 'exec', '/Users/shagohead/Sources/opensource/python-language-server/output/bin/Release/Microsoft.Python.LanguageServer.dll']
 let g:lsp_python_pyls = ['pyls']
 let g:LanguageClient_serverCommands = {
       \ 'python': g:lsp_python_pyls,
