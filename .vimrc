@@ -7,8 +7,8 @@ filetype plugin indent on
 " Variables {{{
 
 " Neo/vim system variables
-let g:python_host_prog  = '/Users/lastdanmer/.pyenv/versions/pynvim-2.7/bin/python'
-let g:python3_host_prog = '/Users/lastdanmer/.pyenv/versions/pynvim/bin/python'
+let g:python_host_prog  = '/Users/lastdanmer/.virtualenvs/pynvim-2/bin/python'
+let g:python3_host_prog = '/Users/lastdanmer/.virtualenvs/pynvim/bin/python'
 
 " Conditional plugins
 " TODO: set by filetype (use coc_nvim for vimscript)
@@ -19,7 +19,7 @@ let g:plug_lang_client = 0
 
 " Environment variables
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
-let $PYTHONPATH = '/Users/lastdanmer/.pyenv/versions/jedi/lib/python3.7/site-packages'
+let $PYTHONPATH = '/Users/lastdanmer/.virtualenvs/jedi/lib/python3.8/site-packages'
 
 " }}}
 " Plugins {{{

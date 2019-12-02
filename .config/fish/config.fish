@@ -106,4 +106,6 @@ if status --is-interactive
     if type -q register-python-argcomplete
         register-python-argcomplete --shell fish pipx | .
     end
+
+    # starship init fish | source
 end
