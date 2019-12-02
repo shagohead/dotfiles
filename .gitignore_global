@@ -1,0 +1,16 @@
+*.swp
+.ctags
+.DS_Store
+.python-version
+Session.vim
+tags
+
+.mypy_cache/
+.pytype/
+.venv/
+.vim/
+.vscode/
+__pycache__/
+
+/.env.development
+/.idea
