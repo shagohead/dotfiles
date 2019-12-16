@@ -1,6 +1,7 @@
 *.swp
 .ctags
 .DS_Store
+.nvimrc
 .python-version
 Session.vim
 tags

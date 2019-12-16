@@ -45,13 +45,33 @@
     "python.linting.flake8Enabled": true,
     "python.linting.mypyEnabled": false,
     "python.jediEnabled": true,
-    "python.sortImports.path": "/Users/lastdanmer/.local/bin/isort",
+    "python.sortImports.path": "/Users/shagohead/.local/bin/isort",
     "python.workspaceSymbols.ctagsPath": "ctags.fish",
     "python.workspaceSymbols.tagFilePath": "${workspaceFolder}/.ctags",
     "typescript.suggestionActions.enabled": true,
     "languageserver": {
+        "bash": {
+            "command": "bash-language-server",
+            "args": [
+                "start"
+            ],
+            "filetypes": [
+                "sh"
+            ],
+            "ignoredRootPaths": [
+                "~"
+            ]
+        },
+        "dockerfile": {
+            "command": "docker-langserver",
+            "args": [
+                "--stdio"
+            ],
+            "filetypes": [
+                "dockerfile"
+            ]
+        },
         "golang": {
-            "args": [],
             "command": "gopls",
             "filetypes": [
                 "go"
@@ -64,6 +84,12 @@
             "command": "lua-lsp",
             "filetypes": [
                 "--lua"
+            ]
+        },
+        "sourcekit-lsp": {
+            "command": "sourcekit-lsp",
+            "filetypes": [
+                "swift"
             ]
         }
     }

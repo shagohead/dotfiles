@@ -1,12 +1,12 @@
 env:
-  TERM: xterm-24bit
+  TERM: alacritty
   LANG: ru_RU.UTF-8
   LC_CTYPE: ru_RU.UTF-8
 
 window:
   dimensions:
-    columns: 170
-    lines: 40
+    columns: 184
+    lines: 48
 
 scrolling:
   history: 15000
@@ -18,7 +18,7 @@ font:
     family: Iosevka Nerd Font
     style: Regular
 
-  size: 13.0
+  size: 15.0
 
   use_thin_strokes: true
 
@@ -66,6 +66,10 @@ shell:
     - -i
     - -c
     - '~/.start_tmux.sh'
+  # program: /usr/local/bin/fish
+  # args:
+  #   - -l
+  #   - -i
 
 enable_experimental_conpty_backend: false
 

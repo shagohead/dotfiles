@@ -47,9 +47,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-unimpaired'
 
 " GROUP: motions through buffer/window
-Plug 'easymotion/vim-easymotion'
-Plug 'justinmk/vim-sneak'
-" Plug 'ripxorip/aerojump.nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'haya14busa/is.vim'
 
 " GROUP: code selection & text objects
 Plug 'michaeljsmith/vim-indent-object'
@@ -57,6 +55,7 @@ Plug 'terryma/vim-expand-region'
 Plug 'wellle/targets.vim'
 
 " GROUP: code formatting
+" Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'godlygeek/tabular'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
@@ -70,9 +69,10 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'mbbill/undotree'
 
 " GROUP: UI
-Plug 'junegunn/limelight.vim'
 Plug 'chriskempson/base16-vim'
+Plug 'junegunn/limelight.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
+" Plug 'kshenoy/vim-signature'
 Plug 'ryanoasis/vim-devicons'
 " TODO: try to replace with another *line plugin
 " TODO: or set minimal airline config
@@ -82,7 +82,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'Yggdroot/indentLine'
 
 if g:plug_coc_nvim
-  Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
 
 if g:plug_lang_client
@@ -96,12 +96,10 @@ call plug#end()
 
 " Colors
 if has('syntax')
-  if !exists('g:syntax_on')
-    syntax enable
-  endif
-
   if &diff
-    syntax diff
+    syntax off
+  elseif !exists('g:syntax_on')
+    syntax enable
   endif
 endif
 
@@ -117,6 +115,7 @@ set nobackup
 set noswapfile
 set nowritebackup
 set encoding=utf-8
+set exrc secure
 
 " Mappings
 set pastetoggle=<F2>
@@ -135,20 +134,15 @@ set notimeout
 set ttimeout
 set ttimeoutlen=10
 
-set guicursor=
-      \n-v-c-sm:block,
-      \i-ci-ve:ver25,
-      \r-cr:hor20,
-      \o:hor50,
-      \a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,
-      \sm:block-blinkwait175-blinkoff150-blinkon175
+set guicursor=n-v-c-sm:block-Cursor,i-ci-ve:ver25,r-cr:hor20,o:hor50
+      \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+      \,sm:block-blinkwait175-blinkoff150-blinkon175
 set sessionoptions-=options
 set viewoptions-=options
 
 " Windows UI
 set noruler
 set nonumber
-set noshowcmd
 set nocursorline
 set splitbelow
 set splitright
@@ -231,10 +225,19 @@ augroup end
 augroup VimRc
   au!
   au BufNewFile,BufRead flake8,pycodestyle setf dosini
-  au CompleteDone * if pumvisible() == 0 | pclose | endif
+  " Or maybe change style of highlights?
+  " au CmdlineEnter [/\?] :set hlsearch
+  " au CmdlineLeave [/\?] :set nohlsearch
+  au InsertEnter *.go,*.js,*.md,*.py set colorcolumn=89
+  au InsertLeave * set colorcolumn=
   au FileType qf map <buffer> dd :RemoveQFItem<CR>
   au User AirlineAfterInit call AirlineInit()
-  au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+  if g:plug_coc_nvim
+    au CompleteDone * if pumvisible() == 0 && getcmdwintype() != ':' | pclose | endif
+    au CursorHold * silent call CocActionAsync('highlight')
+    au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  endif
 augroup end
 
 " }}}
@@ -242,7 +245,9 @@ augroup end
 
 function! ApplyColors() abort
   hi LineNr guibg=NONE
+  hi Cursor guibg=brwhite guifg=black
   hi MatchParen gui=bold,underline guifg=LightCyan guibg=NONE
+  call g:Base16hi('IncSearch', "", g:base16_gui07, "", "") " bright white
 endfunction
 call ApplyColors()
 
@@ -261,6 +266,19 @@ function! GetHighlight(group)
     endif
   endfor
   return dict
+endfunction
+
+" Поиск референсов grep'ом
+function! FindReferences()
+  let l:word = expand('<cword>')
+  if len(l:word) < 1
+    echo 'There is no word under cursor'
+  else
+    let l:ext = expand('%:e')
+    let l:shell = "rg --column --line-number --no-heading --color=always --smart-case
+          \ --type-add '".l:ext.":*.".l:ext."' -t".l:ext." "
+    call fzf#vim#grep(l:shell.shellescape(l:word), 1, 0)
+  endif
 endfunction
 
 " Переключение на предыдущий буфер
@@ -333,10 +351,10 @@ function! RemoveQFItem()
 endfunction
 
 function! ToggleNumber()
-  if(&number == 1)
-    set nonumber
+  if(&relativenumber == 1)
+    set norelativenumber
   else
-    set number
+    set relativenumber
   endif
 endfunction
 
@@ -647,6 +665,7 @@ let g:webdevicons_enable_airline_statusline = 1
 augroup filetype_multiple
   au!
   au FileType html,jinja.html,python setlocal wrap
+  " au FileType help,html,jinja.html,vim set colorcolumn=
 augroup end
 
 " }}}
@@ -788,10 +807,6 @@ nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
 nnoremap <Leader>` :Marks<CR>
-" nmap <Leader>as <Plug>(AerojumpSpace)
-" nmap <Leader>ab <Plug>(AerojumpBolt)
-" nmap <Leader>aa <Plug>(AerojumpFromCursorBolt)
-" nmap <Leader>ad <Plug>(AerojumpDefault)
 nnoremap <Leader>a <Nop>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>cc :call QuickFixToggle()<CR>
@@ -801,11 +816,12 @@ nnoremap <Leader>cs :call QuickFixSave()<CR>
 nnoremap <Leader>cl :call QuickFixLoad()<CR>
 nnoremap <Leader>e :History<CR>
 nnoremap <Leader>f :Files<CR>
-nnoremap <Leader>g <Nop>
+nnoremap <Leader>g :call ToggleNumber()<CR>
 " <Leader>h* mappings in use by GitGutter
 nnoremap <Leader>j <Nop>
 nnoremap <Leader>k <Nop>
 nnoremap <Leader>l <Nop>
+nnoremap <Leader>o <Nop>
 nnoremap <Leader>p <Nop>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>r :%s//g<Left><Left>
@@ -813,7 +829,7 @@ xnoremap <Leader>r :s//g<Left><Left>
 nnoremap <Leader>s <Nop>
 nnoremap <Leader>t :Tags<CR>
 nnoremap <Leader>u <Nop>
-nnoremap <Leader>v <Nop>
+nnoremap <Leader>v :GitGutterToggle<CR> " VCS toggle
 nnoremap <Leader>w :write<CR>
 nnoremap <Leader>x :bd<CR>
 nnoremap <Leader>z <Nop>
@@ -822,12 +838,6 @@ nnoremap <Leader>z <Nop>
 nnoremap <Leader>mm :Maps<CR>
 " Edit register
 nnoremap <Leader>mr :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
-
-" Options toggle
-nnoremap <Leader>og :GitGutterToggle<CR>
-nnoremap <Leader>ol :Limelight!!<CR>
-nnoremap <Leader>on :call ToggleNumber()<CR>
-nnoremap <Leader>or :RainbowParentheses!!<CR>
 
 " S-Tab for completion menu navigation
 inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
@@ -840,7 +850,8 @@ if g:plug_coc_nvim
   nnoremap <silent> ]d :call CocActionAsync('diagnosticNext')<CR>
   nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'edit')<CR>
   nnoremap <silent> gs :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
-  nnoremap <silent> gr :call CocAction('jumpReferences')<CR>
+  " nnoremap <silent> gr :call CocAction('jumpReferences')<CR>
+  nnoremap <silent> gr :call FindReferences()<CR>
   nnoremap <silent> <Leader>= :call CocAction('format')<CR>
   nnoremap <silent> <Leader>d :call CocActionAsync('diagnosticInfo')<CR>
   nnoremap <silent> <Leader>i :call CocAction('runCommand', 'editor.action.organizeImport')<CR>
