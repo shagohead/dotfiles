@@ -187,10 +187,10 @@ c.InteractiveShellApp.extensions = ['autoreload']
 ## Use colors for displaying information about objects. Because this information
 #  is passed through a pager (like 'less'), and some pagers get confused with
 #  color codes, this capability can be turned off.
-#c.InteractiveShell.color_info = True
+c.InteractiveShell.color_info = True
 
 ## Set the color scheme (NoColor, Neutral, Linux, or LightBG).
-#c.InteractiveShell.colors = 'Neutral'
+c.InteractiveShell.colors = 'Linux'
 
 ## 
 #c.InteractiveShell.debug = False
@@ -352,7 +352,7 @@ c.TerminalInteractiveShell.highlight_matching_brackets = True
 ## Use 24bit colors instead of 256 colors in prompt highlighting. If your
 #  terminal supports true color, the following command should print 'TRUECOLOR'
 #  in orange: printf "\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n"
-#c.TerminalInteractiveShell.true_color = False
+c.TerminalInteractiveShell.true_color = True
 
 #------------------------------------------------------------------------------
 # HistoryAccessor(HistoryAccessorBase) configuration

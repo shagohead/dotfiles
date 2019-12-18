@@ -207,11 +207,6 @@ inorea <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
 " }}}
 " Autocommands {{{
 
-augroup Colors
-  au!
-  au ColorScheme * call ApplyColors()
-augroup end
-
 " Make sure Vim returns to the same line when you reopen a file.
 " TODO: exclude commit messages
 augroup LineReturn
@@ -222,9 +217,11 @@ augroup LineReturn
         \ endif
 augroup end
 
+" Initial augroup
 augroup VimRc
   au!
   au BufNewFile,BufRead flake8,pycodestyle setf dosini
+  au ColorScheme * call ApplyColors()
   " Or maybe change style of highlights?
   " au CmdlineEnter [/\?] :set hlsearch
   " au CmdlineLeave [/\?] :set nohlsearch
@@ -268,7 +265,7 @@ function! GetHighlight(group)
   return dict
 endfunction
 
-" Поиск референсов grep'ом
+" Find references with grep
 function! FindReferences()
   let l:word = expand('<cword>')
   if len(l:word) < 1
@@ -281,7 +278,7 @@ function! FindReferences()
   endif
 endfunction
 
-" Переключение на предыдущий буфер
+" Go to previous buffer in jumplist
 function! JumpToPrevBuffer()
   let l:jumps = getjumplist()
   let l:list = l:jumps[0]
@@ -301,6 +298,7 @@ function! JumpToPrevBuffer()
   echo 'There is no previous buffers to jump'
 endfunction
 
+" Jump to placed sign (used with LanguageClient for diagnostics)
 function! JumpToSign(names, go_back)
   let l:next = 0
   let l:line = line('.')
@@ -350,6 +348,7 @@ function! RemoveQFItem()
   endif
 endfunction
 
+" Toggle relativenumber option
 function! ToggleNumber()
   if(&relativenumber == 1)
     set norelativenumber
@@ -360,6 +359,7 @@ endfunction
 
 let g:quickfixlists = {}
 
+" Toggle QuickFix window
 function! QuickFixToggle()
   if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist')) > 0
     :cclose
@@ -368,15 +368,13 @@ function! QuickFixToggle()
   endif
 endfunction
 
+" Clear QuickFix list
 function! QuickFixClear()
   cclose
   call setqflist([], 'r')
 endfunction
 
-function! QuickFixErase()
-  cclose
-endfunction
-
+" Save QuickFix list in variable
 function! QuickFixSave()
   let l:initial = input("Save QF list with key (in form: `key:[message]`): ")
   if len(l:initial) < 1
@@ -395,6 +393,7 @@ function! QuickFixSave()
   echom "QuickFix list saved at key " . l:key
 endfunction
 
+" Load QuickFix list from variable
 function! QuickFixLoad()
   cclose
   let l:available = []
@@ -811,7 +810,6 @@ nnoremap <Leader>a <Nop>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>cc :call QuickFixToggle()<CR>
 nnoremap <Leader>cd :call QuickFixClear()<CR>
-nnoremap <Leader>ce :call QuickFixErase()<CR>
 nnoremap <Leader>cs :call QuickFixSave()<CR>
 nnoremap <Leader>cl :call QuickFixLoad()<CR>
 nnoremap <Leader>e :History<CR>
