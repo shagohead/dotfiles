@@ -2,7 +2,9 @@ if test -e "$__fish_config_dir/config.tokens.fish"
     source "$__fish_config_dir/config.tokens.fish"
 end
 
-set -x BAT_THEME 'base16'
+set -x BAT_PAGER never
+set -x BAT_STYLE plain
+set -x BAT_THEME base16
 set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}"
 set -x EDITOR nvim
 set -x TERM alacritty

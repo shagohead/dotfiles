@@ -20,6 +20,7 @@ let g:plug_lang_client = 0
 " Environment variables
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
 let $PYTHONPATH = '/Users/shagohead/.pyenv/virtualenvs/jedi/lib/python3.8/site-packages'
+" let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 
 " }}}
 " Plugins {{{
