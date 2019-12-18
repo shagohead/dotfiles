@@ -242,9 +242,21 @@ augroup end
 " Functions {{{
 
 function! ApplyColors() abort
+  hi MatchParen gui=bold,underline guibg=NONE
+
+  if stridx(g:colors_name, 'light') > -1
+    set background=light
+  endif
+
+  if &background == 'dark'
+    hi Cursor guifg=black guibg=brwhite
+    hi MatchParen guifg=LightCyan
+  else
+    hi Cursor guifg=brwhite guibg=black
+    hi MatchParen guifg=DarkMagenta
+  endif
+
   hi LineNr guibg=NONE
-  hi Cursor guibg=brwhite guifg=black
-  hi MatchParen gui=bold,underline guifg=LightCyan guibg=NONE
   call g:Base16hi('IncSearch', "", g:base16_gui07, "", "") " bright white
 endfunction
 call ApplyColors()
