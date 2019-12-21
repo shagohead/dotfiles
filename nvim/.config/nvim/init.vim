@@ -16,11 +16,11 @@ let g:plug_coc_nvim = 1
 " TODO: add lang servers for viml & js
 " TODO: try to get previews with syntax highlights (like coc for py and viml)
 let g:plug_lang_client = 0
+let g:plug_lsp = 1
 
 " Environment variables
-let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
-let $PYTHONPATH = '/Users/shagohead/.pyenv/virtualenvs/jedi/lib/python3.8/site-packages'
-" let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all --color=dark --color=fg:15,bg:0,hl:6,hl+:6 --color=info:2,prompt:1,pointer:12,marker:4,spinner:11,header:6'
+" let $PYTHONPATH = '/Users/shagohead/.pyenv/virtualenvs/jedi/lib/python3.8/site-packages'
 
 " }}}
 " Plugins {{{
@@ -34,45 +34,47 @@ endif
 " TODO: optimize startup https://github.com/junegunn/vim-plug/wiki/tips
 call plug#begin('~/.local/share/nvim/plugged')
 
-" GROUP: filetypes
+" FILETYPES
 Plug 'cespare/vim-toml'
 Plug 'chr4/nginx.vim'
 Plug 'dag/vim-fish'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'pangloss/vim-javascript'
+" TODO: check if it needed
+Plug 'Vimjas/vim-python-pep8-indent'
 
-" GROUP: navigation file/buffer
+" NAVIGATION FILE/BUFFER
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-unimpaired'
 
-" GROUP: motions through buffer/window
+" MOTIONS THROUGH BUFFER/WINDOW
 Plug 'haya14busa/is.vim'
 
-" GROUP: code selection & text objects
+" CODE SELECTION & TEXT OBJECTS
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'terryma/vim-expand-region'
 Plug 'wellle/targets.vim'
 
-" GROUP: code formatting
+" CODE FORMATTING
 " Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'godlygeek/tabular'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'Vimjas/vim-python-pep8-indent'
 
-" GROUP: changetree, git, tags
+" CHANGETREE, GIT, TAGS
 Plug 'airblade/vim-gitgutter'
 " TDOO: try to replace with LSP symbol navigation
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'mbbill/undotree'
 
-" GROUP: UI
+" UI
 Plug 'chriskempson/base16-vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
 " Plug 'kshenoy/vim-signature'
 Plug 'ryanoasis/vim-devicons'
 " TODO: try to replace with another *line plugin
@@ -88,6 +90,11 @@ endif
 
 if g:plug_lang_client
   Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
+endif
+
+if g:plug_lsp
+  Plug 'prabirshrestha/async.vim'
+  Plug 'prabirshrestha/vim-lsp'
 endif
 
 call plug#end()
@@ -121,14 +128,16 @@ set exrc secure
 " Mappings
 set pastetoggle=<F2>
 let mapleader="\<SPACE>"
-let maplocalleader="\<SPACE>\<SPACE>"
+let maplocalleader=","
 
 " UI behevior
 set mouse=a
+set shortmess+=c
+
+set numberwidth=2
 set scrolloff=1
 set sidescrolloff=5
 set synmaxcol=800
-set shortmess+=c
 set updatetime=500
 
 set notimeout
@@ -250,13 +259,14 @@ function! ApplyColors() abort
 
   if &background == 'dark'
     hi Cursor guifg=black guibg=brwhite
-    hi MatchParen guifg=LightCyan
+    call g:Base16hi('MatchParen', g:base16_gui0C, "", "", "") " cyan
   else
     hi Cursor guifg=brwhite guibg=black
-    hi MatchParen guifg=DarkMagenta
+    call g:Base16hi('MatchParen', g:base16_gui0E, "", "", "") " magenta
   endif
 
   hi LineNr guibg=NONE
+  hi CursorLineNr gui=NONE guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE
   call g:Base16hi('IncSearch', "", g:base16_gui07, "", "") " bright white
 endfunction
 call ApplyColors()
@@ -279,7 +289,7 @@ function! GetHighlight(group)
 endfunction
 
 " Find references with grep
-function! FindReferences()
+function! GrepReferences()
   let l:word = expand('<cword>')
   if len(l:word) < 1
     echo 'There is no word under cursor'
@@ -567,6 +577,22 @@ function! BuildQuickfixList(lines)
   cc
 endfunction
 
+function! FloatingFZF()
+  let buf = nvim_create_buf(v:false, v:true)
+  call setbufvar(buf, '&signcolumn', 'no')
+
+  let opts = {
+        \ 'relative': 'win',
+        \ 'width': winwidth(winnr()),
+        \ 'height': 13,
+        \ 'row': winheight(winnr()) - 13,
+        \ 'col': 0,
+        \ 'style': 'minimal'
+        \ }
+
+  call nvim_open_win(buf, v:true, opts)
+endfunction
+
 function! s:edit_devicon_prepended_file(item)
   let l:file_path = a:item[4:-1]
   execute 'silent e' l:file_path
@@ -614,7 +640,7 @@ let g:fzf_action = {
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-x': 'split',
       \ 'ctrl-v': 'vsplit'}
-let g:fzf_layout = {'window': '13new'}
+let g:fzf_layout = {'window': 'call FloatingFZF()'}
 let g:fzf_tags_command = 'ctags.sh'
 
 " }}}
@@ -648,11 +674,34 @@ let g:LanguageClient_serverCommands = {
       \ }
 
 augroup LanguageClient_config
-    au!
-    " au User LanguageClientStarted setlocal signcolumn=yes
-    " au User LanguageClientStopped setlocal signcolumn=auto
-    " au User LanguageClientDiagnosticsChanged
-  augroup end
+  au!
+  " au User LanguageClientStarted setlocal signcolumn=yes
+  " au User LanguageClientStopped setlocal signcolumn=auto
+  " au User LanguageClientDiagnosticsChanged
+augroup end
+
+" }}}
+" LSP {{{
+
+function! s:on_lsp_buffer_enabled() abort
+  " setlocal omnifunc=lsp#complete
+  " setlocal signcolumn=yes
+  nmap <buffer> <F6> <plug>(lsp-definition)
+  " nmap <buffer> <f2> <plug>(lsp-rename)
+endfunction
+
+if executable('pyls')
+  au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
+augroup lsp_install
+  au!
+  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 
 " }}}
 " Other {{{
@@ -749,16 +798,10 @@ augroup filetype_py
   au FileType python let b:coc_root_patterns = ['Pipfile', 'pyproject.toml', 'requirements.txt']
   au FileType python iab <buffer> pdb import pdb; pdb.set_trace()
   au FileType python iab <buffer> ipdb import ipdb; ipdb.set_trace()
-  " au FileType python nnoremap <buffer> <LocalLeader>i :ImportName<CR>
 
   if g:plug_coc_nvim
-    " au FileType python call coc#config('python.pythonPath', systemlist('which python')[0])
     au FileType python nnoremap <buffer> <LocalLeader>l :CocCommand python.runLinting<CR>
     " au FileType python nnoremap <buffer> <LocalLeader>s :CocCommand editor.action.organizeImport<CR>
-  endif
-
-  if g:plug_lang_client
-    " au FileType python let $PYTHONPATH = systemlist('python -c \"import sys; print(sys.path[-1])\"')[0]
   endif
 augroup end
 
@@ -810,6 +853,7 @@ vnoremap <M-p> "+p
 
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
+nnoremap <silent> gp :call GrepReferences()<CR>
 nnoremap <silent> <C-w>w :pclose<CR>
 nnoremap <silent> <C-w><C-w> :pclose<CR>
 nnoremap <silent> <Leader><BS> :echo ''<CR>
@@ -861,8 +905,7 @@ if g:plug_coc_nvim
   nnoremap <silent> ]d :call CocActionAsync('diagnosticNext')<CR>
   nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'edit')<CR>
   nnoremap <silent> gs :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
-  " nnoremap <silent> gr :call CocAction('jumpReferences')<CR>
-  nnoremap <silent> gr :call FindReferences()<CR>
+  nnoremap <silent> gr :call CocAction('jumpReferences')<CR>
   nnoremap <silent> <Leader>= :call CocAction('format')<CR>
   nnoremap <silent> <Leader>d :call CocActionAsync('diagnosticInfo')<CR>
   nnoremap <silent> <Leader>i :call CocAction('runCommand', 'editor.action.organizeImport')<CR>
