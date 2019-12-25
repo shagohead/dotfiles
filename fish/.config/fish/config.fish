@@ -9,7 +9,7 @@ set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{
 set -x EDITOR nvim
 set -x TERM alacritty
 set -x FZF_DEFAULT_COMMAND "fd -i -H"
-set -x FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --color=dark --color=fg:15,bg:0,hl:6,hl+:6 --color=info:2,prompt:1,pointer:12,marker:4,spinner:11,header:6"
+set -x FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --color=dark --color=fg:15,bg:0,bg+:0,hl:6,hl+:6 --color=info:2,prompt:1,pointer:12,marker:4,spinner:11,header:6"
 set -x GOPATH $HOME/go
 set -x LANG en_US.UTF-8
 set -x LC_CTYPE en_US.UTF-8

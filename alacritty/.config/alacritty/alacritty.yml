@@ -5,8 +5,8 @@ env:
 
 window:
   dimensions:
-    columns: 184
-    lines: 48
+    columns: 164
+    lines: 42
 
 scrolling:
   history: 15000

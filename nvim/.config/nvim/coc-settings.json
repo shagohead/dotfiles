@@ -1,6 +1,7 @@
 {
     "coc.preferences.previewAutoClose": true,
     "coc.preferences.useQuickfixForLocations": true,
+    "diagnostic.messageTarget": "echo",
     "suggest.completionItemKindLabels": {
         "keyword": "\uf1de",
         "variable": "\ue79b",
