@@ -15,6 +15,7 @@ Plug 'dag/vim-fish'
 Plug 'haya14busa/is.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-commentary'
@@ -171,7 +172,6 @@ noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
-
 nnoremap <C-k> <C-W>k
 nnoremap <C-j> <C-W>j
 nnoremap <C-h> <C-W>h
@@ -180,6 +180,8 @@ inoremap <C-k> <Up>
 inoremap <C-j> <Down>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
+cnoremap <M-b> <S-Left>
+cnoremap <M-f> <S-Right>
 
 nnoremap { gT
 nnoremap } gt
@@ -191,15 +193,10 @@ vnoremap <M-p> "+p
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
 nnoremap <silent> gp :call utils#grep_references()<CR>
-nnoremap <silent> <C-w>w :pclose<CR>
-nnoremap <silent> <C-w><C-w> :pclose<CR>
 nnoremap <silent> <Leader><BS> :echo ''<CR>
 nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
-
-" Execute macro over selected lines range
 xnoremap @ :<C-u>call utils#execute_macro_over_visual_range()<CR>
 
-" TODO WhichKey map with getchar()
 nnoremap <Leader>` :Marks<CR>
 nnoremap <Leader>a <Nop>
 nnoremap <Leader>b :Buffers<CR>
@@ -212,13 +209,13 @@ nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>g :call utils#toggle_numbers()<CR>
 vnoremap <Leader>g :call utils#toggle_numbers()<CR>gv
 nnoremap <Leader>j <Nop>
-nnoremap <Leader>k <Nop>
+nnoremap <Leader>k :call utils#keyhelper()<CR>
 nnoremap <Leader>l <Nop>
 nnoremap <Leader>o <Nop>
 nnoremap <Leader>p <Nop>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>r :%s//g<Left><Left>
-xnoremap <Leader>r :s//g<Left><Left>
+xnoremap <Leader>r :s//g<Bar>noh<Left><Left><Left><Left><Left><Left>
 nnoremap <Leader>s <Nop>
 nnoremap <Leader>t :Tags<CR>
 nnoremap <Leader>u <Nop>
@@ -249,6 +246,14 @@ nnoremap <silent> <Leader>i :call CocActionAsync('runCommand', 'editor.action.or
 nnoremap <silent> <Leader>n :call CocActionAsync('rename')<CR>
 nnoremap <silent> <Leader>y :call CocActionAsync('showSignatureHelp')<CR>
 inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
+
+" }}}
+" Commands {{{
+
+" Search inside / outside syntax group
+command! -nargs=+ -complete=command SInside  call utils#search_inside(<f-args>)
+command! -nargs=+ -complete=command SOutside call utils#search_outside(<f-args>)
+command! -nargs=0 -complete=command SGroup   echo(synIDattr(synID(line("."), col("."), 0), "name"))
 
 " }}}
 " Autocommands {{{
@@ -282,7 +287,7 @@ augroup vimrc
   au FileType html,jinja.html,python setlocal wrap
 
   " QuickFix item remove
-  au FileType qf map <buffer> dd :quickfix#remove()<CR>
+  au FileType qf map <buffer> dd :call quickfix#remove()<CR>
 
   " Show wordwrap column in insert mode
   au InsertEnter *.go,*.js,*.md,*.py set colorcolumn=89
@@ -290,6 +295,10 @@ augroup vimrc
 
   " CoC recommendation (which currently i dont understand)
   au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+  " Gutentags status messages
+  au User GutentagsUpdated echo 'Tags updated'
+  au User GutentagsUpdating echo 'Updating tags..'
 
   " TMUX window title with filename
   if exists('$TMUX')

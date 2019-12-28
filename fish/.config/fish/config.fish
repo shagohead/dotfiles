@@ -7,7 +7,6 @@ set -x BAT_STYLE plain
 set -x BAT_THEME base16
 set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}"
 set -x EDITOR nvim
-set -x TERM alacritty
 set -x FZF_DEFAULT_COMMAND "fd -i -H"
 set -x FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --color=dark --color=fg:15,bg:0,bg+:0,hl:6,hl+:6 --color=info:2,prompt:1,pointer:12,marker:4,spinner:11,header:6"
 set -x GOPATH $HOME/go
@@ -66,7 +65,10 @@ alias dsa 'docker stop (docker ps -q)'
 alias dps 'docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Status}}"'
 alias ssh 'env TERM=xterm-256color ssh'
 alias top 'top -o cpu'
-alias tldr 'tldr -t ocean'
+
+if test -n "$ALACRITTY_LOG"
+    set -x TERM alacritty
+end
 
 if status --is-interactive
     set BASE16_SHELL "$HOME/.config/base16-shell/"
