@@ -5,7 +5,7 @@
     "coc-python": ">=1.2.6",
     "coc-syntax": ">=1.2.4",
     "coc-tsserver": ">=1.4.9",
-    "coc-vimlsp": ">=0.4.3",
+    "coc-vimlsp": ">=0.4.4",
     "coc-yaml": ">=1.0.2"
   }
 }

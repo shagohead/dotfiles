@@ -366,21 +366,21 @@ function! utils#update_colors()
     set background=light
   endif
 
-  hi CurrentWord gui=undercurl
-  hi CursorLineNr gui=NONE guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE
-  hi LineNr guibg=NONE
-  hi MatchParen gui=bold,underline guibg=NONE
-  hi SignColumn guibg=NONE
-  hi StatusLine guibg=NONE
-  hi StatusLineNC guibg=NONE
-  hi TabLine guibg=NONE
-  hi TabLineFill guibg=NONE
-  hi TabLineSel guibg=NONE
-  hi VertSplit guibg=NONE
+  hi CurrentWord cterm=undercurl gui=undercurl
+  hi CursorLineNr cterm=NONE gui=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+  hi LineNr ctermbg=NONE guibg=NONE
+  hi MatchParen cterm=bold,underline gui=bold,underline ctermbg=NONE guibg=NONE
+  hi SignColumn ctermbg=NONE guibg=NONE
+  hi StatusLine ctermbg=NONE guibg=NONE
+  hi StatusLineNC ctermbg=NONE guibg=NONE
+  hi TabLine ctermbg=NONE guibg=NONE
+  hi TabLineFill ctermbg=NONE guibg=NONE
+  hi TabLineSel ctermbg=NONE guibg=NONE
+  hi VertSplit ctermbg=NONE guibg=NONE
 
-  execute 'hi CocErrorSign guifg=#'.g:base16_gui08
-  execute 'hi CocWarningSign guifg=#'.g:base16_gui0A
-  execute 'hi CocInfoSign guifg=#'.g:base16_gui0D
+  execute 'hi CocErrorSign ctermfg='.g:base16_cterm08.' guifg=#'.g:base16_gui08
+  execute 'hi CocWarningSign ctermfg='.g:base16_cterm0A.' guifg=#'.g:base16_gui0A
+  execute 'hi CocInfoSign ctermfg='.g:base16_cterm0D.' guifg=#'.g:base16_gui0D
 endfunction
 
 function! utils#search_with_skip(pattern, flags, stopline, timeout, skip)

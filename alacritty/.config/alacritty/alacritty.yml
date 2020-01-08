@@ -140,13 +140,19 @@ key_bindings:
     mods: Command
     command:
       program: "/usr/local/bin/tmux"
-      args: ["new-window", "-n alacritty.yml", "nvim ~/dotfiles/alacritty/.config/alacritty/alacritty.yml"]
+      args: ["new-window", "-nalacritty.yml", "nvim ~/dotfiles/alacritty/.config/alacritty/alacritty.yml"]
+
+  - key: Period
+    mods: Command
+    command:
+      program: "/usr/local/bin/tmux"
+      args: ["new-window", "-ndotfiles", "cd ~/dotfiles; fish"]
 
   - key: Slash
     mods: Command
     command:
       program: "/usr/local/bin/tmux"
-      args: ["new-window", "-n help.txt", "nvim -c 'help | only'"]
+      args: ["new-window", "-nhelp.txt", "nvim -c 'help | only'"]
 
   - key: Semicolon
     mods: Command

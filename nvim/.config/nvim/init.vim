@@ -13,9 +13,11 @@ Plug 'chr4/nginx.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'dag/vim-fish'
 Plug 'haya14busa/is.vim'
+" Plug 'janko/vim-test'
 Plug 'justinmk/vim-sneak'
 Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'luochen1990/rainbow'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-commentary'
@@ -55,6 +57,7 @@ set undofile
 set nobackup
 set noswapfile
 set nowritebackup
+set path+=**
 set encoding=utf-8
 set exrc secure
 
@@ -159,7 +162,7 @@ else
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
-if exists('+termguicolors')
+if exists('+termguicolors') && $TERM == 'alacritty'
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
@@ -284,7 +287,7 @@ augroup vimrc
   " au CmdlineLeave [/\?] :set nohlsearch
 
   " Word wrapping
-  au FileType html,jinja.html,python setlocal wrap
+  au FileType html,jinja.html,htmldjango,python setlocal wrap
 
   " QuickFix item remove
   au FileType qf map <buffer> dd :call quickfix#remove()<CR>
