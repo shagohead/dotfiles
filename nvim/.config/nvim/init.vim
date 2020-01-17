@@ -18,6 +18,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'luochen1990/rainbow'
+Plug 'michaeljsmith/vim-indent-object'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-commentary'
@@ -52,14 +53,17 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " IO
 set autoread
-set undodir=~/.local/share/nvim/undo
-set undofile
+set exrc secure
+set encoding=utf-8
+
+set path+=**
+set wildignore+=*.pyc
+
 set nobackup
 set noswapfile
 set nowritebackup
-set path+=**
-set encoding=utf-8
-set exrc secure
+set undodir=~/.local/share/nvim/undo
+set undofile
 
 let g:loaded_python_provider = 0
 let g:loaded_python3_provider = 0
@@ -179,15 +183,11 @@ nnoremap <C-k> <C-W>k
 nnoremap <C-j> <C-W>j
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
-inoremap <C-k> <Up>
-inoremap <C-j> <Down>
-inoremap <C-h> <Left>
-inoremap <C-l> <Right>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 
-nnoremap { gT
-nnoremap } gt
+nnoremap <M-[> gT
+nnoremap <M-]> gt
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
 nnoremap <M-p> "+p
@@ -202,20 +202,21 @@ xnoremap @ :<C-u>call utils#execute_macro_over_visual_range()<CR>
 
 nnoremap <Leader>` :Marks<CR>
 nnoremap <Leader>a <Nop>
-nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>b :b<Space>
 nnoremap <Leader>cc :call quickfix#toggle()<CR>
 nnoremap <Leader>cd :call quickfix#clear()<CR>
 nnoremap <Leader>cs :call quickfix#save()<CR>
 nnoremap <Leader>cl :call quickfix#load()<CR>
 nnoremap <Leader>e :History<CR>
-nnoremap <Leader>f :Files<CR>
+nnoremap <Leader>f :find<Space>
 nnoremap <Leader>g :call utils#toggle_numbers()<CR>
 vnoremap <Leader>g :call utils#toggle_numbers()<CR>gv
+nnoremap <Leader>h <Nop>
 nnoremap <Leader>j <Nop>
 nnoremap <Leader>k :call utils#keyhelper()<CR>
 nnoremap <Leader>l <Nop>
 nnoremap <Leader>o <Nop>
-nnoremap <Leader>p <Nop>
+nnoremap <Leader>p :CocList outline<CR>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Bar>noh<Left><Left><Left><Left><Left><Left>
@@ -225,7 +226,7 @@ nnoremap <Leader>u <Nop>
 nnoremap <Leader>v :GitGutterToggle<CR> " VCS toggle
 nnoremap <Leader>w :write<CR>
 nnoremap <Leader>x :bd<CR>
-nnoremap <Leader>z <Nop>
+nnoremap <Leader>z :Files<CR>
 
 " Mappings & macros
 nnoremap <Leader>mm :Maps<CR>
