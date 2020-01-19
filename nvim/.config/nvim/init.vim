@@ -13,7 +13,6 @@ Plug 'chr4/nginx.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'dag/vim-fish'
 Plug 'haya14busa/is.vim'
-" Plug 'janko/vim-test'
 Plug 'justinmk/vim-sneak'
 Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
 Plug 'ludovicchabant/vim-gutentags'
@@ -28,6 +27,11 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'Yggdroot/indentLine'
 Plug 'Vimjas/vim-python-pep8-indent'
+" temporarily plugged:
+Plug 'janko/vim-test'
+Plug 'tpope/vim-dispatch'
+Plug 'neomake/neomake'
+Plug 'benmills/vimux'
 call plug#end()
 
 " }}}
