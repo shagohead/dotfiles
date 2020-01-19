@@ -102,10 +102,10 @@ if status --is-interactive
     set fish_pager_color_progress brcyan # the color of the progress bar at the bottom left corner
     # set fish_pager_color_secondary # the background color of the every second completion
 
-    if test \( "$POETRY_ACTIVE" = "1" \) -a \( -f .env \)
-        posix_source # source .env on poetry shell activate
+    if test -f .env
+        posix_source -q # source .env on poetry shell activate
         if test -f .env.local
-            posix_source .env.local
+            posix_source -q .env.local
         end
     end
 

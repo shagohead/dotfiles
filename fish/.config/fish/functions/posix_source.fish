@@ -1,6 +1,6 @@
 function posix_source
     set -l verbose 0
-    if test $argv[1] = '-q'
+    if test $argv -a $argv[1] = '-q'
         set -e argv[1]
     else
         set verbose 1
