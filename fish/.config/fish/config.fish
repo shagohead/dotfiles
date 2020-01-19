@@ -15,6 +15,7 @@ set -x LC_CTYPE en_US.UTF-8
 set -x PYTHONBREAKPOINT ipdb.set_trace
 set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
+set -x PYENV_SHELL fish
 set -x PYTEST_ADDOPTS -x --ff --pdb --pdbcls=IPython.terminal.debugger:TerminalPdb
 
 # TODO: append only if there is no value like with _PATH_PREPEND
@@ -22,8 +23,6 @@ set -x CFLAGS {$CFLAGS} -I(xcrun --show-sdk-path)/usr/include/
 set -x CPPFLAGS {$CPPFLAGS} -I/usr/local/opt/zlib/include
 set -x LDFLAGS {$LDFLAGS} -L/usr/local/opt/zlib/lib
 set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
-
-pyenv init - | source
 
 set _PATH_PREPEND \
     /usr/local/opt/icu4c/bin \
@@ -72,7 +71,8 @@ end
 
 if status --is-interactive
     set BASE16_SHELL "$HOME/.config/base16-shell/"
-    source "$BASE16_SHELL/profile_helper.fish"
+    alias base16 'source "$BASE16_SHELL/profile_helper.fish"'
+    alias pyenv-init 'pyenv init - | source'
 
     # Colors:
     # black, red, green, yellow, blue, magenta, cyan, white
@@ -109,35 +109,7 @@ if status --is-interactive
         end
     end
 
-    function __set_tmux_window_title -a title
-        tmux rename-window $title
-        set -g tmux_window_title $title
-    end
-
-    function __fish_preexec_handler -e fish_preexec
-        switch $argv
-            case "./manage.py runserver*"
-                __set_tmux_window_title "django-server"
-            case "http-prompt*"
-                __set_tmux_window_title "http-prompt"
-            case "nvim *.tmux.conf"
-                __set_tmux_window_title ".tmux.conf"
-            case "nvim *.vimrc"
-                __set_tmux_window_title ".vimrc"
-        end
-    end
-
-    function __fish_postexec_handler -e fish_postexec
-        set -q tmux_window_title
-        if test $status -eq 0
-            tmux rename-window "fish"
-            set -e tmux_window_title
-        end
-    end
-
     if type -q register-python-argcomplete
         register-python-argcomplete --shell fish pipx | .
     end
-
-    # starship init fish | source
 end
