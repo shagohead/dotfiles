@@ -452,7 +452,7 @@ function! utils#search_inside(synName, pattern)
 endfunction
 
 " WhichKey calling interface
-function! utils#keyhelper()
+function! utils#which_key()
   echo 'Enter first key of mapping:'
   execute "WhichKey '".nr2char(getchar())."'"
   echo ''

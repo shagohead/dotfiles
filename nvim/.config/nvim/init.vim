@@ -218,7 +218,7 @@ nnoremap <Leader>g :call utils#toggle_numbers()<CR>
 vnoremap <Leader>g :call utils#toggle_numbers()<CR>gv
 nnoremap <Leader>h <Nop>
 nnoremap <Leader>j <Nop>
-nnoremap <Leader>k :call utils#keyhelper()<CR>
+nnoremap <Leader>k :call utils#which_key()<CR>
 nnoremap <Leader>l <Nop>
 nnoremap <Leader>o <Nop>
 nnoremap <Leader>p :CocList outline<CR>
@@ -297,6 +297,10 @@ augroup vimrc
 
   " QuickFix item remove
   au FileType qf map <buffer> dd :call quickfix#remove()<CR>
+
+  " Tests mappings
+  au FileType python nmap <buffer> <LocalLeader>t :TestNearest<CR>
+  au FileType python nmap <buffer> <LocalLeader>v :TestNearest -strategy=vimux<CR>
 
   " Show wordwrap column in insert mode
   au InsertEnter *.go,*.js,*.md,*.py set colorcolumn=89
