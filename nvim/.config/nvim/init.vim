@@ -299,6 +299,8 @@ augroup vimrc
   au FileType qf map <buffer> dd :call quickfix#remove()<CR>
 
   " Tests mappings
+  let g:runserver_command = 'runserver'
+  au FileType python execute "nmap <buffer> <LocalLeader>r :VimuxRunCommand '".runserver_command."'<CR>"
   au FileType python nmap <buffer> <LocalLeader>t :TestNearest<CR>
   au FileType python nmap <buffer> <LocalLeader>v :TestNearest -strategy=vimux<CR>
 
