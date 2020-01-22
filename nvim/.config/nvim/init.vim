@@ -201,6 +201,7 @@ vnoremap <M-p> "+p
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
 nnoremap <silent> gp :call utils#grep_references()<CR>
+nnoremap <silent> <C-w>0 :execute ':resize '.line('$')<CR>
 nnoremap <silent> <Leader><BS> :echo ''<CR>
 nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 xnoremap @ :<C-u>call utils#execute_macro_over_visual_range()<CR>
