@@ -177,6 +177,12 @@ if exists('+termguicolors') && $TERM == 'alacritty'
   set termguicolors
 endif
 
+" LocalLeader mappings:
+" r - runserver (which uses g:runserver_command)
+" t - test nearest
+" y - test nearest through vimux
+let g:runserver_command = 'runserver'
+
 " }}}
 " Mappings {{{
 
@@ -201,6 +207,7 @@ vnoremap <M-p> "+p
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
 nnoremap <silent> gp :call utils#grep_references()<CR>
+nnoremap <silent> <C-w>9 :vertical resize 90<CR>
 nnoremap <silent> <C-w>0 :execute ':resize '.line('$')<CR>
 nnoremap <silent> <Leader><BS> :echo ''<CR>
 nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
@@ -229,7 +236,7 @@ xnoremap <Leader>r :s//g<Bar>noh<Left><Left><Left><Left><Left><Left>
 nnoremap <Leader>s <Nop>
 nnoremap <Leader>t :Tags<CR>
 nnoremap <Leader>u <Nop>
-nnoremap <Leader>v :GitGutterToggle<CR> " VCS toggle
+nnoremap <Leader>v :VimuxRunLastCommand<CR>
 nnoremap <Leader>w :write<CR>
 nnoremap <Leader>x :bd<CR>
 nnoremap <Leader>z :Files<CR>
@@ -298,12 +305,6 @@ augroup vimrc
 
   " QuickFix item remove
   au FileType qf map <buffer> dd :call quickfix#remove()<CR>
-
-  " Tests mappings
-  let g:runserver_command = 'runserver'
-  au FileType python execute "nmap <buffer> <LocalLeader>r :VimuxRunCommand '".runserver_command."'<CR>"
-  au FileType python nmap <buffer> <LocalLeader>t :TestNearest<CR>
-  au FileType python nmap <buffer> <LocalLeader>v :TestNearest -strategy=vimux<CR>
 
   " Show wordwrap column in insert mode
   au InsertEnter *.go,*.js,*.md,*.py set colorcolumn=89
