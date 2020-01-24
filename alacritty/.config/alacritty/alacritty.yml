@@ -5,7 +5,7 @@ env:
 
 window:
   dimensions:
-    columns: 176
+    columns: 180
     lines: 48
 
 scrolling:
