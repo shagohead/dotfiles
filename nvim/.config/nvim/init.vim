@@ -197,6 +197,8 @@ nnoremap <C-l> <C-W>l
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 
+nnoremap <M-j> 7j
+nnoremap <M-k> 7k
 nnoremap <M-[> gT
 nnoremap <M-]> gt
 nnoremap <C-p> "0p
