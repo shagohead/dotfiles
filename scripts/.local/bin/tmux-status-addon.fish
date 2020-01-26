@@ -8,13 +8,13 @@ if pgrep -q Music
     set status_list (osascript -e 'tell application "Music" to get (artist, name) of current track' 2>/dev/null)
 end
 
-set status_list (pmset -g ps | rg -o '\d+%')
+set status_list $status_list (pmset -g ps | rg -o '\d+%')
 
 set -l keyboard (xkbswitch -ge)
 if test "$keyboard" = "Russian"
     set keyboard "RU"
 end
-set status_list $keyboard
+set status_list $status_list $keyboard
 
 set -l status_string (string join ' | ' $status_list)
 
