@@ -254,8 +254,8 @@ inoremap <expr><CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : utils#check_back_space() ? "\<Tab>" : coc#refresh()
 
 nnoremap <silent> Y :call utils#show_documentation()<CR>
-nnoremap <silent> [d :call CocActionAsync('diagnosticPrevious')<CR>
-nnoremap <silent> ]d :call CocActionAsync('diagnosticNext')<CR>
+nnoremap <silent> [w :call CocActionAsync('diagnosticPrevious')<CR>
+nnoremap <silent> ]w :call CocActionAsync('diagnosticNext')<CR>
 nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'edit')<CR>
 nnoremap <silent> gs :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
 nnoremap <silent> gr :call CocActionAsync('jumpReferences')<CR>
