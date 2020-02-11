@@ -47,6 +47,7 @@ function! StatusLine(mode) abort
       let l:line.='%4* %{&fenc}%*'
     endif
     let l:line.='%4* %{statusline#rhs()}%* '
+    let l:line.='%{gutentags#statusline()}'
   else
     " inactive
     let l:line.='%#StatusLineNC#'

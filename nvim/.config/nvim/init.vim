@@ -1,6 +1,10 @@
 " Author: Vakhmin Anton <html.ru@gmail.com>
 "
 
+if &shell =~# 'fish$'
+  set shell=sh
+endif
+
 filetype plugin indent on
 
 " Plugins {{{
@@ -19,6 +23,7 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'luochen1990/rainbow'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'plasticboy/vim-markdown'
 Plug 'sudar/vim-arduino-syntax'
 Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-commentary'
@@ -26,6 +31,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'Yggdroot/indentLine'
+Plug 'vim-python/python-syntax'
 Plug 'Vimjas/vim-python-pep8-indent'
 " temporarily plugged:
 Plug 'janko/vim-test'
@@ -176,6 +182,8 @@ if exists('+termguicolors') && $TERM == 'alacritty'
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
+
+let g:python_highlight_all = 1
 
 " LocalLeader mappings:
 " r - runserver (which uses g:runserver_command)
