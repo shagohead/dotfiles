@@ -41,7 +41,7 @@ function! StatusLine(mode) abort
     if type(get(g:, 'gutentags_project_root')) != 0
       let l:line.='%{gutentags#statusline()}'
     endif
-    let l:line.='%4* %k%* '
+    let l:line.='%3* %k%* '
     let l:line.='%4* '. &filetype " %y will have [] around the test & %Y is uppercase so &filetype gives me what I want
     if &fileformat !=# 'unix'
       let l:line.='%4* %{&ff}%*'

@@ -387,6 +387,10 @@ function! utils#update_colors()
   hi TabLineSel ctermbg=NONE guibg=NONE
   hi VertSplit ctermbg=NONE guibg=NONE
 
+  exec 'hi User3 guifg='.(utils#get_color('Question', 'fg', 'gui'))
+  exec 'hi User4 guifg='.(utils#get_color('NonText', 'fg', 'gui'))
+  exec 'hi User5 guifg='.(utils#get_color('ErrorMsg', 'fg', 'gui'))
+
   execute 'hi CocErrorSign ctermfg='.g:base16_cterm08.' guifg=#'.g:base16_gui08
   execute 'hi CocWarningSign ctermfg='.g:base16_cterm0A.' guifg=#'.g:base16_gui0A
   execute 'hi CocInfoSign ctermfg='.g:base16_cterm0D.' guifg=#'.g:base16_gui0D
