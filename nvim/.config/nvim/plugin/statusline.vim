@@ -1,7 +1,6 @@
 scriptencoding utf-8
 
 " TODO:
-" gutentags
 " coc-nvim server status
 
 "------------------------------------------------------------------------------
@@ -39,6 +38,10 @@ function! StatusLine(mode) abort
       let l:line.='%4* %*'
       let l:line.=statusline#statusDiagnostic()
     endif
+    if type(get(g:, 'gutentags_project_root')) != 0
+      let l:line.='%{gutentags#statusline()}'
+    endif
+    let l:line.='%4* %k%* '
     let l:line.='%4* '. &filetype " %y will have [] around the test & %Y is uppercase so &filetype gives me what I want
     if &fileformat !=# 'unix'
       let l:line.='%4* %{&ff}%*'
@@ -47,7 +50,6 @@ function! StatusLine(mode) abort
       let l:line.='%4* %{&fenc}%*'
     endif
     let l:line.='%4* %{statusline#rhs()}%* '
-    let l:line.='%{gutentags#statusline()}'
   else
     " inactive
     let l:line.='%#StatusLineNC#'
@@ -59,14 +61,9 @@ function! StatusLine(mode) abort
   return l:line
 endfunction
 
-set laststatus=2
 set statusline=%!StatusLine('active')
 augroup MyStatusLine
   autocmd!
   autocmd WinEnter * setl statusline=%!StatusLine('active')
   autocmd WinLeave * setl statusline=%!StatusLine('inactive')
-  if exists('##TextChangedI')
-    autocmd TextChanged,TextChangedI * call statusline#getMode()
-  endif
-  autocmd BufWinEnter,BufWritePost,FileWritePost,WinEnter,InsertEnter,InsertLeave,CmdWinEnter,CmdWinLeave,ColorScheme * call statusline#getMode()
 augroup END
