@@ -92,7 +92,7 @@ set mouse=a
 set shortmess+=c
 
 set numberwidth=2
-set scrolloff=1
+set scrolloff=0
 set sidescrolloff=5
 set synmaxcol=800
 set updatetime=500
@@ -109,7 +109,6 @@ set viewoptions-=options
 " Windows UI
 set noruler
 set nonumber
-set noshowcmd
 set noshowmode
 set nocursorline
 set splitbelow
@@ -204,6 +203,11 @@ noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
+
 nnoremap <C-k> <C-W>k
 nnoremap <C-j> <C-W>j
 nnoremap <C-h> <C-W>h
@@ -284,6 +288,9 @@ inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
 " }}}
 " Commands {{{
 
+command! ClearRegisters call utils#ClearRegisters()
+
+
 " Search inside / outside syntax group
 command! -nargs=+ -complete=command SInside  call utils#search_inside(<f-args>)
 command! -nargs=+ -complete=command SOutside call utils#search_outside(<f-args>)
@@ -348,6 +355,8 @@ augroup vimrc
       " au VimLeave * call system('tmux set-window automatic-rename on')
     endif
   endif
+
+  au VimResized * wincmd =
 augroup end
 
 call utils#update_colors()
