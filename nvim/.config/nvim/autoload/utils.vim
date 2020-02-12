@@ -351,6 +351,15 @@ function! utils#show_documentation() abort
   endif
 endfunction
 
+" Toggle input mode options
+function! utils#toggle_imode()
+  if(&iminsert == 1)
+    set iminsert=0
+  else
+    set iminsert=1
+  endif
+endfunction
+
 " Toggle relativenumber option
 function! utils#toggle_numbers()
   if(&relativenumber == 1)

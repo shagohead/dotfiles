@@ -80,7 +80,10 @@ let g:loaded_python_provider = 0
 let g:loaded_python3_provider = 0
 
 " Mappings
+set keymap=russian-jcukenmac
 set pastetoggle=<F2>
+set iminsert=0
+set imsearch=0
 let mapleader="\<SPACE>"
 let maplocalleader="\\"
 
@@ -151,6 +154,9 @@ set incsearch
 set smartcase
 set ignorecase
 
+" Spell
+set spelllang=ru_yo,en_us
+
 " Tags, files..
 set grepprg=rg\ --vimgrep
 set tags=./.ctags,.ctags
@@ -214,6 +220,7 @@ vnoremap <C-p> "0p
 nnoremap <M-p> "+p
 vnoremap <M-p> "+p
 
+nnoremap <silent> <C-_> :call utils#toggle_imode()<CR>
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
 nnoremap <silent> gp :call utils#grep_references()<CR>
