@@ -5,6 +5,7 @@ set -l status_list
 
 
 if pgrep -q Music
+    # TODO: try js https://github.com/nicknisi/dotfiles/blob/master/applescripts/tunes.js
     set status_list (osascript -e 'tell application "Music" to get (artist, name) of current track' 2>/dev/null)
 end
 
