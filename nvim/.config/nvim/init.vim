@@ -91,6 +91,7 @@ let maplocalleader="\\"
 set mouse=a
 set shortmess+=c
 
+set conceallevel=0
 set numberwidth=2
 set scrolloff=0
 set sidescrolloff=5
@@ -283,7 +284,7 @@ nnoremap <silent> <Leader>d :call CocActionAsync('diagnosticInfo')<CR>
 nnoremap <silent> <Leader>i :call CocActionAsync('runCommand', 'editor.action.organizeImport')<CR>
 nnoremap <silent> <Leader>n :call CocActionAsync('rename')<CR>
 nnoremap <silent> <Leader>y :call CocActionAsync('showSignatureHelp')<CR>
-inoremap <C-y> <C-o>:call CocActionAsync('showSignatureHelp')<CR>
+inoremap <C-y> <C-\><C-o>:call CocActionAsync('showSignatureHelp')<CR>
 
 " }}}
 " Commands {{{
