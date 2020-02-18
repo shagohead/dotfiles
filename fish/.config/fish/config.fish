@@ -12,11 +12,15 @@ set -x FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --color=dark --color=fg:15,bg
 set -x GOPATH $HOME/go
 set -x LANG en_US.UTF-8
 set -x LC_CTYPE en_US.UTF-8
-set -x PYTHONBREAKPOINT ipdb.set_trace
 set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
 set -x PYENV_SHELL fish
 set -x PYTEST_ADDOPTS -x --ff --pdb --pdbcls=IPython.terminal.debugger:TerminalPdb
+set -x PYTHONBREAKPOINT ipdb.set_trace
+
+if test -e "$HOME/.pythonrc"
+    set -x PYTHONSTARTUP "$HOME/.pythonrc"
+end
 
 # TODO: append only if there is no value like with _PATH_PREPEND
 set -x CFLAGS {$CFLAGS} -I(xcrun --show-sdk-path)/usr/include/
@@ -57,7 +61,7 @@ abbr -a gd git diff
 abbr -a gs git status
 abbr -a l ls -la
 abbr -a tm tmux -u
-abbr -a vim nvim
+abbr -a rg rg -uu
 abbr -a run ./manage.py runserver
 
 alias dsa 'docker stop (docker ps -q)'

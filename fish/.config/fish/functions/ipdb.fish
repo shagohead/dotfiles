@@ -1,4 +1,4 @@
-function pdb -d "invoke builtin pdb into env variables"
+function ipdb -d "invoke ipdb class into env variables"
     # Удаление класса дебагера из PYTEST_ADDOPTS
     if set -q PYTEST_ADDOPTS
         for i in (seq (count $PYTEST_ADDOPTS))
@@ -6,8 +6,11 @@ function pdb -d "invoke builtin pdb into env variables"
                 set -e PYTEST_ADDOPTS[$i]
             end
         end
+
+        # И установка для него нового значения
+        set -p PYTEST_ADDOPTS --pdbcls=IPython.terminal.debugger:TerminalPdb
     end
 
-    set -x PYTHONBREAKPOINT pdb.set_trace
+    set -x PYTHONBREAKPOINT ipdb.set_trace
     eval $argv
 end
