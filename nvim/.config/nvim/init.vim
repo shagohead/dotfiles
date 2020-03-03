@@ -12,11 +12,13 @@ filetype plugin indent on
 call plug#begin('~/.local/share/nvim/plugged')
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'benmills/vimux'
 Plug 'cespare/vim-toml'
 Plug 'chr4/nginx.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'dag/vim-fish'
 Plug 'haya14busa/is.vim'
+Plug 'haya14busa/vim-asterisk'
 Plug 'justinmk/vim-sneak'
 Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
 Plug 'ludovicchabant/vim-gutentags'
@@ -34,10 +36,14 @@ Plug 'Yggdroot/indentLine'
 Plug 'vim-python/python-syntax'
 Plug 'Vimjas/vim-python-pep8-indent'
 " temporarily plugged:
-Plug 'janko/vim-test'
-Plug 'tpope/vim-dispatch'
-Plug 'neomake/neomake'
-Plug 'benmills/vimux'
+Plug 'alfredodeza/pytest.vim'
+Plug '5long/pytest-vim-compiler'  " pytest compiler
+Plug 'janko/vim-test'  " tests configurations
+Plug 'tpope/vim-dispatch'  " make & dispatch async
+Plug 'neomake/neomake'  " ???
+" TODO: slimux like (send selected code in REPL)
+" TODO: run nearest test (with vim-test) async (with vim-dispatch) with QF
+" support (with pytest-vim-compiler)
 call plug#end()
 
 " }}}
@@ -85,7 +91,7 @@ set pastetoggle=<F2>
 set iminsert=0
 set imsearch=0
 let mapleader="\<SPACE>"
-let maplocalleader="\\"
+let maplocalleader="\<SPACE>"
 
 " UI behevior
 set mouse=a
@@ -165,7 +171,10 @@ set tags=./.ctags,.ctags
 set completeopt=noinsert,menuone,noselect
 
 " Environment variables
-let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all '.$FZF_DEFAULT_OPTS
+let $FZF_DEFAULT_OPTS = '--bind=alt-enter:select-all,alt-bs:deselect-all '.$FZF_DEFAULT_OPTS
+
+call setenv('PYTEST_ADDOPTS', v:null)
+call setenv('PYTHONPATH', '/users/shagohead/.pyenv/virtualenvs/jedi/lib/python3.8/site-packages/')
 
 if !has('nvim')
   set t_Co=256
@@ -189,17 +198,13 @@ if exists('+termguicolors') && $TERM == 'alacritty'
   set termguicolors
 endif
 
+let g:gutentags_ctags_extra_args = ['--tag-relative=always']
 let g:python_highlight_all = 1
-
-" LocalLeader mappings:
-" r - runserver (which uses g:runserver_command)
-" t - test nearest
-" y - test nearest through vimux
-let g:runserver_command = 'runserver'
 
 " }}}
 " Mappings {{{
 
+" Disable arrows
 noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
@@ -209,32 +214,52 @@ inoremap <Down> <Nop>
 inoremap <Left> <Nop>
 inoremap <Right> <Nop>
 
+" Switch windows
 nnoremap <C-k> <C-W>k
 nnoremap <C-j> <C-W>j
 nnoremap <C-h> <C-W>h
 nnoremap <C-l> <C-W>l
+
+" Command mode word motions
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 
+" Faster line moves
 nnoremap <M-j> 7j
 nnoremap <M-k> 7k
-nnoremap <M-[> gT
-nnoremap <M-]> gt
+
+" Paste recent yank
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
+
+" Copy & paste within clipboard
 nnoremap <M-p> "+p
 vnoremap <M-p> "+p
+vnoremap <M-y> "+y
 
+" Toggle inputmode/langmap
 nnoremap <silent> <C-_> :call utils#toggle_imode()<CR>
+vnoremap <silent> <C-_> <Cmd>call utils#toggle_imode()<CR>
+
+" Jump to QuickFix place
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
+
+" Grep word
 nnoremap <silent> gp :call utils#grep_references()<CR>
+
+" Resize window to: 90 width & fill height
 nnoremap <silent> <C-w>9 :vertical resize 90<CR>
 nnoremap <silent> <C-w>0 :execute ':resize '.line('$')<CR>
+
+" Message line cleanup
 nnoremap <silent> <Leader><BS> :echo ''<CR>
 nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
+
+" Execute macros on visual selection
 xnoremap @ :<C-u>call utils#execute_macro_over_visual_range()<CR>
 
+" Leader mappings
 nnoremap <Leader>` :Marks<CR>
 nnoremap <Leader>a <Nop>
 nnoremap <Leader>b :b<Space>
@@ -249,7 +274,10 @@ vnoremap <Leader>g :call utils#toggle_numbers()<CR>gv
 nnoremap <Leader>h <Nop>
 nnoremap <Leader>j <Nop>
 nnoremap <Leader>k :call utils#which_key()<CR>
+" Used in local as linter
 nnoremap <Leader>l <Nop>
+" Edit & re-use register
+nnoremap <Leader>m :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
 nnoremap <Leader>o <Nop>
 nnoremap <Leader>p :CocList outline<CR>
 nnoremap <Leader>q :quit<CR>
@@ -263,12 +291,7 @@ nnoremap <Leader>w :write<CR>
 nnoremap <Leader>x :bd<CR>
 nnoremap <Leader>z :Files<CR>
 
-" Mappings & macros
-nnoremap <Leader>mm :Maps<CR>
-" Edit register
-nnoremap <Leader>mr :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
-
-" S-Tab for completion menu navigation
+" Popup menu navigation
 inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <expr><CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : utils#check_back_space() ? "\<Tab>" : coc#refresh()
@@ -277,7 +300,6 @@ nnoremap <silent> Y :call utils#show_documentation()<CR>
 nnoremap <silent> [w :call CocActionAsync('diagnosticPrevious')<CR>
 nnoremap <silent> ]w :call CocActionAsync('diagnosticNext')<CR>
 nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'edit')<CR>
-nnoremap <silent> gs :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
 nnoremap <silent> gr :call CocActionAsync('jumpReferences')<CR>
 nnoremap <silent> <Leader>= :call CocActionAsync('format')<CR>
 nnoremap <silent> <Leader>d :call CocActionAsync('diagnosticInfo')<CR>
@@ -327,6 +349,10 @@ augroup vimrc
 
   " Word wrapping
   au FileType html,jinja.html,htmldjango,python setlocal wrap
+
+  " Pytest plugin prints long lines with spaces
+  " Python trailing spaces highlighted with python-syntax
+  au FileType pytest,python setlocal listchars-=trail:↔
 
   " QuickFix item remove
   au FileType qf map <buffer> dd :call quickfix#remove()<CR>
