@@ -78,8 +78,12 @@
                 "go"
             ],
             "rootPatterns": [
-                "go.mod"
-            ]
+                "go.mod",
+                ".git/"
+            ],
+            "initializationOptions": {
+                "usePlaceholders": true
+            }
         },
         "lua": {
             "command": "lua-lsp",
