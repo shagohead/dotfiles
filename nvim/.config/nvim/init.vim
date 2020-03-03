@@ -238,6 +238,7 @@ vnoremap <M-p> "+p
 vnoremap <M-y> "+y
 
 " Toggle inputmode/langmap
+imap <silent>  
 nnoremap <silent> <C-_> :call utils#toggle_imode()<CR>
 vnoremap <silent> <C-_> <Cmd>call utils#toggle_imode()<CR>
 
