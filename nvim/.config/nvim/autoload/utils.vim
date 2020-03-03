@@ -355,8 +355,10 @@ endfunction
 function! utils#toggle_imode()
   if(&iminsert == 1)
     set iminsert=0
+    set imsearch=0
   else
     set iminsert=1
+    set imsearch=1
   endif
 endfunction
 
@@ -387,13 +389,20 @@ function! utils#update_colors()
   hi TabLineSel ctermbg=NONE guibg=NONE
   hi VertSplit ctermbg=NONE guibg=NONE
 
-  exec 'hi User3 guifg='.(utils#get_color('Question', 'fg', 'gui'))
+  if &background == 'dark'
+    hi User3 guifg=Cyan
+  else
+    hi User3 guifg=DarkCyan
+  endif
+
+  " exec 'hi User3 guifg='.(utils#get_color('Question', 'fg', 'gui'))
   exec 'hi User4 guifg='.(utils#get_color('NonText', 'fg', 'gui'))
   exec 'hi User5 guifg='.(utils#get_color('ErrorMsg', 'fg', 'gui'))
 
-  execute 'hi CocErrorSign ctermfg='.g:base16_cterm08.' guifg=#'.g:base16_gui08
-  execute 'hi CocWarningSign ctermfg='.g:base16_cterm0A.' guifg=#'.g:base16_gui0A
-  execute 'hi CocInfoSign ctermfg='.g:base16_cterm0D.' guifg=#'.g:base16_gui0D
+  " exec 'hi User3 ctermfg='.g:base16_cterm0E.' guifg=#'.g:base16_gui0E
+  exec 'hi CocErrorSign ctermfg='.g:base16_cterm08.' guifg=#'.g:base16_gui08
+  exec 'hi CocWarningSign ctermfg='.g:base16_cterm0A.' guifg=#'.g:base16_gui0A
+  exec 'hi CocInfoSign ctermfg='.g:base16_cterm0D.' guifg=#'.g:base16_gui0D
 endfunction
 
 function! utils#search_with_skip(pattern, flags, stopline, timeout, skip)
