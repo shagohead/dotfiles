@@ -32,7 +32,7 @@ function update_all --description 'Update all packages'
 
     if test $option_provided -eq 0; or contains -- --go $argv
         colored_echo "Updating go packages "
-        go get -u github.com/rakyll/hey golang.org/x/lint/golint golang.org/x/tools/cmd/gopls
+        env GO111MODULE=on go get -u github.com/rakyll/hey golang.org/x/lint/golint golang.org/x/tools/cmd/gopls@latest
     end
 
     if test $option_provided -eq 0; or contains -- -n $argv; or contains -- --npm $argv

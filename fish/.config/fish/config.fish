@@ -2,13 +2,22 @@ if test -e "$__fish_config_dir/config.tokens.fish"
     source "$__fish_config_dir/config.tokens.fish"
 end
 
+# bat config
 set -x BAT_PAGER never
 set -x BAT_STYLE plain
 set -x BAT_THEME base16
+
 set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}"
 set -x EDITOR nvim
+
+# fzf config
+set -l _FZF_COLORS (string join "," "fg:15" "fg:15" "bg:0" "bg+:0" "hl:6" "hl+:6" \
+    "info:2" "prompt:1" "pointer:12" "marker:4" "spinner:11" "header:6")
+set -x FZF_DEFAULT_OPTS "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up" \
+    "--height=$FZF_TMUX_HEIGHT --history=$HOME/.fzf_history" \
+    "--color=dark --color=$_FZF_COLORS"
 set -x FZF_DEFAULT_COMMAND "fd -i -H"
-set -x FZF_DEFAULT_OPTS "--height $FZF_TMUX_HEIGHT --color=dark --color=fg:15,bg:0,bg+:0,hl:6,hl+:6 --color=info:2,prompt:1,pointer:12,marker:4,spinner:11,header:6"
+
 set -x GOPATH $HOME/go
 set -x LANG en_US.UTF-8
 set -x LC_CTYPE en_US.UTF-8
@@ -61,7 +70,6 @@ abbr -a gd git diff
 abbr -a gs git status
 abbr -a l ls -la
 abbr -a tm tmux -u
-abbr -a rg rg -uu
 abbr -a run ./manage.py runserver
 
 alias dsa 'docker stop (docker ps -q)'
@@ -75,7 +83,7 @@ end
 
 if status --is-interactive
     set BASE16_SHELL "$HOME/.config/base16-shell/"
-    alias base16 'source "$BASE16_SHELL/profile_helper.fish"'
+    alias base16-init 'source "$BASE16_SHELL/profile_helper.fish"'
     alias pyenv-init 'pyenv init - | source'
 
     # Colors:
@@ -106,6 +114,9 @@ if status --is-interactive
     set fish_pager_color_progress brcyan # the color of the progress bar at the bottom left corner
     # set fish_pager_color_secondary # the background color of the every second completion
 
+    if test ! -e ~/.fzf_history
+        touch ~/.fzf_history
+    end
     if test -f .env
         posix_source -q # source .env on poetry shell activate
         if test -f .env.local
