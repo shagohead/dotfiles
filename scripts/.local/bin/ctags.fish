@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-fd -e py -a
+fd -e py
 set site_packages
 
 if test -e poetry.lock
