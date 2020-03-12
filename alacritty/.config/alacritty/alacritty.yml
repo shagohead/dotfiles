@@ -105,7 +105,7 @@ key_bindings:
   - { key: Add,    mods: Command,         action: IncreaseFontSize }
   - { key: Minus,  mods: Command,         action: DecreaseFontSize }
   - { key: K,      mods: Command,         action: ClearHistory     }
-  - { key: K,      mods: Command,         chars: "\x0c"            }
+  - { key: K,      mods: Command,         chars: "\x13\x6b"        }
   - { key: V,      mods: Command,         action: Paste            }
   - { key: C,      mods: Command,         action: Copy             }
 # - { key: H,      mods: Command,         action: Hide             }
@@ -154,7 +154,6 @@ key_bindings:
   - { key: F, mods: Command, chars: "\x13\x5b" }
 
   # Clear buffer and history (k)
-  # - { key: K, mods: Command, chars: "\x13\x6b" }
   - { key: R, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["send-keys", "-R"] } }
 
   # New window (c)
