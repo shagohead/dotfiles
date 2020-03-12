@@ -20,6 +20,7 @@ Plug 'dag/vim-fish'
 Plug 'haya14busa/is.vim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'justinmk/vim-sneak'
+Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'luochen1990/rainbow'
@@ -198,6 +199,7 @@ if exists('+termguicolors') && $TERM == 'alacritty'
   set termguicolors
 endif
 
+let g:clap_layout = {'relative': 'editor', 'height': '40%', 'row': '25%'}
 let g:gutentags_ctags_extra_args = ['--tag-relative=always']
 let g:python_highlight_all = 1
 
@@ -246,8 +248,9 @@ vnoremap <silent> <C-_> <Cmd>call utils#toggle_imode()<CR>
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
 
-" Grep word
-nnoremap <silent> gp :call utils#grep_references()<CR>
+" Grep word or visual selection
+nnoremap <silent> gp :Clap grep ++query=<cword><CR>
+vnoremap <silent> gp :Clap grep ++query=@visual<CR>
 
 " Resize window to: 90 width & fill height
 nnoremap <silent> <C-w>9 :vertical resize 90<CR>
@@ -268,7 +271,7 @@ nnoremap <Leader>cc :call quickfix#toggle()<CR>
 nnoremap <Leader>cd :call quickfix#clear()<CR>
 nnoremap <Leader>cs :call quickfix#save()<CR>
 nnoremap <Leader>cl :call quickfix#load()<CR>
-nnoremap <Leader>e :History<CR>
+nnoremap <Leader>e :Clap history<CR>
 nnoremap <Leader>f :find<Space>
 nnoremap <Leader>g :call utils#toggle_numbers()<CR>
 vnoremap <Leader>g :call utils#toggle_numbers()<CR>gv
@@ -279,12 +282,12 @@ nnoremap <Leader>k :call utils#which_key()<CR>
 nnoremap <Leader>l <Nop>
 " Edit & re-use register
 nnoremap <Leader>m :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
-nnoremap <Leader>o <Nop>
-nnoremap <Leader>p :CocList outline<CR>
+nnoremap <Leader>o :CocList outline<CR>
+nnoremap <Leader>p :Clap<CR>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Bar>noh<Left><Left><Left><Left><Left><Left>
-nnoremap <Leader>s <Nop>
+nnoremap <Leader>s :syntax on<CR>
 nnoremap <Leader>t :Tags<CR>
 nnoremap <Leader>u <Nop>
 nnoremap <Leader>v :VimuxRunLastCommand<CR>
