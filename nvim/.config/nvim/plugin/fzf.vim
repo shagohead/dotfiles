@@ -1,3 +1,9 @@
+function! BuildLocationList(lines)
+  call setloclist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
 function! BuildQuickfixList(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
@@ -42,7 +48,8 @@ command! -bang -nargs=* Find
       \ '.shellescape(<q-args>), 1, <bang>0)
 
 let g:fzf_action = {
-      \ 'ctrl-l': function('BuildQuickfixList'),
+      \ 'ctrl-f': function('BuildQuickfixList'),
+      \ 'ctrl-l': function('BuildLocationList'),
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-x': 'split',
       \ 'ctrl-v': 'vsplit'}
@@ -53,10 +60,10 @@ if has('nvim')
     let buf = nvim_create_buf(v:false, v:true)
     call setbufvar(buf, '&signcolumn', 'no')
     let opts = {
-          \ 'relative': 'win',
-          \ 'width': winwidth(winnr()),
+          \ 'relative': 'editor',
+          \ 'width': &columns,
           \ 'height': 13,
-          \ 'row': winheight(winnr()) - 13,
+          \ 'row': &lines - 13,
           \ 'col': 0,
           \ 'style': 'minimal'
           \ }
