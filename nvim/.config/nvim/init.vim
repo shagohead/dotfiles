@@ -367,6 +367,7 @@ augroup vimrc
 
   " CoC recommendation (which currently i dont understand)
   au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  au User CocStatusChange echo g:coc_status
 
   " Gutentags status messages
   au User GutentagsUpdated echo 'Tags updated'
