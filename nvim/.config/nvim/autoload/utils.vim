@@ -388,6 +388,7 @@ function! utils#update_colors()
   hi TabLineFill ctermbg=NONE guibg=NONE
   hi TabLineSel ctermbg=NONE guibg=NONE
   hi VertSplit ctermbg=NONE guibg=NONE
+  hi! link Comment Special
 
   if &background == 'dark'
     hi User3 guifg=Cyan
