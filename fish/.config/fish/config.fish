@@ -11,7 +11,7 @@ set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{
 set -x EDITOR nvim
 
 # fzf config
-set -l _FZF_COLORS (string join "," "fg:15" "fg:15" "bg:0" "bg+:0" "hl:6" "hl+:6" \
+set -l _FZF_COLORS (string join "," "fg:7" "fg+:7" "bg:0" "bg+:0" "hl:6" "hl+:6" \
     "info:2" "prompt:1" "pointer:12" "marker:4" "spinner:11" "header:6")
 set -x FZF_DEFAULT_OPTS "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up" \
     "--height=$FZF_TMUX_HEIGHT --history=$HOME/.fzf_history" \
@@ -69,8 +69,9 @@ abbr -a gco git checkout
 abbr -a gd git diff
 abbr -a gs git status
 abbr -a l ls -la
-abbr -a tm tmux -u
+abbr -a psaux 'ps aux | head -1 && ps aux | grep -v grep | grep'
 abbr -a run ./manage.py runserver
+abbr -a tm tmux -u
 
 alias dsa 'docker stop (docker ps -q)'
 alias dps 'docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Status}}"'
@@ -108,7 +109,7 @@ if status --is-interactive
     set fish_color_host brblue # the color used to print the current host system in some of fish default prompts
     set fish_color_cancel brred # the color for the '^C' indicator on a canceled command
 
-    # set fish_pager_color_prefix # the color of the prefix string, i.e. the string that is to be completed
+    set fish_pager_color_prefix white --underline # the color of the prefix string, i.e. the string that is to be completed
     # set fish_pager_color_completion # the color of the completion itself
     set fish_pager_color_description bryellow # the color of the completion description
     set fish_pager_color_progress brcyan # the color of the progress bar at the bottom left corner
