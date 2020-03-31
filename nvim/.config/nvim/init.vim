@@ -99,6 +99,7 @@ set mouse=a
 set shortmess+=c
 
 set conceallevel=0
+set concealcursor=nc
 set numberwidth=2
 set scrolloff=0
 set sidescrolloff=5
@@ -110,7 +111,11 @@ set notimeout
 set ttimeout
 set ttimeoutlen=0
 
-set guicursor=n-v-c-sm:block-Cursor,i-ci-ve:ver25,r-cr:hor20,o:hor50
+set guicursor=n-v-c:block
+set guicursor+=i-ci-ve:ver25
+set guicursor+=r-cr:hor20
+set guicursor+=o:hor50
+set guicursor+=a:Cursor/lCursor
 set sessionoptions-=options
 set viewoptions-=options
 
@@ -145,7 +150,7 @@ set nowrap
 set linebreak
 if has('multi_byte') && &encoding ==# 'utf-8'
   set list
-  let &listchars = 'trail:↔,tab:· ,extends:⟩,precedes:⟨,nbsp:×'
+  let &listchars = 'trail:↔,extends:⟩,precedes:⟨,nbsp:×'
   let &fillchars = 'vert:|'
 
   if has('patch-7.4.338')
@@ -337,6 +342,10 @@ augroup vimrc
         \ if line("'\"") > 0 && line("'\"") <= line("$")
         \| execute 'normal! g`"zvzz'
         \| endif
+
+  " Visible tab char only for windows with 'expandtab'
+  au BufReadPost * if &expandtab | set listchars+=tab:\·\  | endif
+  au BufReadPost * if !&expandtab | set listchars+=tab:\ \  | endif
 
   " Highlights cleanup
   au ColorScheme * call utils#update_colors()
