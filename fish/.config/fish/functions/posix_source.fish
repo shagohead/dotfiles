@@ -1,10 +1,12 @@
 function posix_source
-    set -l verbose 0
-    if test $argv -a $argv[1] = '-q'
-        set -e argv[1]
-    else
-        set verbose 1
+    set -l verbose 1
+    if test -n "$argv"
+        if test $argv[1] = '-q'
+            set -e argv[1]
+            set verbose 0
+        end
     end
+
     if test -d $argv
         set argv '.env'
     end
