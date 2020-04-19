@@ -1,5 +1,15 @@
 let g:quickfixlists = {}
 
+" Add QuickFix item
+function! quickfix#add() abort
+  call setqflist([{
+        \'bufnr': bufnr(),
+        \'lnum': line('.'),
+        \'col': col('.'),
+        \'text': getline('.'),
+        \}], 'a')
+endfunction
+
 " Toggle QuickFix window
 function! quickfix#toggle() abort
   if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist')) > 0

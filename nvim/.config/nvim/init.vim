@@ -272,6 +272,7 @@ xnoremap @ :<C-u>call utils#execute_macro_over_visual_range()<CR>
 nnoremap <Leader>` :Marks<CR>
 nnoremap <Leader>a <Nop>
 nnoremap <Leader>b :b<Space>
+nnoremap <Leader>ca :call quickfix#add()<CR>
 nnoremap <Leader>cc :call quickfix#toggle()<CR>
 nnoremap <Leader>cd :call quickfix#clear()<CR>
 nnoremap <Leader>cs :call quickfix#save()<CR>
