@@ -206,6 +206,10 @@ endif
 
 let g:clap_layout = {'relative': 'editor', 'height': '40%', 'row': '25%'}
 let g:gutentags_ctags_extra_args = ['--tag-relative=always']
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+let g:indentLine_bufTypeExclude = ['help', 'terminal']
+let g:indentLine_fileTypeExclude = ['help', 'markdown']
+let g:indentLine_setConceal = 0
 let g:python_highlight_all = 1
 
 " }}}
