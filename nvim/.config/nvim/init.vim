@@ -246,8 +246,8 @@ vnoremap <M-y> "+y
 
 " Toggle inputmode/langmap
 imap <silent>  
-nnoremap <silent> <C-_> :call utils#toggle_imode()<CR>
-vnoremap <silent> <C-_> <Cmd>call utils#toggle_imode()<CR>
+nnoremap <silent> <C-_> :call options#toggle_imode()<CR>
+vnoremap <silent> <C-_> <Cmd>call options#toggle_imode()<CR>
 
 " Jump to QuickFix place
 nnoremap <silent> [q :cp<CR>
@@ -266,7 +266,7 @@ nnoremap <silent> <Leader><BS> :echo ''<CR>
 nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 
 " Execute macros on visual selection
-xnoremap @ :<C-u>call utils#execute_macro_over_visual_range()<CR>
+xnoremap @ :<C-u>call change#execute_macro_over_visual_range()<CR>
 
 " Leader mappings
 nnoremap <Leader>` :Marks<CR>
@@ -277,13 +277,13 @@ nnoremap <Leader>cc :call quickfix#toggle()<CR>
 nnoremap <Leader>cd :call quickfix#clear()<CR>
 nnoremap <Leader>cs :call quickfix#save()<CR>
 nnoremap <Leader>cl :call quickfix#load()<CR>
-nnoremap <Leader>e :Clap history<CR>
+nnoremap <Leader>e :call fzy#history()<CR>
 nnoremap <Leader>f :find<Space>
-nnoremap <Leader>g :call utils#toggle_numbers()<CR>
-vnoremap <Leader>g :call utils#toggle_numbers()<CR>gv
+nnoremap <Leader>g :call options#toggle_numbers()<CR>
+vnoremap <Leader>g :call options#toggle_numbers()<CR>gv
 nnoremap <Leader>h <Nop>
 nnoremap <Leader>j <Nop>
-nnoremap <Leader>k :call utils#which_key()<CR>
+nnoremap <Leader>k :call mappings#which_key()<CR>
 " Used in local as linter
 nnoremap <Leader>l <Nop>
 " Edit & re-use register
@@ -321,12 +321,12 @@ inoremap <C-y> <C-\><C-o>:call CocActionAsync('showSignatureHelp')<CR>
 " }}}
 " Commands {{{
 
-command! ClearRegisters call utils#ClearRegisters()
+command! ClearRegisters call change#ClearRegisters()
 
 
 " Search inside / outside syntax group
-command! -nargs=+ -complete=command SInside  call utils#search_inside(<f-args>)
-command! -nargs=+ -complete=command SOutside call utils#search_outside(<f-args>)
+command! -nargs=+ -complete=command SInside  call syntax#search_inside(<f-args>)
+command! -nargs=+ -complete=command SOutside call syntax#search_outside(<f-args>)
 command! -nargs=0 -complete=command SGroup   echo(synIDattr(synID(line("."), col("."), 0), "name"))
 
 " }}}
@@ -349,7 +349,7 @@ augroup vimrc
   au BufReadPost * if !&expandtab | set listchars+=tab:\ \  | endif
 
   " Highlights cleanup
-  au ColorScheme * call utils#update_colors()
+  au ColorScheme * call syntax#update_colors()
 
   " Menu autoclose
   au CompleteDone * if pumvisible() == 0 && getcmdwintype() != ':' | pclose | endif
@@ -367,9 +367,11 @@ augroup vimrc
   " Pytest plugin prints long lines with spaces
   " Python trailing spaces highlighted with python-syntax
   au FileType pytest,python setlocal listchars-=trail:↔
+  au FileType python let g:gutentags_project_root = ['pyproject.toml', 'Pipfile', '.git']
 
-  " QuickFix item remove
+  " QuickFix item remove and window resizer
   au FileType qf map <buffer> dd :call quickfix#remove()<CR>
+  au FileType qf call windows#minimize()
 
   " Show wordwrap column in insert mode
   au InsertEnter *.go,*.js,*.md,*.py set colorcolumn=89
@@ -401,7 +403,7 @@ augroup vimrc
   au VimResized * wincmd =
 augroup end
 
-call utils#update_colors()
+call syntax#update_colors()
 
 " }}}
 

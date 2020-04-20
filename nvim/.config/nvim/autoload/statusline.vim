@@ -31,8 +31,8 @@ function! statusline#LinterStatus() abort
     return ''
   endif
 
-  let l:error_symbol = utils#GetIcon('error')
-  let l:style_symbol = utils#GetIcon('warn')
+  let l:error_symbol = syntax#GetIcon('error')
+  let l:style_symbol = syntax#GetIcon('warn')
   let l:counts = ale#statusline#Count(bufnr(''))
   let [l:DELETE, l:CHANGE, l:ADD, l:TEXT] = statusline#getDiffColors()
   let l:status = []
@@ -62,10 +62,10 @@ function! statusline#statusDiagnostic() abort
   let [l:DELETE, l:CHANGE, l:ADD, l:TEXT] = statusline#getDiffColors()
   let l:msgs = []
   if get(l:info, 'error', 0)
-    call add(l:msgs, printf('%s%d %s %%*', l:DELETE,  l:info['error'] , utils#GetIcon('error')))
+    call add(l:msgs, printf('%s%d %s %%*', l:DELETE,  l:info['error'] , syntax#GetIcon('error')))
   endif
   if get(info, 'warning', 0)
-    call add(l:msgs, printf('%s%d %s %%*', l:CHANGE,  l:info['warning'] , utils#GetIcon('warn')))
+    call add(l:msgs, printf('%s%d %s %%*', l:CHANGE,  l:info['warning'] , syntax#GetIcon('warn')))
   endif
 
   return join(l:msgs, ' ')
@@ -78,18 +78,18 @@ function! statusline#gitInfo() abort
 
   let l:out = fugitive#head(10)
   if !empty(l:out)
-    let l:out = utils#GetIcon('branch') . l:out
+    let l:out = syntax#GetIcon('branch') . l:out
   endif
   return l:out
 endfunction
 
 function! statusline#readOnly() abort
   if !&modifiable && &readonly
-    return utils#GetIcon('lock') . ' RO'
+    return syntax#GetIcon('lock') . ' RO'
   elseif &modifiable && &readonly
     return 'RO'
   elseif !&modifiable && !&readonly
-    return utils#GetIcon('lock')
+    return syntax#GetIcon('lock')
   else
     return ''
   endif
@@ -136,7 +136,7 @@ let s:dictmode={
       \'t'      : 'T.',
       \}
 
-exec printf('hi! StatusLine gui=NONE cterm=NONE guibg=NONE ctermbg=NONE guifg=%s ctermfg=%s', utils#get_color('Identifier', 'fg', 'gui'), utils#get_color('Identifier', 'fg', 'cterm'))
+exec printf('hi! StatusLine gui=NONE cterm=NONE guibg=NONE ctermbg=NONE guifg=%s ctermfg=%s', syntax#get_color('Identifier', 'fg', 'gui'), syntax#get_color('Identifier', 'fg', 'cterm'))
 
 function! statusline#getMode() abort
   return get(s:dictmode, mode(), mode() ==# 'n' ? '' : mode().' NOT IN MAP')

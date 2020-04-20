@@ -54,42 +54,4 @@ let g:fzf_action = {
       \ 'ctrl-x': 'split',
       \ 'ctrl-v': 'vsplit'}
 let g:fzf_tags_command = 'ctags.sh'
-
-if has('nvim')
-  function! FloatingFZF()
-    let buf = nvim_create_buf(v:false, v:true)
-    call setbufvar(buf, '&signcolumn', 'no')
-    let opts = {
-          \ 'relative': 'editor',
-          \ 'width': &columns,
-          \ 'height': 13,
-          \ 'row': &lines - 13,
-          \ 'col': 0,
-          \ 'style': 'minimal'
-          \ }
-    let win = nvim_open_win(buf, v:true, opts)
-    call nvim_win_set_option(win, 'winhl', 'NormalFloat:Normal')
-  endfunction
-
-  let g:fzf_layout = {'window': 'call FloatingFZF()'}
-else
-  " TODO: vim8 popups
-  function! FloatingFZF()
-    let buf = bufadd('')
-    call setbufvar(buf, '&signcolumn', 'no')
-    return popup_create(buf, {
-          \ 'line': 13,
-          \ 'col': 0,
-          \ 'pos': 'topleft',
-          \ 'maxheight': 23,
-          \ 'minheight': 13,
-          \ 'wrap': v:false,
-          \ 'drag': v:false,
-          \ 'highlight': 'Normal',
-          \ 'padding': [0, 0, 0, 0],
-          \ 'border': [0, 0, 0, 0]
-          \ })
-  endfunction
-
-  let g:fzf_layout = {'window': '13new'}
-endif
+let g:fzf_layout = {'window': 'call windows#floating(13)'}
