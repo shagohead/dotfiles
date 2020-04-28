@@ -273,6 +273,9 @@ xnoremap @ :<C-u>call change#execute_macro_over_visual_range()<CR>
 
 " Leader mappings
 nnoremap <Leader>` :Marks<CR>
+nnoremap <Leader>' :Marks<CR>
+" I'im too lazy ;)
+nnoremap <Leader>/ /<C-R>/
 nnoremap <Leader>a <Nop>
 nnoremap <Leader>b :b<Space>
 nnoremap <Leader>ca :call quickfix#add()<CR>
