@@ -204,7 +204,6 @@ if exists('+termguicolors') && $TERM == 'alacritty'
   set termguicolors
 endif
 
-let g:clap_layout = {'relative': 'editor', 'height': '40%', 'row': '25%'}
 let g:gutentags_ctags_extra_args = ['--tag-relative=always']
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
@@ -293,7 +292,7 @@ nnoremap <Leader>l <Nop>
 " Edit & re-use register
 nnoremap <Leader>m :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
 nnoremap <Leader>o :CocList outline<CR>
-nnoremap <Leader>p :Clap<CR>
+nnoremap <Leader>p :BTags<CR>
 nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Bar>noh<Left><Left><Left><Left><Left><Left>
