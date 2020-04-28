@@ -118,12 +118,6 @@ if status --is-interactive
     if test ! -e ~/.fzf_history
         touch ~/.fzf_history
     end
-    if test -f .env
-        posix_source -q # source .env on poetry shell activate
-        if test -f .env.local
-            posix_source -q .env.local
-        end
-    end
 
     if type -q register-python-argcomplete
         register-python-argcomplete --shell fish pipx | .
