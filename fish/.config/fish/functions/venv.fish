@@ -31,6 +31,7 @@ function venv \
 
     switch $action
     case "spawn"
+        colored_echo cyan 'Starting sub-shell..'
         fish -C 'venv activate'
     case "activate"
         source $activate_script
