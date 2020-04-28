@@ -168,27 +168,31 @@ key_bindings:
   # Open specific programs
   - key: Comma
     mods: Command
-    command:
-      program: "/usr/local/bin/tmux"
-      args: ["new-window", "-nalacritty.yml", "nvim ~/dotfiles/alacritty/.config/alacritty/alacritty.yml"]
+    chars: "\x13\x41" # prefix + A
+    # command:
+    #   program: "/usr/local/bin/tmux"
+    #   args: ["new-window", "-nalacritty.yml", "nvim ~/dotfiles/alacritty/.config/alacritty/alacritty.yml"]
 
   - key: Slash
     mods: Command
-    command:
-      program: "/usr/local/bin/tmux"
-      args: ["new-window", "-nhelp.txt", "nvim -c 'help | only'"]
+    chars: "\x13\x48" # prefix + H
+    # command:
+    #   program: "/usr/local/bin/tmux"
+    #   args: ["new-window", "-nhelp.txt", "nvim -c 'help | only'"]
 
   - key: Semicolon
     mods: Command
-    command:
-      program: "/usr/local/bin/tmux"
-      args: ["new-window", "-nMonitor", "glances"]
+    chars: "\x13\x47" # prefix + G
+    # command:
+    #   program: "/usr/local/bin/tmux"
+    #   args: ["new-window", "-nMonitor", "glances"]
 
   - key: T
     mods: Command|Shift
-    command:
-      program: "/usr/local/bin/tmux"
-      args: ["new-window", "-ntranslate", "trans -I"]
+    chars: "\x13\x54" # prefix + T
+    # command:
+    #   program: "/usr/local/bin/tmux"
+    #   args: ["new-window", "-ntranslate", "trans -I"]
 
   - { key: Home,                       chars: "\x1bOH",   mode: AppCursor   }
   - { key: Home,                       chars: "\x1b[H",   mode: ~AppCursor  }
