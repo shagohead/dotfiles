@@ -28,10 +28,10 @@ function! StatusLine(mode) abort
 
     let l:line.='%{statusline#getMode()} %*'
     if &paste
-      let l:line.='%#ErrorMsg#%{" '. utils#GetIcon('paste') .' "}%*'
+      let l:line.='%#ErrorMsg#%{" '. syntax#GetIcon('paste') .' "}%*'
     endif
     if &spell
-      let l:line.='%#WarningMsg#%{" '. utils#GetIcon('spell') .' "}%*'
+      let l:line.='%#WarningMsg#%{" '. syntax#GetIcon('spell') .' "}%*'
     endif
     let l:line.=statusline#LinterStatus()
     if exists('*statusline#statusDiagnostic')
