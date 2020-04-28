@@ -12,7 +12,7 @@ function update_all --description 'Update all packages'
 
     set --local option_provided 0
 
-    for arg in -b --brew --git --go -n --npm -p --pipx
+    for arg in -b --brew --git --go -n --npm -p --pipx -f --fish
         if contains -- $arg $argv
             set option_provided 1
         end
@@ -45,7 +45,12 @@ function update_all --description 'Update all packages'
         pipx upgrade-all
     end
 
-    # TODO: fish section (fisher self-update; fisher)
+    if test $option_provided -eq 0; or contains -- -f $argv; or contains -- --fish $argv
+        colored_echo "Upgrading fish packages "
+        curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
+        fisher
+        poetry completions fish > ~/.config/fish/completions/poetry.fish
+    end
 
     functions -e colored_echo
 end
