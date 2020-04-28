@@ -182,7 +182,13 @@ key_bindings:
     mods: Command
     command:
       program: "/usr/local/bin/tmux"
-      args: ["new-window", "-n Monitor", "glances"]
+      args: ["new-window", "-nMonitor", "glances"]
+
+  - key: T
+    mods: Command|Shift
+    command:
+      program: "/usr/local/bin/tmux"
+      args: ["new-window", "-ntranslate", "trans -I"]
 
   - { key: Home,                       chars: "\x1bOH",   mode: AppCursor   }
   - { key: Home,                       chars: "\x1b[H",   mode: ~AppCursor  }
