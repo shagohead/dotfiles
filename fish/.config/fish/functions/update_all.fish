@@ -47,7 +47,7 @@ function update_all --description 'Update all packages'
 
     if test $option_provided -eq 0; or contains -- -f $argv; or contains -- --fish $argv
         colored_echo "Upgrading fish packages "
-        curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
+        fisher self-update
         fisher
         poetry completions fish > ~/.config/fish/completions/poetry.fish
     end
