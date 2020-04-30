@@ -17,6 +17,7 @@ set -x FZF_DEFAULT_OPTS "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up" \
     "--height=$FZF_TMUX_HEIGHT --history=$HOME/.fzf_history" \
     "--color=dark --color=$_FZF_COLORS"
 set -x FZF_DEFAULT_COMMAND "fd -i -H"
+set -q FZF_TMUX; or set -U FZF_TMUX 1
 
 set -x GOPATH $HOME/go
 set -x LANG en_US.UTF-8
@@ -75,7 +76,6 @@ abbr -a tm tmux -u
 
 alias dsa 'docker stop (docker ps -q)'
 alias dps 'docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Status}}"'
-alias ssh 'env TERM=xterm-256color ssh'
 alias top 'top -o cpu'
 
 if test -n "$ALACRITTY_LOG"
@@ -121,5 +121,10 @@ if status --is-interactive
 
     if type -q register-python-argcomplete
         register-python-argcomplete --shell fish pipx | .
+    end
+
+    bind \cr fzy-history
+    if bind -M insert >/dev/null 2>/dev/null
+        bind -M insert \cr fzy-history
     end
 end
