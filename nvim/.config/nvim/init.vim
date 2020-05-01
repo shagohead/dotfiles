@@ -361,7 +361,9 @@ augroup vimrc
   au CompleteDone * if pumvisible() == 0 && getcmdwintype() != ':' | pclose | endif
 
   " Highlight current word
-  au CursorHold * silent call CocActionAsync('highlight')
+  if exists('g:did_coc_loaded')
+    au CursorHold * silent call CocActionAsync('highlight')
+  endif
 
   " Or maybe change style of highlights?
   " au CmdlineEnter [/\?] :set hlsearch
