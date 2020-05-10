@@ -244,13 +244,14 @@ vnoremap <C-p> "0p
 
 " Copy & paste within clipboard
 nnoremap <M-p> "+p
+inoremap <M-p> +
 vnoremap <M-p> "+p
 vnoremap <M-y> "+y
 
-" Toggle inputmode/langmap
-imap <silent>  
-nnoremap <silent> <C-_> :call options#toggle_imode()<CR>
-vnoremap <silent> <C-_> <Cmd>call options#toggle_imode()<CR>
+" Toggle inputmode/langmap with C-^, but in normal mode
+nnoremap  a
+" Switch between recently edited files with C-A, not C-^
+nnoremap  
 
 " Jump to QuickFix place
 nnoremap <silent> [q :cp<CR>

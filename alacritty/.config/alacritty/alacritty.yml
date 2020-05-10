@@ -128,6 +128,10 @@ key_bindings:
   # Control + ^
   - { key: Key6, mods: Control|Shift, chars: "\x1e" }
 
+  - key: Back
+    mods: Command
+    chars: "\x1e"
+
   # Switch panes (Arrows)
   - { key: Up, mods: Command, chars: "\x13\x1b[A"}
   - { key: Down, mods: Command, chars: "\x13\x1b[B"}
