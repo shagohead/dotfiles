@@ -97,6 +97,12 @@ mouse:
 # `Underline`, `Unlabeled`, `VolumeDown`, `VolumeUp`, `Wake`, `WebBack`,
 # `WebFavorites`, `WebForward`, `WebHome`, `WebRefresh`, `WebSearch`,
 # `WebStop`, `Yen`, `Caret`, `Copy`, `Paste`, `Cut`
+#
+# ASCII hex to Key:
+# echo 0x6b | xxd -r
+#
+# Key to ASCII hex interactivly:
+# xxd -ps -c1
 
 key_bindings:
   # Default alacritty.yml Mac OS only bindings
