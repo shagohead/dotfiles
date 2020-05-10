@@ -149,7 +149,8 @@ key_bindings:
   - { key: LBracket, mods: Command, chars: "\x67\x54" }
   - { key: RBracket, mods: Command, chars: "\x67\x74" }
 
-  # Switch to last window
+  # Switch to last pane(;) / window(l)
+  - { key: P, mods: Command, chars: "\x13\x3b" }
   - { key: P, mods: Command|Shift, chars: "\x13\x6c" }
 
   # Move tmux windows (<>)
