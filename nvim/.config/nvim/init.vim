@@ -177,7 +177,7 @@ set tags=./.ctags,.ctags
 set completeopt=noinsert,menuone,noselect
 
 " Environment variables
-let $FZF_DEFAULT_OPTS = '--bind=alt-enter:select-all,alt-bs:deselect-all '.$FZF_DEFAULT_OPTS
+let $FZF_DEFAULT_OPTS = '--bind=alt-enter:select-all,alt-bs:deselect-all '.$_FZF_COMMON_OPTS
 
 call setenv('PYTEST_ADDOPTS', v:null)
 call setenv('PYTHONPATH', '/users/shagohead/.pyenv/virtualenvs/jedi/lib/python3.8/site-packages/')
