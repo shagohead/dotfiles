@@ -14,6 +14,10 @@ if test -e Pipfile.lock
     end
 end
 
+if test -z "$site_packages" -a -f .venv/bin/python
+    set site_packages (fish -c '.venv/bin/python -c "import sys; print(sys.path[-1])"')
+end
+
 if test -n $site_packages
     fd -E 'jedi/' -E 'mypy*' '.py$' $site_packages
 end
