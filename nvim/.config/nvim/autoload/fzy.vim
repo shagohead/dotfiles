@@ -76,13 +76,15 @@ function! fzy#util_buflisted_sorted() abort
 endfunction
 
 function! fzy#history()
-  " Stolen from vim-clap
-  " TODO: items are not unique =(
+  " Stolen from vim-clap and modified for local history
   call fzy#command(uniq(map(
-    \ filter([expand('%')], 'len(v:val)')
-    \   + filter(map(fzy#util_buflisted_sorted(), 'bufname(v:val)'), 'len(v:val)')
-    \   + filter(copy(v:oldfiles), "filereadable(fnamemodify(v:val, ':p'))"),
-    \ 'fnamemodify(v:val, ":~:.")')))
+        \ filter (
+        \   filter([expand('%')], 'len(v:val)')
+        \   + filter(map(fzy#util_buflisted_sorted(), 'bufname(v:val)'), 'len(v:val)')
+        \   + filter(copy(v:oldfiles), "filereadable(fnamemodify(v:val, ':p'))"),
+        \   'v:val =~ "^'.getcwd().'"'
+        \ ),
+        \ 'fnamemodify(v:val, ":~:.")')))
 endfunction
 
 function! fzy#tags()
