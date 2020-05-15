@@ -78,12 +78,9 @@ endfunction
 function! fzy#history()
   " Stolen from vim-clap and modified for local history
   call fzy#command(uniq(map(
-        \ filter (
-        \   filter([expand('%')], 'len(v:val)')
-        \   + filter(map(fzy#util_buflisted_sorted(), 'bufname(v:val)'), 'len(v:val)')
-        \   + filter(copy(v:oldfiles), "filereadable(fnamemodify(v:val, ':p'))"),
-        \   'v:val =~ "^'.getcwd().'"'
-        \ ),
+        \ filter([expand('%')], 'len(v:val)')
+        \ + filter(map(fzy#util_buflisted_sorted(), 'bufname(v:val)'), 'len(v:val)')
+        \ + filter(filter(copy(v:oldfiles), "filereadable(fnamemodify(v:val, ':p'))"), 'v:val =~ "^'.getcwd().'"'),
         \ 'fnamemodify(v:val, ":~:.")')))
 endfunction
 
