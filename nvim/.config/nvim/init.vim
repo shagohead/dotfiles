@@ -381,7 +381,7 @@ augroup vimrc
   " Pytest plugin prints long lines with spaces
   " Python trailing spaces highlighted with python-syntax
   au FileType pytest,python setlocal listchars-=trail:↔
-  au FileType python let g:gutentags_project_root = ['pyproject.toml', 'Pipfile', '.git']
+  " au FileType python let g:gutentags_project_root = ['pyproject.toml', 'Pipfile', '.git']
 
   " QuickFix item remove and window resizer
   au FileType qf map <buffer> dd :call quickfix#remove()<CR>
