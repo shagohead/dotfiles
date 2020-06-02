@@ -84,7 +84,12 @@ set undodir=~/.local/share/nvim/undo
 set undofile
 
 let g:loaded_python_provider = 0
-let g:loaded_python3_provider = 0
+
+if filereadable(expand('~/.pyenv/virtualenvs/pynvim/bin/python3'))
+  let g:python3_host_prog = '~/.pyenv/virtualenvs/pynvim/bin/python3'
+else
+  let g:loaded_python3_provider = 0
+endif
 
 " Mappings
 set keymap=russian-jcukenmac
