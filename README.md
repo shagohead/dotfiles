@@ -41,7 +41,7 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 some usefull stuff:
 
 ```
-brew install bat fd fzf ripgrep telnet
+brew install bat fd fzf ripgrep telnet shellcheck hadolint
 git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
 ```
 
@@ -96,8 +96,6 @@ some usefull settings:
 poetry config settings.virtualenvs.in-project true
 ```
 
-
-# Recomended packages
 
 ## Node packages:
 
