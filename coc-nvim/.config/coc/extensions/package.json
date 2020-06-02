@@ -2,11 +2,11 @@
   "dependencies": {
     "coc-css": ">=1.2.3",
     "coc-dictionary": ">=1.2.2",
-    "coc-json": ">=1.2.5",
+    "coc-json": ">=1.2.6",
     "coc-python": ">=1.2.12",
     "coc-syntax": ">=1.2.4",
     "coc-tsserver": ">=1.5.1",
-    "coc-vimlsp": ">=0.5.2",
+    "coc-vimlsp": ">=0.8.0",
     "coc-yaml": ">=1.0.4"
   }
 }
