@@ -239,10 +239,6 @@ nnoremap <C-l> <C-W>l
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 
-" Faster line moves
-nnoremap <M-j> 7j
-nnoremap <M-k> 7k
-
 " Paste recent yank
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
