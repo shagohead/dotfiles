@@ -3,4 +3,4 @@ check compilemessages createcachetable dbshell diffsettings dumpdata flush inspe
 makemessages makemigrations migrate sendtestemail shell showmigrations sqlflush sqlmigrate \
 sqlsequencereset squashmigrations startapp startproject test testserver clearsessions \
 collectstatic findstatic runserver
-complete -c manage.py -f -a (string join " " $django_commands)
+complete -c manage.py -f -n "not __fish_seen_subcommand_from $django_commands" -a (string join " " $django_commands)
