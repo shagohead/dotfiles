@@ -18,7 +18,7 @@ function posix_source
             continue
         end
         # TODO: skip comments
-        set -l arr (echo $i | tr = \n)
+        set -l arr (string split -m1 '=' $i)
         set -gx $arr[1] $arr[2]
     end
 end
