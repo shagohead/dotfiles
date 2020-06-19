@@ -10,38 +10,38 @@ filetype plugin indent on
 " Plugins {{{
 
 call plug#begin('~/.local/share/nvim/plugged')
-Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'benmills/vimux'
-Plug 'cespare/vim-toml'
-Plug 'chr4/nginx.vim'
-Plug 'chriskempson/base16-vim'
-Plug 'dag/vim-fish'
+Plug '/usr/local/opt/fzf' " fzf integration
+Plug 'junegunn/fzf.vim' " fzf commands
+Plug 'benmills/vimux' " tmux commands (Vimux*)
+Plug 'cespare/vim-toml' " .toml syntax highlighting
+Plug 'chr4/nginx.vim' " nginx syntax highlighting
+Plug 'chriskempson/base16-vim' " base16 color schemes
+Plug 'dag/vim-fish' " .fish syntax highlighting
 Plug 'haya14busa/is.vim'
 Plug 'haya14busa/vim-asterisk'
-Plug 'justinmk/vim-sneak'
-Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
+Plug 'justinmk/vim-sneak' " motions with: s / S
 Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'luochen1990/rainbow'
-Plug 'michaeljsmith/vim-indent-object'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'plasticboy/vim-markdown'
-Plug 'sudar/vim-arduino-syntax'
-Plug 'terryma/vim-expand-region'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
-Plug 'Yggdroot/indentLine'
-Plug 'vim-python/python-syntax'
-Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'ludovicchabant/vim-gutentags' " .ctags autoupdating
+Plug 'luochen1990/rainbow' " colored brackets highlighting
+Plug 'michaeljsmith/vim-indent-object' " indentation text objects: i / I
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " completions by langservers
+Plug 'plasticboy/vim-markdown' " .md syntax highlighting
+Plug 'romainl/vim-qf' " quickfix commands
+Plug 'sudar/vim-arduino-syntax' " .ino syntax highlighting
+Plug 'terryma/vim-expand-region' " visual selection by: + / _ TODO: conf objects
+Plug 'tpope/vim-commentary' " comment mappings
+Plug 'tpope/vim-repeat' " repeat changes from several plugins
+Plug 'tpope/vim-surround' " surrounding mappings
+Plug 'tpope/vim-unimpaired' " motions with brackets
+Plug 'Yggdroot/indentLine' " indentation guide line
+Plug 'vim-python/python-syntax' " .py syntax highlighting
+Plug 'Vimjas/vim-python-pep8-indent' " .py string indentation
+
 " temporarily plugged:
 Plug 'alfredodeza/pytest.vim'
 Plug '5long/pytest-vim-compiler'  " pytest compiler
 Plug 'janko/vim-test'  " tests configurations
 Plug 'tpope/vim-dispatch'  " make & dispatch async
-Plug 'neomake/neomake'  " ???
 " TODO: slimux like (send selected code in REPL)
 " TODO: run nearest test (with vim-test) async (with vim-dispatch) with QF
 " support (with pytest-vim-compiler)
@@ -210,10 +210,13 @@ if exists('+termguicolors') && ($TERM == 'alacritty' || $TERM == 'xterm-kitty')
 endif
 
 let g:gutentags_ctags_extra_args = ['--tag-relative=always']
+let g:indentLine_faster = 1
+let g:indentLine_concealcursor = 'n'
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
 let g:indentLine_fileTypeExclude = ['help', 'markdown']
-let g:indentLine_setConceal = 0
+" let g:indentLine_setConceal = 0
+let g:python_pep8_indent_multiline_string = -1 " to the same line
 let g:python_highlight_all = 1
 
 " }}}
@@ -259,8 +262,8 @@ nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
 
 " Grep word or visual selection
-nnoremap <silent> gp :Clap grep ++query=<cword><CR>
-vnoremap <silent> gp :Clap grep ++query=@visual<CR>
+" nnoremap <silent> gp :Clap grep ++query=<cword><CR>
+" vnoremap <silent> gp :Clap grep ++query=@visual<CR>
 
 " Resize window to: 90 width & fill height
 nnoremap <silent> <C-w>9 :vertical resize 90<CR>
@@ -285,7 +288,7 @@ nnoremap <Leader>cc :call quickfix#toggle()<CR>
 nnoremap <Leader>cd :call quickfix#clear()<CR>
 nnoremap <Leader>cs :call quickfix#save()<CR>
 nnoremap <Leader>cl :call quickfix#load()<CR>
-nnoremap <Leader>e :call fzy#history()<CR>
+nnoremap <Leader>e :call fz#history()<CR>
 nnoremap <Leader>f :find<Space>
 nnoremap <Leader>g :call options#toggle_numbers()<CR>
 vnoremap <Leader>g :call options#toggle_numbers()<CR>gv
@@ -360,7 +363,7 @@ augroup vimrc
   au ColorScheme * call syntax#update_colors()
 
   " Menu autoclose
-  au CompleteDone * if pumvisible() == 0 && getcmdwintype() != ':' | pclose | endif
+  au CompleteDone * if pumvisible() == 0 && index([':', '/'], getcmdwintype()) == -1 | pclose | endif
 
   " Highlight current word
   if exists('g:did_coc_loaded')

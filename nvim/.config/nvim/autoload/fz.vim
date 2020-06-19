@@ -1,12 +1,16 @@
-function! fzy#action_edit(result_value)
+"""""""
+" FZY "
+"""""""
+
+function! fz#action_edit(result_value)
   execute "e ".a:result_value
 endfunction
 
-function fzy#action_tjump(result_value)
+function fz#action_tjump(result_value)
   echo a:result_value
 endfunction
 
-function! fzy#termopen(cmd, ctx)
+function! fz#termopen(cmd, ctx)
   function! s:on_exit(ctx, job_id, data, event)
     close
     if filereadable(a:ctx.result_file)
@@ -29,10 +33,10 @@ function! fzy#termopen(cmd, ctx)
   startinsert
 endfunction
 
-function! fzy#command(source, ...)
+function! fz#command(source, ...)
   let ctx = {
         \'result_file': tempname(),
-        \'action': get(a:, 1, function('fzy#action_edit'))
+        \'action': get(a:, 1, function('fz#action_edit'))
         \}
 
   if type(a:source) == v:t_list
@@ -42,48 +46,49 @@ function! fzy#command(source, ...)
     " Borrowed from vim-fzy
     if executable('mkfifo')
       call system('mkfifo '.ctx.source_file)
-      call fzy#termopen(cmd, ctx)
+      call fz#termopen(cmd, ctx)
       call writefile(a:source, ctx.source_file)
     else
       call writefile(a:source, ctx.source_file)
-      call fzy#termopen(cmd, ctx)
+      call fz#termopen(cmd, ctx)
     endif
 
   else
-    call fzy#termopen(a:source." | fzy", ctx)
+    call fz#termopen(a:source." | fzy", ctx)
   end
 endfunction
 
-function! fzy#files()
-  call fzy#command('fd')
+function! fz#files()
+  call fz#command('fd')
 endfunction
 
 " Stolen from vim-clap
-function! fzy#util_buflisted() abort
+function! fz#util_buflisted() abort
   return filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&filetype") !=# "qf"')
 endfunction
 
 " Stolen from vim-clap (which borred from fzf)
 function! s:sort_buffers(...) abort
-  let [b1, b2] = map(copy(a:000), 'get(g:__clap_buffers, v:val, v:val)')
+  let [b1, b2] = map(copy(a:000), 'get(g:__buffers, v:val, v:val)')
   " Using minus between a float and a number in a sort function causes an error
   return b1 < b2 ? 1 : -1
 endfunction
 
 " Stolen from vim-clap
-function! fzy#util_buflisted_sorted() abort
-  return sort(fzy#util_buflisted(), 's:sort_buffers')
+function! fz#util_buflisted_sorted() abort
+  return sort(fz#util_buflisted(), 's:sort_buffers')
 endfunction
 
-function! fzy#history()
+function! fz#history()
   " Stolen from vim-clap and modified for local history
-  call fzy#command(uniq(map(
-        \ filter([expand('%')], 'len(v:val)')
-        \ + filter(map(fzy#util_buflisted_sorted(), 'bufname(v:val)'), 'len(v:val)')
-        \ + filter(filter(copy(v:oldfiles), "filereadable(fnamemodify(v:val, ':p'))"), 'v:val =~ "^'.getcwd().'"'),
+  call fz#command(uniq(map(
+        \   filter([expand('%')], 'len(v:val)')
+        \   + filter(map(fz#util_buflisted_sorted(), 'bufname(v:val)'), 'len(v:val)')
+        \   + filter(copy(v:oldfiles), 'v:val =~ "^'.getcwd().'"'),
         \ 'fnamemodify(v:val, ":~:.")')))
+        " \   + filter(filter(copy(v:oldfiles), "filereadable(fnamemodify(v:val, ':p'))"), 'v:val =~ "^'.getcwd().'"'),
 endfunction
 
-function! fzy#tags()
-  call fzy#command(map(taglist('.*'), 'v:val.name'), function('fzy#action_tjump'))
+function! fz#tags()
+  call fz#command(map(taglist('.*'), 'v:val.name'), function('fz#action_tjump'))
 endfunction

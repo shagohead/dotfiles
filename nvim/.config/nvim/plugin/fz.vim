@@ -1,4 +1,9 @@
+"""""""
+" FZF "
+"""""""
+
 function! BuildLocationList(lines)
+  " TODO: fix location list creation
   call setloclist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
   cc
@@ -55,3 +60,22 @@ let g:fzf_action = {
       \ 'ctrl-v': 'vsplit'}
 let g:fzf_tags_command = 'ctags.sh'
 let g:fzf_layout = {'window': 'call windows#floating(13)'}
+
+
+"""""""
+" FZY "
+"""""""
+
+function! s:OnBufDelete(bufnr) abort
+  if has_key(g:__buffers, a:bufnr)
+    call remove(g:__buffers, a:bufnr)
+  endif
+endfunction
+
+let g:__buffers = get(g:, '__buffers', {})
+
+augroup plugin_fz
+  autocmd!
+  autocmd BufDelete            * call s:OnBufDelete(+expand('<abuf>'))
+  autocmd BufWinEnter,WinEnter * let g:__buffers[bufnr('')] = reltimefloat(reltime())
+augroup END

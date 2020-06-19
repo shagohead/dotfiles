@@ -99,8 +99,10 @@ function! syntax#update_colors()
   hi! link Comment Special
 
   if &background == 'dark'
+    hi Cursor guibg=Cyan
     hi User3 guifg=Cyan
   else
+    hi Cursor guibg=DarkCyan
     hi User3 guifg=DarkCyan
   endif
 
