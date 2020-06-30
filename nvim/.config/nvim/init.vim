@@ -236,6 +236,10 @@ inoremap <Right> <Nop>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 
+" Command line C-n/p search substring
+cnoremap <C-n> <Down>
+cnoremap <C-p> <Up>
+
 " Paste recent yank
 nnoremap <C-p> "0p
 vnoremap <C-p> "0p
@@ -295,15 +299,15 @@ nnoremap <Leader>l <Nop>
 nnoremap <Leader>m :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
 nnoremap <Leader>o :CocList outline<CR>
 nnoremap <Leader>p :BTags<CR>
-nnoremap <Leader>q :quit<CR>
+nnoremap <Leader>q <Nop>
 nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Bar>noh<Left><Left><Left><Left><Left><Left>
 nnoremap <Leader>s :syntax on<CR>
 nnoremap <Leader>t :Tags<CR>
 nnoremap <Leader>u <Nop>
 nnoremap <Leader>v :VimuxRunLastCommand<CR>
-nnoremap <Leader>w :write<CR>
-nnoremap <Leader>x :bd<CR>
+nnoremap <Leader>w <Nop>
+nnoremap <Leader>x <Nop>
 nnoremap <Leader>z :Files<CR>
 
 " Popup menu navigation
