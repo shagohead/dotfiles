@@ -232,12 +232,6 @@ inoremap <Down> <Nop>
 inoremap <Left> <Nop>
 inoremap <Right> <Nop>
 
-" Switch windows
-nnoremap <C-k> <C-W>k
-nnoremap <C-j> <C-W>j
-nnoremap <C-h> <C-W>h
-nnoremap <C-l> <C-W>l
-
 " Command mode word motions
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
