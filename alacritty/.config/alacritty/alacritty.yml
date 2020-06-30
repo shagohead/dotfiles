@@ -110,8 +110,8 @@ key_bindings:
   - { key: Equals, mods: Command,         action: IncreaseFontSize }
   - { key: Add,    mods: Command,         action: IncreaseFontSize }
   - { key: Minus,  mods: Command,         action: DecreaseFontSize }
-  - { key: K,      mods: Command,         action: ClearHistory     }
-  - { key: K,      mods: Command,         chars: "\x13\x6b"        }
+# - { key: K,      mods: Command,         action: ClearHistory     }
+# - { key: K,      mods: Command,         chars: "\x13\x6b"        }
   - { key: V,      mods: Command,         action: Paste            }
   - { key: C,      mods: Command,         action: Copy             }
 # - { key: H,      mods: Command,         action: Hide             }
@@ -132,11 +132,17 @@ key_bindings:
     mods: Command
     chars: "\x1e"
 
+  # VIM Window navigation ( + h/j/k/l)
+  # - { key: H, mods: Command, chars: "\x17\x68" }
+  # - { key: J, mods: Command, chars: "\x17\x6a" }
+  # - { key: K, mods: Command, chars: "\x17\x6b" }
+  # - { key: L, mods: Command, chars: "\x17\x6c" }
+
   # Switch panes (Arrows)
-  - { key: Up, mods: Command, chars: "\x13\x1b[A"}
-  - { key: Down, mods: Command, chars: "\x13\x1b[B"}
-  - { key: Left, mods: Command, chars: "\x13\x1b[D"}
-  - { key: Right, mods: Command, chars: "\x13\x1b[C"}
+  - { key: Up, mods: Command, chars: "\x13\x1b[A" }
+  - { key: Down, mods: Command, chars: "\x13\x1b[B" }
+  - { key: Left, mods: Command, chars: "\x13\x1b[D" }
+  - { key: Right, mods: Command, chars: "\x13\x1b[C" }
 
   # Switch to next pane (o)
   - { key: O, mods: Command|Shift, chars: "\x13\x6f" }
@@ -164,8 +170,13 @@ key_bindings:
   # Enter copy mode ([)
   - { key: F, mods: Command, chars: "\x13\x5b" }
 
+  # No Hide action
+  - { key: H, mods: Command, action: None }
+
   # Clear buffer and history (k)
   - { key: R, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["send-keys", "-R"] } }
+  - { key: K, mods: Command, action: ClearHistory }
+  - { key: K, mods: Command, chars: "\x13\x6b" }
 
   # New window (c)
   - { key: T, mods: Command, chars: "\x13\x63" }
@@ -204,6 +215,12 @@ key_bindings:
     # command:
     #   program: "/usr/local/bin/tmux"
     #   args: ["new-window", "-ntranslate", "trans -I"]
+
+  # (NEO)VIM related bindings
+  - { key: J, mods: Alt, chars: "8j" }
+  - { key: K, mods: Alt, chars: "8k" }
+  - { key: Q, mods: Alt, chars: ":q\x0d" }
+  - { key: W, mods: Alt, chars: ":w\x0d" }
 
   - { key: Home,                       chars: "\x1bOH",   mode: AppCursor   }
   - { key: Home,                       chars: "\x1b[H",   mode: ~AppCursor  }
@@ -315,21 +332,19 @@ key_bindings:
   - { key: H,         mods: Alt,       chars: "\x1bh"                       }
   - { key: I,         mods: Alt,       chars: "\x1bi"                       }
 # - { key: J,         mods: Alt,       chars: "\x1bj"                       }
-  - { key: J,         mods: Alt,       chars: "8j"                          }
 # - { key: K,         mods: Alt,       chars: "\x1bk"                       }
-  - { key: K,         mods: Alt,       chars: "8k"                          }
   - { key: L,         mods: Alt,       chars: "\x1bl"                       }
   - { key: M,         mods: Alt,       chars: "\x1bm"                       }
   - { key: N,         mods: Alt,       chars: "\x1bn"                       }
   - { key: O,         mods: Alt,       chars: "\x1bo"                       }
   - { key: P,         mods: Alt,       chars: "\x1bp"                       }
-  - { key: Q,         mods: Alt,       chars: "\x1bq"                       }
+# - { key: Q,         mods: Alt,       chars: "\x1bq"                       }
   - { key: R,         mods: Alt,       chars: "\x1br"                       }
   - { key: S,         mods: Alt,       chars: "\x1bs"                       }
   - { key: T,         mods: Alt,       chars: "\x1bt"                       }
   - { key: U,         mods: Alt,       chars: "\x1bu"                       }
   - { key: V,         mods: Alt,       chars: "\x1bv"                       }
-  - { key: W,         mods: Alt,       chars: "\x1bw"                       }
+# - { key: W,         mods: Alt,       chars: "\x1bw"                       }
   - { key: X,         mods: Alt,       chars: "\x1bx"                       }
   - { key: Y,         mods: Alt,       chars: "\x1by"                       }
   - { key: Z,         mods: Alt,       chars: "\x1bz"                       }
