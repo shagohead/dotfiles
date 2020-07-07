@@ -96,6 +96,9 @@ some usefull settings:
 poetry config settings.virtualenvs.in-project true
 ```
 
+## Homebrewed packages:
+- git-flow
+
 
 ## Node packages:
 
