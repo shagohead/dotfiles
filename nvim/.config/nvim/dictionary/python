@@ -1,3 +1,5 @@
+instance
 metaclass
+short_description
 verbose_name
 verbose_name_plural
