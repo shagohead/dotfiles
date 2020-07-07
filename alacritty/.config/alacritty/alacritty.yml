@@ -219,8 +219,8 @@ key_bindings:
   # (NEO)VIM related bindings
   - { key: J, mods: Alt, chars: "8j" }
   - { key: K, mods: Alt, chars: "8k" }
-  - { key: Q, mods: Alt, chars: ":q\x0d" }
-  - { key: W, mods: Alt, chars: ":w\x0d" }
+  - { key: D, mods: Command, chars: ":q\x0d" }
+  - { key: S, mods: Command, chars: ":w\x0d" }
 
   - { key: Home,                       chars: "\x1bOH",   mode: AppCursor   }
   - { key: Home,                       chars: "\x1b[H",   mode: ~AppCursor  }
@@ -338,13 +338,13 @@ key_bindings:
   - { key: N,         mods: Alt,       chars: "\x1bn"                       }
   - { key: O,         mods: Alt,       chars: "\x1bo"                       }
   - { key: P,         mods: Alt,       chars: "\x1bp"                       }
-# - { key: Q,         mods: Alt,       chars: "\x1bq"                       }
+  - { key: Q,         mods: Alt,       chars: "\x1bq"                       }
   - { key: R,         mods: Alt,       chars: "\x1br"                       }
   - { key: S,         mods: Alt,       chars: "\x1bs"                       }
   - { key: T,         mods: Alt,       chars: "\x1bt"                       }
   - { key: U,         mods: Alt,       chars: "\x1bu"                       }
   - { key: V,         mods: Alt,       chars: "\x1bv"                       }
-# - { key: W,         mods: Alt,       chars: "\x1bw"                       }
+  - { key: W,         mods: Alt,       chars: "\x1bw"                       }
   - { key: X,         mods: Alt,       chars: "\x1bx"                       }
   - { key: Y,         mods: Alt,       chars: "\x1by"                       }
   - { key: Z,         mods: Alt,       chars: "\x1bz"                       }
