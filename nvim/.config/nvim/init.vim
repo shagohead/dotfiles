@@ -260,7 +260,7 @@ nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
 
 " Grep word or visual selection
-" nnoremap <silent> gp :Clap grep ++query=<cword><CR>
+nnoremap <silent> gp :execute ':grep '.expand('<cword>')<CR>
 " vnoremap <silent> gp :Clap grep ++query=@visual<CR>
 
 " Resize window to: 90 width & fill height
