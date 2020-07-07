@@ -15,8 +15,10 @@ set -l _FZF_COLORS (string join "," "fg:7" "fg+:7" "bg:0" "bg+:0" "hl:6" "hl+:6"
     "info:2" "prompt:1" "pointer:12" "marker:4" "spinner:11" "header:6")
 set -x _FZF_COMMON_OPTS "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up" \
     "--history=$HOME/.fzf_history --color=dark --color=$_FZF_COLORS"
+# https://github.com/junegunn/fzf#environment-variables
 set -x FZF_DEFAULT_OPTS "--reverse --height=$FZF_TMUX_HEIGHT $_FZF_COMMON_OPTS"
 set -x FZF_DEFAULT_COMMAND "fd --hidden --follow --exclude .git"
+# https://github.com/jethrokuan/fzf#commands
 set -x FZF_FIND_FILE_COMMAND $FZF_DEFAULT_COMMAND
 set -q FZF_TMUX; or set -U FZF_TMUX 1
 
