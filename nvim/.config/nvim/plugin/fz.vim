@@ -37,12 +37,23 @@ function! s:buffsink(lines)
   endif
 endfunction
 
+function! s:allfiles(dir, bang)
+  let l:default_command = $FZF_DEFAULT_COMMAND
+  let $FZF_DEFAULT_COMMAND .= ' -I'
+  call fzf#vim#files(a:dir, {}, a:bang)
+  let $FZF_DEFAULT_COMMAND = l:default_command
+endfunction
+
+command! -bang -nargs=? -complete=dir AllFiles
+      \ call s:allfiles(<q-args>, <bang>0)
+command! DirFiles Files %:h
+
 command! -bar -bang -nargs=? -complete=buffer Buffers
       \ call fzf#vim#buffers(<q-args>, {
       \ 'sink*': function('s:buffsink'),
       \ 'options': '--multi --expect alt-d',
       \ }, <bang>0)
-command! DirFiles Files %:h
+
 command! -bang -nargs=* Find
       \ call fzf#vim#grep('rg
       \ --column --line-number

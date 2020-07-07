@@ -279,7 +279,7 @@ nnoremap <Leader>` :Marks<CR>
 nnoremap <Leader>' :Marks<CR>
 " I'im too lazy ;)
 nnoremap <Leader>/ /<C-R>/
-nnoremap <Leader>a <Nop>
+nnoremap <Leader>a :AllFiles<CR>
 nnoremap <Leader>b :b<Space>
 nnoremap <Leader>ca :call quickfix#add()<CR>
 nnoremap <Leader>cc :call quickfix#toggle()<CR>
