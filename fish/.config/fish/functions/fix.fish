@@ -1,4 +1,4 @@
-function fix
+function fix -d "Fix some package configs/links/etc"
     function colored_echo
         set_color $argv[1]
         echo -n $argv[2]

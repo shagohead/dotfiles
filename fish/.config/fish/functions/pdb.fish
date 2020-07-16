@@ -1,4 +1,4 @@
-function pdb -d "invoke builtin pdb into env variables"
+function pdb -d "Invoke builtin pdb into env variables"
     # Удаление класса дебагера из PYTEST_ADDOPTS
     if set -q PYTEST_ADDOPTS
         for i in (seq (count $PYTEST_ADDOPTS))

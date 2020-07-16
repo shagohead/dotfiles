@@ -1,4 +1,4 @@
-function posix_source
+function posix_source -d "Source env files like POSIX shells does"
     set -l verbose 1
     if test -n "$argv"
         if test $argv[1] = '-q'

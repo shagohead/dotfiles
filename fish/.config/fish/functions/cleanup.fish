@@ -1,4 +1,3 @@
-# Defined in /var/folders/gg/s159wbtx1014w775zwkbdx4r0000gn/T//fish.D9DIHc/cleanup.fish @ line 2
 function cleanup -d "System cleanup utility"
     function colored_echo
         set_color $argv[1]

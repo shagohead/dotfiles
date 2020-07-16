@@ -1,4 +1,4 @@
-function ipdb -d "invoke ipdb class into env variables"
+function ipdb -d "Invoke ipdb class into env variables"
     # Удаление класса дебагера из PYTEST_ADDOPTS
     if set -q PYTEST_ADDOPTS
         for i in (seq (count $PYTEST_ADDOPTS))

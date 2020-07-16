@@ -1,5 +1,5 @@
 function venv \
-    --description 'Activate python virtualenv & export environment variables' \
+    --description "Activate python virtualenv & export environment variables" \
     --argument-names action
 
     function colored_echo

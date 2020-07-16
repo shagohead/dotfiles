@@ -1,4 +1,4 @@
-function update_all --description 'Update all packages'
+function update_all --description "Update all packages"
     function colored_echo
         set_color green
         echo -n $argv[1]
