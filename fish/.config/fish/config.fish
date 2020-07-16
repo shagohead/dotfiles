@@ -126,8 +126,9 @@ if status --is-interactive
         register-python-argcomplete --shell fish pipx | .
     end
 
-    bind \cr fzy-history
+    bind \ed fzf_cd_up
+    bind \cr fzy_history
     if bind -M insert >/dev/null 2>/dev/null
-        bind -M insert \cr fzy-history
+        bind -M insert \cr fzy_history
     end
 end
