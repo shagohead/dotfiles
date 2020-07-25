@@ -252,8 +252,8 @@ vnoremap <M-y> "+y
 
 " Toggle inputmode/langmap with C-^, but in normal mode
 nnoremap  a
-" Switch between recently edited files with C-A, not C-^
-nnoremap  
+" Switch between recently edited files with C-Q, not C-^
+nnoremap  
 
 " Jump to QuickFix place
 nnoremap <silent> [q :cp<CR>
@@ -284,8 +284,7 @@ nnoremap <Leader>b :b<Space>
 nnoremap <Leader>ca :call quickfix#add()<CR>
 nnoremap <Leader>cc :call quickfix#toggle()<CR>
 nnoremap <Leader>cd :call quickfix#clear()<CR>
-nnoremap <Leader>cs :call quickfix#save()<CR>
-nnoremap <Leader>cl :call quickfix#load()<CR>
+nnoremap <Leader>d /\(<\<bar>>\<bar>=\<bar><bar>\)\{7}<CR>
 nnoremap <Leader>e :call fz#history()<CR>
 nnoremap <Leader>f :find<Space>
 nnoremap <Leader>g :call options#toggle_numbers()<CR>
@@ -306,7 +305,6 @@ nnoremap <Leader>s :syntax on<CR>
 nnoremap <Leader>t :Tags<CR>
 nnoremap <Leader>u <Nop>
 nnoremap <Leader>v :VimuxRunLastCommand<CR>
-nnoremap <Leader>w <Nop>
 nnoremap <Leader>x <Nop>
 nnoremap <Leader>z :Files<CR>
 
@@ -321,7 +319,7 @@ nnoremap <silent> ]w :call CocActionAsync('diagnosticNext')<CR>
 nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'edit')<CR>
 nnoremap <silent> gr :call CocActionAsync('jumpReferences')<CR>
 nnoremap <silent> <Leader>= :call CocActionAsync('format')<CR>
-nnoremap <silent> <Leader>d :call CocActionAsync('diagnosticInfo')<CR>
+nnoremap <silent> <Leader>w :call CocActionAsync('diagnosticInfo')<CR>
 nnoremap <silent> <Leader>i :call CocActionAsync('runCommand', 'editor.action.organizeImport')<CR>
 nnoremap <silent> <Leader>n :call CocActionAsync('rename')<CR>
 nnoremap <silent> <Leader>y :call CocActionAsync('showSignatureHelp')<CR>
