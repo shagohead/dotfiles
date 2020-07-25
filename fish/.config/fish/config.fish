@@ -35,12 +35,7 @@ if test -e "$HOME/.pythonrc"
     set -x PYTHONSTARTUP "$HOME/.pythonrc"
 end
 
-# TODO: append only if there is no value like with _PATH_PREPEND
-set -x CFLAGS {$CFLAGS} -I(xcrun --show-sdk-path)/usr/include/
-set -x CPPFLAGS {$CPPFLAGS} -I/usr/local/opt/zlib/include
-set -x LDFLAGS {$LDFLAGS} -L/usr/local/opt/zlib/lib
-set -x PKG_CONFIG_PATH {$PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig
-
+# Директории для $PATH который будут добавлены в начало списка
 set _PATH_PREPEND \
     /usr/local/opt/icu4c/bin \
     /usr/local/opt/gnu-getopt/bin \
@@ -51,10 +46,35 @@ set _PATH_PREPEND \
     $GOPATH/bin \
     $HOME/.pyenv/shims
 
-if test -n $VIRTUAL_ENV # append virtual env /bin path
-    set -gx _PATH_PREPEND $_PATH_PREPEND $VIRTUAL_ENV/bin
+# В $PATH добавятся только существующие директории
+for bin_path in $_PATH_PREPEND
+    if test ! -d $bin_path
+        set _PATH_PREPEND (string match -v $bin_path $_PATH_PREPEND)
+    end
 end
 
+# Добавление в $PATH виртуального окружение Python
+if test -n $VIRTUAL_ENV
+    set _PATH_PREPEND $_PATH_PREPEND $VIRTUAL_ENV/bin
+end
+
+# Дополнение опций gcc установленными библиотеками
+for opt_name in llvm zlib
+    if test -d /usr/local/opt/$opt_name
+        set -gx CPPFLAGS {$CPPFLAGS} -I/usr/local/opt/$opt_name/include
+        set -gx LDFLAGS {$LDFLAGS} -L/usr/local/opt/$opt_name/lib
+
+        if test "$opt_name" = "llmv"
+            set -gx PKG_CONFIG_PATH /usr/local/opt/$opt_name/lib/pkgconfig
+        else if test "$opt_name" = "zlib"
+            set _PATH_PREPEND /usr/local/opt/$opt_name/bin $_PATH_PREPEND
+        end
+    end
+end
+
+set -x CFLAGS -I(xcrun --show-sdk-path)/usr/include/
+
+# Дополнение $PATH значениями, переносимыми в начало списка, если уже имеется
 for item in $_PATH_PREPEND # (re) prepend PATH
     set -gx PATH (string match -v $item $PATH)
     set -gx PATH $item $PATH
