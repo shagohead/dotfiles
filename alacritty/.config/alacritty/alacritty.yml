@@ -9,7 +9,7 @@ window:
     lines: 47
 
 scrolling:
-  history: 15000
+  history: 20000
 
 tabspaces: 4
 
