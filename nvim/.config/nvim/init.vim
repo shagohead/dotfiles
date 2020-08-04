@@ -250,6 +250,15 @@ inoremap <M-p> +
 vnoremap <M-p> "+p
 vnoremap <M-y> "+y
 
+" Saner n/N behavior
+nnoremap <expr> n 'Nn'[v:searchforward]
+xnoremap <expr> n 'Nn'[v:searchforward]
+onoremap <expr> n 'Nn'[v:searchforward]
+
+nnoremap <expr> N 'nN'[v:searchforward]
+xnoremap <expr> N 'nN'[v:searchforward]
+onoremap <expr> N 'nN'[v:searchforward]
+
 " Toggle inputmode/langmap with C-^, but in normal mode
 nnoremap  a
 " Switch between recently edited files with C-Q, not C-^
