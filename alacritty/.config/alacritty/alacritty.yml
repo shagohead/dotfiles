@@ -5,8 +5,8 @@ env:
 
 window:
   dimensions:
-    columns: 135
-    lines: 47
+    columns: 180
+    lines: 48
 
 scrolling:
   history: 20000
@@ -18,7 +18,7 @@ font:
     family: Iosevka Nerd Font
     style: Regular
 
-  size: 14.0
+  size: 12.0
 
   use_thin_strokes: true
 
@@ -184,9 +184,6 @@ key_bindings:
   # New session (S)
   - { key: N, mods: Command, chars: "\x13\x53" }
 
-  # Kill pane (close window) (x)
-  - { key: W, mods: Command, chars: "\x13\x78" }
-
   # Open specific programs
   - key: Comma
     mods: Command
@@ -219,7 +216,7 @@ key_bindings:
   # (NEO)VIM related bindings
   - { key: J, mods: Alt, chars: "8j" }
   - { key: K, mods: Alt, chars: "8k" }
-  - { key: D, mods: Command, chars: ":q\x0d" }
+  - { key: W, mods: Command, chars: ":q\x0d" }
   - { key: S, mods: Command, chars: ":w\x0d" }
 
   - { key: Home,                       chars: "\x1bOH",   mode: AppCursor   }
