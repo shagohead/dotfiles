@@ -2,6 +2,10 @@ if test -e "$__fish_config_dir/config.tokens.fish"
     source "$__fish_config_dir/config.tokens.fish"
 end
 
+# base16 themes for `darkmode` function
+set -x BASE_16_LIGHT base16-atelier-savanna-light
+set -x BASE_16_DARK base16-tomorrow-night
+
 # bat config
 set -x BAT_PAGER never
 set -x BAT_STYLE plain
