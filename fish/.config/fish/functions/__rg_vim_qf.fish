@@ -12,6 +12,10 @@ function __rg_vim_qf -d "Wraps current rg command to populate nvim ($EDITOR) qui
         commandline -aj -- ' --vimgrep'
     end
 
+    if commandline -j | string match -q -r -v -- '--sort'
+        commandline -aj -- ' --sort path'
+    end
+
     if commandline -j | string match -q -r -v -- 'psub'
         commandline -aj -- ' | psub'
     end
