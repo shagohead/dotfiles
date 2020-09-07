@@ -5,10 +5,8 @@ setlocal expandtab
 setlocal formatoptions-=t
 setlocal dictionary+=~/.config/nvim/dictionary/python
 
-iab <buffer> pdb import pdb; pdb.set_trace()
-iab <buffer> ipdb import ipdb; ipdb.set_trace()
-iab <buffer> " """"""
-iab <buffer>  """"""
+ia <buffer> pdb import pdb; pdb.set_trace()
+ia <buffer> ipdb import ipdb; ipdb.set_trace()
 
 " nnoremap <buffer> <LocalLeader>i :call python#sort_imports()<CR>
 nnoremap <buffer> <LocalLeader>l :CocCommand python.runLinting<CR>

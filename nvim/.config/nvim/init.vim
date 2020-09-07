@@ -219,6 +219,12 @@ let g:indentLine_fileTypeExclude = ['help', 'markdown']
 let g:python_pep8_indent_multiline_string = -1 " to the same line
 let g:python_highlight_all = 1
 
+
+" Abbrebiations
+ia 1 """"""
+ia 2 """"""
+ia 3 #
+
 " }}}
 " Mappings {{{
 
@@ -261,8 +267,8 @@ onoremap <expr> N 'nN'[v:searchforward]
 
 " Toggle inputmode/langmap with C-^, but in normal mode
 nnoremap  a
-" Switch between recently edited files with C-Q, not C-^
-nnoremap  
+" Switch between recently edited files with C-H, not C-^
+nnoremap  
 
 " Jump to QuickFix place
 nnoremap <silent> [q :cp<CR>
