@@ -7,7 +7,6 @@ set -x BASE_16_LIGHT base16-atelier-savanna-light
 set -x BASE_16_DARK base16-tomorrow-night
 
 # bat config
-set -x BAT_PAGER never
 set -x BAT_STYLE plain
 set -x BAT_THEME base16
 
