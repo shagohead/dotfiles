@@ -17,8 +17,9 @@ function posix_source -d "Source env files like POSIX shells does"
         if test -z "$i"
             continue
         end
-        # TODO: skip comments
         set -l arr (string split -m1 '=' $i)
-        set -gx $arr[1] $arr[2]
+        if not string match -q -- '#*' $arr[1]
+            set -gx $arr[1] $arr[2]
+        end
     end
 end
