@@ -102,19 +102,11 @@ abbr -a psaux 'ps aux | head -1 && ps aux | grep -v grep | grep'
 abbr -a run ./manage.py runserver
 abbr -a tm tmux -u
 
-alias dsa 'docker stop (docker ps -q)'
-alias dps 'docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Status}}"'
-alias top 'top -o cpu'
-
 if test -n "$ALACRITTY_LOG"
     set -x TERM alacritty
 end
 
 if status --is-interactive
-    set BASE16_SHELL "$HOME/.config/base16-shell/"
-    alias base16-init 'source "$BASE16_SHELL/profile_helper.fish"'
-    alias pyenv-init 'pyenv init - | source'
-
     # Colors:
     # black, red, green, yellow, blue, magenta, cyan, white
     # brblack, brred, brgreen, bryellow, brblue, brmagenta, brcyan, brwhite
