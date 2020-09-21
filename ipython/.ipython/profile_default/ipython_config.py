@@ -34,8 +34,7 @@
 c.InteractiveShellApp.exec_lines = ['%autoreload 2']
 
 ## A list of dotted module names of IPython extensions to load.
-c.InteractiveShellApp.extensions = ['autoreload', 'memory_profiler']
-c.InteractiveShellApp.extensions = ['autoreload']
+c.InteractiveShellApp.extensions = ['autoreload']  # 'memory_profiler'
 
 ## dotted module name of an IPython extension to load.
 #c.InteractiveShellApp.extra_extension = ''
@@ -190,7 +189,7 @@ c.InteractiveShellApp.extensions = ['autoreload']
 c.InteractiveShell.color_info = True
 
 ## Set the color scheme (NoColor, Neutral, Linux, or LightBG).
-c.InteractiveShell.colors = 'Linux'
+c.InteractiveShell.colors = 'Neutral'
 
 ## 
 #c.InteractiveShell.debug = False
@@ -314,7 +313,7 @@ c.TerminalInteractiveShell.highlight_matching_brackets = True
 
 ## The name or class of a Pygments style to use for syntax highlighting. To see
 #  available styles, run `pygmentize -L styles`.
-#c.TerminalInteractiveShell.highlighting_style = traitlets.Undefined
+c.TerminalInteractiveShell.highlighting_style = 'friendly'
 
 ## Override highlighting format for specific tokens
 #c.TerminalInteractiveShell.highlighting_style_overrides = {}
@@ -324,7 +323,7 @@ c.TerminalInteractiveShell.highlight_matching_brackets = True
 #c.TerminalInteractiveShell.mouse_support = False
 
 ## Display the current vi mode (when using vi editing mode).
-#c.TerminalInteractiveShell.prompt_includes_vi_mode = True
+c.TerminalInteractiveShell.prompt_includes_vi_mode = True
 
 ## Class used to generate Prompt token for prompt_toolkit
 #c.TerminalInteractiveShell.prompts_class = 'IPython.terminal.prompts.Prompts'
