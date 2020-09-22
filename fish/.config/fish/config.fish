@@ -2,6 +2,9 @@ if test -e "$__fish_config_dir/config.tokens.fish"
     source "$__fish_config_dir/config.tokens.fish"
 end
 
+# https://support.apple.com/ru-ru/HT208050
+set -x BASH_SILENCE_DEPRECATION_WARNING 1
+
 set BASE16_SHELL "$HOME/.config/base16-shell/"
 
 # base16 themes for `darkmode` function
