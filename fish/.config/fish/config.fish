@@ -15,8 +15,9 @@ set -x BASE_16_DARK base16-material-darker
 set -x BAT_STYLE plain
 set -x BAT_THEME base16
 
-set -x DF_STATS "table {{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}\t{{.PIDs}}"
-set -x EDITOR nvim
+# editors
+set -x EDITOR vi -e
+set -x VISUAL nvim
 
 # fzf config
 set -l _FZF_COLORS (string join "," "fg:7" "fg+:7" "bg:0" "bg+:0" "hl:6" "hl+:6" \
