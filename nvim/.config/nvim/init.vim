@@ -333,6 +333,8 @@ nnoremap <silent> [w :call CocActionAsync('diagnosticPrevious')<CR>
 nnoremap <silent> ]w :call CocActionAsync('diagnosticNext')<CR>
 nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'edit')<CR>
 nnoremap <silent> gr :call CocActionAsync('jumpReferences')<CR>
+" Search buffer from start
+nnoremap <silent> gs :let @/='\<'.expand('<cword>').'\>'\|:norm ggn<CR>
 nnoremap <silent> <Leader>= :call CocActionAsync('format')<CR>
 nnoremap <silent> <Leader>w :call CocActionAsync('diagnosticInfo')<CR>
 nnoremap <silent> <Leader>i :call CocActionAsync('runCommand', 'editor.action.organizeImport')<CR>
