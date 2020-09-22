@@ -218,6 +218,8 @@ let g:indentLine_fileTypeExclude = ['help', 'markdown']
 " let g:indentLine_setConceal = 0
 let g:python_pep8_indent_multiline_string = -1 " to the same line
 let g:python_highlight_all = 1
+let g:qf_auto_resize = 1
+let g:qf_shorten_path = 0
 
 
 " Abbrebiations
@@ -296,9 +298,7 @@ nnoremap <Leader>' :Marks<CR>
 nnoremap <Leader>/ /<C-R>/
 nnoremap <Leader>a :AllFiles<CR>
 nnoremap <Leader>b :b<Space>
-nnoremap <Leader>ca :call quickfix#add()<CR>
-nnoremap <Leader>cc :call quickfix#toggle()<CR>
-nnoremap <Leader>cd :call quickfix#clear()<CR>
+nnoremap <Leader>c <Nop>
 nnoremap <Leader>d /\(<\<bar>>\<bar>=\<bar><bar>\)\{7}<CR>
 nnoremap <Leader>e :call fz#history()<CR>
 nnoremap <Leader>f :find<Space>
@@ -313,7 +313,7 @@ nnoremap <Leader>l <Nop>
 nnoremap <Leader>m :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
 nnoremap <Leader>o :CocList outline<CR>
 nnoremap <Leader>p :BTags<CR>
-nnoremap <Leader>q <Nop>
+nmap <Leader>q <Plug>(qf_qf_toggle_stay)
 nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Bar>noh<Left><Left><Left><Left><Left><Left>
 nnoremap <Leader>s :syntax on<CR>
@@ -393,10 +393,6 @@ augroup vimrc
   au FileType pytest,python setlocal listchars-=trail:↔
   au FileType python let b:coc_root_patterns = ['pyproject.toml', 'Pipfile']
   " au FileType python let g:gutentags_project_root = ['pyproject.toml', 'Pipfile', '.git']
-
-  " QuickFix item remove and window resizer
-  au FileType qf map <buffer> dd :call quickfix#remove()<CR>
-  au FileType qf call windows#minimize()
 
   " Show wordwrap column in insert mode
   au InsertEnter *.go,*.js,*.md,*.py set colorcolumn=89
