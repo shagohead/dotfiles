@@ -9,7 +9,7 @@ set BASE16_SHELL "$HOME/.config/base16-shell/"
 
 # base16 themes for `darkmode` function
 set -x BASE_16_LIGHT base16-one-light
-set -x BASE_16_DARK base16-material-darker
+set -x BASE_16_DARK base16-classic-dark
 
 # bat config
 set -x BAT_STYLE plain
