@@ -156,4 +156,5 @@ if status --is-interactive
     end
 
     bind \er __rg_vim_qf
+    bind \cx "commandline -i (fzf-complete-from-tmux.sh) 2>/dev/null"
 end
