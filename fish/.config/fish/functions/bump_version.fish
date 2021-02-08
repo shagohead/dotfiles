@@ -1,9 +1,31 @@
 function bump_version \
-    --description "Bump current tag to pyproject.toml (in cwd or it children)"
+    --description "Bump project version to pyproject.toml (in cwd or it children)"
+
+    function error
+        set_color red
+        echo -n $argv 1>&2
+        set_color normal
+        echo "" 1>&2
+    end
+
 
     if not git rev-parse --git-dir &> /dev/null
-        echo "Working directory is not git repository"
-        return 1
+        error "Working directory is not git repository"; return 1
+    end
+
+    for option in $argv
+        switch "$option"
+            case -t --tag
+                set project_version (git describe --abbrev=0)
+            case -s --suffix
+                set project_version (string split '/' (git rev-parse --abbrev-ref HEAD))[2]
+            case \*
+                error "error: Unknown option: $option"; return 1
+        end
+    end
+
+    if not set -q project_version
+        error "error: Provide version source"; return 1
     end
 
     set -g find_result
@@ -30,8 +52,7 @@ function bump_version \
         return 1
     end
 
-    set -l git_tag (git describe --abbrev=0)
-    sed -i '' "s/version = \"[^\"]*\"/version = \"$git_tag\"/" $find_result
-    echo "Version $git_tag bumped to $find_result"
+    sed -i '' "s/version = \"[^\"]*\"/version = \"$project_version\"/" $find_result
+    echo "Version $project_version bumped to $find_result"
     functions -e find_file
 end

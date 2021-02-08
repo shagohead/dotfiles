@@ -9,7 +9,7 @@ function fzf_cd_up -d "FZF upper directories and cd into it"
     # reverse list & drop root path (which will be empty)
     set paths $paths[-1..2]
 
-    eval "echo $paths | tr -s ' ' \n | "(__fzfcmd)" $FZF_DEFAULT_OPTS | read -l select"
+    eval "echo $paths | tr -s ' ' \n | "(__fzfcmd)" +m $FZF_DEFAULT_OPTS --query \"\" | read -l select"
 
     if not test -z "$select"
         builtin cd "$select"
