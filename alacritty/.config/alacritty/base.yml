@@ -202,7 +202,7 @@ key_bindings:
     chars: "\x13\x54" # prefix + T
     # command:
     #   program: "/usr/local/bin/tmux"
-    #   args: ["new-window", "-ntranslate", "trans -I"]
+    #   args: ["new-window", "-ntranslate", "trans -d -I"]
 
   # (NEO)VIM related bindings
   - { key: J, mods: Alt, chars: "8j" }

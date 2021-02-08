@@ -318,6 +318,8 @@ nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Bar>noh<Left><Left><Left><Left><Left><Left>
 nnoremap <Leader>s :syntax on<CR>
 nnoremap <Leader>t :Tags<CR>
+" Translate with https://github.com/soimort/translate-shell
+nnoremap <Leader>T :!trans <cword><CR>
 nnoremap <Leader>u <Nop>
 nnoremap <Leader>v :VimuxRunLastCommand<CR>
 nnoremap <Leader>x <Nop>
@@ -332,6 +334,8 @@ nnoremap <silent> Y :call utils#show_documentation()<CR>
 nnoremap <silent> [w :call CocActionAsync('diagnosticPrevious')<CR>
 nnoremap <silent> ]w :call CocActionAsync('diagnosticNext')<CR>
 nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'edit')<CR>
+nnoremap <silent> gDt :call CocActionAsync('jumpDefinition', 'tabe')<CR>
+nnoremap <silent> gDg :execute ':grep "(class.*\<bar>def.*)?'.expand('<cword>').'.*[:\<bar>=]"'<CR>
 nnoremap <silent> gr :call CocActionAsync('jumpReferences')<CR>
 " Search buffer from start
 nnoremap <silent> gs :let @/='\<'.expand('<cword>').'\>'\|:norm ggn<CR>
