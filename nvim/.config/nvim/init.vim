@@ -351,6 +351,7 @@ inoremap <C-y> <C-\><C-o>:call CocActionAsync('showSignatureHelp')<CR>
 " Commands {{{
 
 command! ClearRegisters call change#ClearRegisters()
+command! Breadcrumbs call indent#breadcrumbs()
 
 
 " Search inside / outside syntax group
