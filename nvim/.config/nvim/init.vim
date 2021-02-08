@@ -27,6 +27,7 @@ Plug 'michaeljsmith/vim-indent-object' " indentation text objects: i / I
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " completions by langservers
 Plug 'plasticboy/vim-markdown' " .md syntax highlighting
 Plug 'romainl/vim-qf' " quickfix commands
+Plug 'rust-lang/rust.vim' " rust
 Plug 'sudar/vim-arduino-syntax' " .ino syntax highlighting
 Plug 'terryma/vim-expand-region' " visual selection by: + / _ TODO: conf objects
 Plug 'tpope/vim-commentary' " comment mappings

@@ -105,3 +105,8 @@ poetry config settings.virtualenvs.in-project true
 - bash-language-server
 - dockerfile-language-server-nodejs
 
+
+## Rust development
+
+language server:
+`rustup component add rls rust-analysis rust-src`
