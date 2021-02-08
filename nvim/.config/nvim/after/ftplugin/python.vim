@@ -2,13 +2,17 @@ setlocal tabstop=4
 setlocal textwidth=88
 setlocal shiftwidth=4
 setlocal expandtab
-setlocal formatoptions-=t
 setlocal dictionary+=~/.config/nvim/dictionary/python
+setlocal formatoptions-=t
+setlocal formatoptions+=ro
+setlocal formatexpr=format#PythonFormat()
+setlocal nojoinspaces
 
 ia <buffer> pdb import pdb; pdb.set_trace()
 ia <buffer> ipdb import ipdb; ipdb.set_trace()
 
 " nnoremap <buffer> <LocalLeader>i :call python#sort_imports()<CR>
+nnoremap <silent> <LocalLeader>i :CocCommand pyright.organizeimports<CR>
 nnoremap <buffer> <LocalLeader>l :CocCommand python.runLinting<CR>
 
 function! python#sort_imports() abort

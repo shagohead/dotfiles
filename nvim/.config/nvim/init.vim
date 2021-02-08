@@ -398,7 +398,7 @@ augroup vimrc
   " Pytest plugin prints long lines with spaces
   " Python trailing spaces highlighted with python-syntax
   au FileType pytest,python setlocal listchars-=trail:↔
-  au FileType python let b:coc_root_patterns = ['pyproject.toml', 'Pipfile']
+  au FileType python let b:coc_root_patterns = ['pyproject.toml', 'Pipfile', 'venv']
   " au FileType python let g:gutentags_project_root = ['pyproject.toml', 'Pipfile', '.git']
 
   " Show wordwrap column in insert mode
