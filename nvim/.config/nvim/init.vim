@@ -26,11 +26,13 @@ Plug 'luochen1990/rainbow' " colored brackets highlighting
 Plug 'michaeljsmith/vim-indent-object' " indentation text objects: i / I
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " completions by langservers
 Plug 'plasticboy/vim-markdown' " .md syntax highlighting
+Plug 'preservim/tagbar'  " buffer .ctags viewer
 Plug 'romainl/vim-qf' " quickfix commands
 Plug 'rust-lang/rust.vim' " rust
 Plug 'sudar/vim-arduino-syntax' " .ino syntax highlighting
 Plug 'terryma/vim-expand-region' " visual selection by: + / _ TODO: conf objects
 Plug 'tpope/vim-commentary' " comment mappings
+Plug 'tpope/vim-fugitive' " git wrapper
 Plug 'tpope/vim-repeat' " repeat changes from several plugins
 Plug 'tpope/vim-surround' " surrounding mappings
 Plug 'tpope/vim-unimpaired' " motions with brackets
@@ -183,7 +185,8 @@ set tags=./.ctags,.ctags
 set completeopt=noinsert,menuone,noselect
 
 " Environment variables
-let $FZF_DEFAULT_OPTS = '--bind=alt-enter:select-all,alt-bs:deselect-all '.$_FZF_COMMON_OPTS
+" FIXME: check variable exists (fallback to default)
+let $FZF_DEFAULT_OPTS = $FZF_NVIM_OPTS
 
 call setenv('PYTEST_ADDOPTS', v:null)
 call setenv('PYTHONPATH', '/users/shagohead/.pyenv/virtualenvs/jedi/lib/python3.8/site-packages/')
@@ -273,79 +276,107 @@ nnoremap  a
 " Switch between recently edited files with C-H, not C-^
 nnoremap  
 
-" Jump to QuickFix place
+" Jump through QuickFix places
 nnoremap <silent> [q :cp<CR>
 nnoremap <silent> ]q :cn<CR>
 
+" Jump through diagnostic messages
+nnoremap <silent> [w :call CocActionAsync('diagnosticPrevious')<CR>
+nnoremap <silent> ]w :call CocActionAsync('diagnosticNext')<CR>
+
+" Goto object definitions and other references
+nnoremap <silent> gd :call CocActionAsync('jumpDefinition')<CR>
+nnoremap <silent> gr :call CocActionAsync('jumpReferences')<CR>
+" Search buffer from start
+nnoremap <silent> gs :let @/='\<'.expand('<cword>').'\>'\|:norm ggn<CR>
 " Grep word or visual selection
 nnoremap <silent> gp :execute ':grep '.expand('<cword>')<CR>
+" Grep word definition
+nnoremap <silent> gP :execute ':grep "(class.*\<Bar>def.*)?'.expand('<cword>').'.*[:\<Bar>=]"'<CR>
+" vnoremap <silent> gp :normal! gv\"ay | :execute ':grep '.@a
 " vnoremap <silent> gp :Clap grep ++query=@visual<CR>
 
-" Resize window to: 90 width & fill height
-nnoremap <silent> <C-w>9 :vertical resize 90<CR>
+" Resize window vertically to fit content
 nnoremap <silent> <C-w>0 :execute ':resize '.line('$')<CR>
+
+" Execute macros on visual selection
+xnoremap @ :<C-u>call change#execute_macro_over_visual_range()<CR>
+
+"""""""""""""""""""
+" Leader mappings "
+"""""""""""""""""""
+" Format file by language server
+nnoremap <silent> <Leader>= :call CocActionAsync('format')<CR>
 
 " Message line cleanup
 nnoremap <silent> <Leader><BS> :echo ''<CR>
 nnoremap <silent> <Leader><CR> :noh<CR>:echo ''<CR>
 
-" Execute macros on visual selection
-xnoremap @ :<C-u>call change#execute_macro_over_visual_range()<CR>
+" Edit & re-use register
+nnoremap <Leader>@ :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
 
-" Leader mappings
-nnoremap <Leader>` :Marks<CR>
-nnoremap <Leader>' :Marks<CR>
-" I'im too lazy ;)
+" Search last search term again
 nnoremap <Leader>/ /<C-R>/
-nnoremap <Leader>a :AllFiles<CR>
+
+" Buffer & file selector
 nnoremap <Leader>b :b<Space>
-nnoremap <Leader>c <Nop>
-nnoremap <Leader>d /\(<\<bar>>\<bar>=\<bar><bar>\)\{7}<CR>
 nnoremap <Leader>e :call fz#history()<CR>
 nnoremap <Leader>f :find<Space>
-nnoremap <Leader>g :call options#toggle_numbers()<CR>
-vnoremap <Leader>g :call options#toggle_numbers()<CR>gv
-nnoremap <Leader>h <Nop>
-nnoremap <Leader>j <Nop>
-nnoremap <Leader>k :call mappings#which_key()<CR>
-" Used in local as linter
-nnoremap <Leader>l <Nop>
-" Edit & re-use register
-nnoremap <Leader>m :<C-u><C-r><C-r>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-f><Left>
+nnoremap <Leader>a :AllFiles<CR>
+nnoremap <Leader>g :Files<CR>
+
+" Show buffer symbols & tags
 nnoremap <Leader>o :CocList outline<CR>
 nnoremap <Leader>p :BTags<CR>
+
+" Show project symbols & tags
+nnoremap <Leader>s :CocList symbols<CR>
+nnoremap <Leader>t :Tags<CR>
+
+" List diagnostic messages & show one message contents
+nnoremap <silent> <Leader>w :CocList diagnostics<CR>
+nnoremap <silent> <Leader>W :call CocActionAsync('diagnosticInfo')<CR>
+
+" Toggle quickfix window
 nmap <Leader>q <Plug>(qf_qf_toggle_stay)
+
+" Find tag for name under cursor
+nnoremap <Leader>d :execute 'Tags '.expand('<cword>')<CR>
+
+" Show object signature
+nnoremap <silent> Y :call utils#show_documentation()<CR>
+nnoremap <silent> <Leader>y :call CocActionAsync('showSignatureHelp')<CR>
+inoremap <C-y> <C-\><C-o>:call CocActionAsync('showSignatureHelp')<CR>
+
+" Organize imports by language server
+nnoremap <silent> <Leader>i :CocCommand editor.action.organizeImport<CR>
+
+" Rename object by language server
+nnoremap <silent> <Leader>n :call CocActionAsync('rename')<CR>
+
+" Print stack of indentation lines
+nnoremap <Leader>B :Breadcrumbs<CR>
+
+" Search diff delimiters
+nnoremap <Leader>D /\(<\<Bar>>\<Bar>=\<Bar><Bar>\)\{7}<CR>
+
+" Keymap finding helper
+nnoremap <Leader>k :call mappings#which_key()<CR>
+
+" Rerun last vimux command
+nnoremap <Leader>v :VimuxRunLastCommand<CR>
+
+" Substitute helper
 nnoremap <Leader>r :%s//g<Left><Left>
 xnoremap <Leader>r :s//g<Bar>noh<Left><Left><Left><Left><Left><Left>
-nnoremap <Leader>s :syntax on<CR>
-nnoremap <Leader>t :Tags<CR>
-" Translate with https://github.com/soimort/translate-shell
-nnoremap <Leader>T :!trans <cword><CR>
-nnoremap <Leader>u <Nop>
-nnoremap <Leader>v :VimuxRunLastCommand<CR>
-nnoremap <Leader>x <Nop>
-nnoremap <Leader>z :Files<CR>
 
 " Popup menu navigation
 inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <expr><CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : utils#check_back_space() ? "\<Tab>" : coc#refresh()
 
-nnoremap <silent> Y :call utils#show_documentation()<CR>
-nnoremap <silent> [w :call CocActionAsync('diagnosticPrevious')<CR>
-nnoremap <silent> ]w :call CocActionAsync('diagnosticNext')<CR>
-nnoremap <silent> gd :call CocActionAsync('jumpDefinition', 'edit')<CR>
-nnoremap <silent> gDt :call CocActionAsync('jumpDefinition', 'tabe')<CR>
-nnoremap <silent> gDg :execute ':grep "(class.*\<bar>def.*)?'.expand('<cword>').'.*[:\<bar>=]"'<CR>
-nnoremap <silent> gr :call CocActionAsync('jumpReferences')<CR>
-" Search buffer from start
-nnoremap <silent> gs :let @/='\<'.expand('<cword>').'\>'\|:norm ggn<CR>
-nnoremap <silent> <Leader>= :call CocActionAsync('format')<CR>
-nnoremap <silent> <Leader>w :call CocActionAsync('diagnosticInfo')<CR>
-nnoremap <silent> <Leader>i :call CocActionAsync('runCommand', 'editor.action.organizeImport')<CR>
-nnoremap <silent> <Leader>n :call CocActionAsync('rename')<CR>
-nnoremap <silent> <Leader>y :call CocActionAsync('showSignatureHelp')<CR>
-inoremap <C-y> <C-\><C-o>:call CocActionAsync('showSignatureHelp')<CR>
+" TODO: checkout update coc.nvim README for new mappings available
+" https://github.com/neoclide/coc.nvim#example-vim-configuration
 
 " }}}
 " Commands {{{

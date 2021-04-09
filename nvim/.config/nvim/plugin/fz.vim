@@ -37,6 +37,7 @@ function! s:buffsink(lines)
   endif
 endfunction
 
+" fzf#vim#files with hidden files
 function! s:allfiles(dir, bang)
   let l:default_command = $FZF_DEFAULT_COMMAND
   let $FZF_DEFAULT_COMMAND .= ' -I'
@@ -44,6 +45,7 @@ function! s:allfiles(dir, bang)
   let $FZF_DEFAULT_COMMAND = l:default_command
 endfunction
 
+" Files with hidden files
 command! -bang -nargs=? -complete=dir AllFiles
       \ call s:allfiles(<q-args>, <bang>0)
 command! DirFiles Files %:h
@@ -64,11 +66,13 @@ command! -bang -nargs=* Find
       \ '.shellescape(<q-args>), 1, <bang>0)
 
 let g:fzf_action = {
-      \ 'ctrl-f': function('BuildQuickfixList'),
+      \ 'ctrl-q': function('BuildQuickfixList'),
       \ 'ctrl-l': function('BuildLocationList'),
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-x': 'split',
       \ 'ctrl-v': 'vsplit'}
+" Сейчас не работает, bat выдает ошибку
+" let g:fzf_preview_window = ['up:40%']
 let g:fzf_tags_command = 'ctags.sh'
 let g:fzf_layout = {'window': 'call windows#floating(13)'}
 

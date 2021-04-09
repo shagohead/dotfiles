@@ -1,4 +1,11 @@
 function! indent#breadcrumbs() abort
+  " FIXME multiline defs
+  " class EventRequestSerializer(
+  "     AddressSerializer, serializers.ModelSerializer, ValidateEventMixin
+  " ):
+  "
+  " Outputs:
+  " ):
   let l:breadcrumbs = []
   let l:current_line = getcurpos()[1]
   let l:current_indent = indent(l:current_line)

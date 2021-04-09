@@ -15,6 +15,19 @@
                 "~"
             ]
         },
+        "ccls": {
+            "command": "ccls",
+            "filetypes": ["c", "cpp", "cuda", "objc", "objcpp", "ino"],
+            "rootPatterns": [".ccls-root", "compile_commands.json"],
+            "initializationOptions": {
+                "cache": {
+                    "directory": ".ccls-cache"
+                },
+                "client": {
+                    "snippetSupport": true
+                }
+            }
+        },
         "dockerfile": {
             "command": "docker-langserver",
             "args": [
@@ -51,9 +64,6 @@
         }
     },
     "python.analysis.diagnosticMode": "openFilesOnly",
-    "python.analysis.diagnosticSeverityOverrides": {
-        "reportGeneralTypeIssues": "none"
-    },
     "python.formatting.provider": "black",
     "python.formatting.blackPath": "~/.local/bin/black",
     "python.linting.flake8Path": "~/.local/bin/flake8",
