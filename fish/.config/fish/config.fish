@@ -20,7 +20,6 @@ set -x PYENV_ROOT $HOME/.pyenv
 set -x PYENV_SHELL fish
 set -x PYTEST_ADDOPTS -v -x --ff --nf --reuse-db --pdb \
     --pdbcls=IPython.terminal.debugger:TerminalPdb
-set -x PYTHONBREAKPOINT ipdb.set_trace  # FIXME: +fallback variant
 
 # GO development
 set -q GOPATH; or set -xU GOPATH $HOME/go
@@ -39,7 +38,7 @@ set -q HOMEBREW_GITHUB_API_TOKEN; or echo 'set -xU HOMEBREW_GITHUB_API_TOKEN ...
 set -x BASH_SILENCE_DEPRECATION_WARNING 1
 
 # base16
-set BASE16_SHELL "$HOME/.config/base16-shell/"
+set BASE16_SHELL $HOME/.config/base16-shell/
 set -x BASE_16_LIGHT base16-one-light
 set -x BASE_16_DARK base16-classic-dark
 
@@ -83,7 +82,7 @@ if status --is-interactive
     bind \er __rg_vim_qf
 
     # complete from tmux buffer
-    bind \cx "commandline -i (fzf-complete-from-tmux.sh) 2>/dev/null"
+    bind \cx 'commandline -i (fzf-complete-from-tmux.sh) 2>/dev/null'
 
     # abbreviations
     abbr -a dc docker-compose

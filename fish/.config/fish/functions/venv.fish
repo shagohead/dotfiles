@@ -40,6 +40,9 @@ function venv \
                 posix_source $path
             end
         end
+        if test -e (echo $VIRTUAL_ENV/lib/python*/site-packages)/ipdb
+            set -gx PYTHONBREAKPOINT ipdb.set_trace
+        end
     case "*"
         colored_echo red "unknown action provided"
         return 1
