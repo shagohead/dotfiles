@@ -72,17 +72,19 @@ if status --is-interactive
     bind \eo fzf_cd_up
 
     # fzy-based fish history search
-    bind \co '__fzf_find_file'
+    bind \co __fzf_find_file
     bind \cr fzy_history
-    if bind -M insert >/dev/null 2>/dev/null
-        bind -M insert \cr fzy_history
-    end
+    bind -M insert \cr fzy_history
 
     # quickfix-wrapped ripgrep call
     bind \er __rg_vim_qf
 
     # complete from tmux buffer
     bind \cx 'commandline -i (fzf-complete-from-tmux.sh) 2>/dev/null'
+
+    # change key bindings while typing
+    bind \cv toggle_key_bindings
+    bind -M insert \cv toggle_key_bindings
 
     # abbreviations
     abbr -a dc docker-compose
