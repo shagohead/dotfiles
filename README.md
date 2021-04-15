@@ -98,6 +98,7 @@ poetry config settings.virtualenvs.in-project true
 
 ## Homebrewed packages:
 - git-flow
+- git-delta (update git-config core.pager & interacive.diffFilter)
 
 
 ## Node packages:
