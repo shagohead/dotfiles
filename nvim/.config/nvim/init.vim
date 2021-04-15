@@ -398,6 +398,7 @@ augroup vimrc
 
   " FileTypes
   au BufNewFile,BufRead flake8,pycodestyle setf dosini
+  au BufNewFile,BufRead .gitconfig.* setf gitconfig
 
   " Return to previous line
   au BufReadPost *

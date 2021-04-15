@@ -1,0 +1,46 @@
+[core]
+    editor = nvim
+    filemode = false
+    excludesfile = /Users/shagohead/.gitignore_global
+
+    ; pager = delta --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
+    ; invoking bash slightly faster than 'defaults' (but need variable value to be updated)
+    pager = delta --$(bash -c "'if [ $DARK_SHELL -eq 0 ]; then echo dark; else echo light; fi'")
+
+[delta]
+    features = line-numbers
+    navigate = true
+
+[interactive]
+    diffFilter = delta --color-only
+
+[alias]
+    stsh = stash --keep-index
+    staash = stash --include-untracked
+    stat = status --short --branch
+    latesttag = describe --abbrev=0 --tags
+    logg = log --abbrev-commit --decorate --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
+    loggg = logg --graph
+    branches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+    che = checkout
+
+[merge]
+    tool = nvim-fugitive
+    ; conflictstyle = diff3
+
+[mergetool]
+    prompt = true
+    keepBackup = false
+[mergetool "nvim"]
+    cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[mergetool "nvim-fugitive"]
+    cmd = nvim -f -c \"Gvdiffsplit!\" \"$MERGED\"
+
+[diff]
+    tool = nvim-fugitive
+
+[difftool]
+    prompt = false
+
+[pull]
+    rebase = true

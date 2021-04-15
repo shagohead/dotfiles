@@ -1,0 +1,6 @@
+[include]
+    path = .gitconfig.base
+
+[user]
+    name = shagohead
+    email = html.ru@gmail.com
