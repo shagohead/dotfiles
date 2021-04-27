@@ -39,12 +39,10 @@ set -x BASH_SILENCE_DEPRECATION_WARNING 1
 
 # base16
 set BASE16_SHELL $HOME/.config/base16-shell/
-set -x BASE_16_LIGHT base16-one-light
-set -x BASE_16_DARK base16-classic-dark
 
 # bat
 set -x BAT_STYLE plain
-set -x BAT_THEME base16
+set -x BAT_THEME base16-256
 
 # fzf
 set -l _fzf_colors fg:7,fg+:7,bg:0,bg+:0,hl:6,hl+:6,\
@@ -98,4 +96,25 @@ if status --is-interactive
     abbr -a gs git status
     abbr -a l ls -la
     abbr -a psaux 'ps aux | head -1 && ps aux | grep -v grep | grep'
+
+    if test (uname -s) = "Darwin"
+        # permanent value
+        set -q DARK_SHELL; or set -Ux DARK_SHELL \
+        (defaults read -globalDomain AppleInterfaceStyle &> /dev/null; echo $status)
+
+        # session-only value
+        set -gx DARK_SYSTEM (defaults read -globalDomain AppleInterfaceStyle &> /dev/null; echo $status)
+
+        if test $DARK_SHELL -ne $DARK_SYSTEM
+            set -Ux DARK_SHELL $DARK_SYSTEM
+            base16-init
+            if test $DARK_SYSTEM -eq 0
+                set -x BAT_THEME TwoDark
+                base16-onedark
+            else
+                set -x BAT_THEME base16-256
+                base16-one-light
+            end
+        end
+    end
 end
