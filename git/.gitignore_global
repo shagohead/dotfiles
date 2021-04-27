@@ -1,4 +1,5 @@
 *.swp
+.HELP.md
 .ctags
 .DS_Store
 .exrc
@@ -12,6 +13,7 @@ tags
 .venv/
 .vim/
 .vscode/
+.backups/
 __pycache__/
 
 /.env.development

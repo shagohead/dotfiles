@@ -1,7 +1,7 @@
 [core]
     editor = nvim
     filemode = false
-    excludesfile = /Users/shagohead/.gitignore_global
+    excludesfile = ~/.gitignore_global
 
     ; pager = delta --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
     ; invoking bash slightly faster than 'defaults' (but need variable value to be updated)
