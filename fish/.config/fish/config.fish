@@ -18,7 +18,7 @@ set -x LC_CTYPE en_US.UTF-8
 set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
 set -x PYENV_SHELL fish
-set -x PYTEST_ADDOPTS -v -x --ff --nf --reuse-db --pdb \
+set -x PYTEST_ADDOPTS -x --ff --nf --reuse-db --pdb \
     --pdbcls=IPython.terminal.debugger:TerminalPdb
 
 # GO development
