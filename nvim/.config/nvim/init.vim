@@ -324,6 +324,7 @@ nnoremap <Leader>e :call fz#history()<CR>
 nnoremap <Leader>f :find<Space>
 nnoremap <Leader>a :AllFiles<CR>
 nnoremap <Leader>g :Files<CR>
+nnoremap <Leader>h :e <C-r><C-r>=expand('%:h').'/'<CR>
 
 " Show buffer symbols & tags
 nnoremap <Leader>o :CocList outline<CR>
