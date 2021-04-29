@@ -2,13 +2,6 @@
 " FZF "
 """""""
 
-function! BuildLocationList(lines)
-  " TODO: fix location list creation
-  call setloclist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
-endfunction
-
 function! BuildQuickfixList(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
   copen
@@ -67,14 +60,30 @@ command! -bang -nargs=* Find
 
 let g:fzf_action = {
       \ 'ctrl-q': function('BuildQuickfixList'),
-      \ 'ctrl-l': function('BuildLocationList'),
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-x': 'split',
       \ 'ctrl-v': 'vsplit'}
-" Сейчас не работает, bat выдает ошибку
-" let g:fzf_preview_window = ['up:40%']
+
+let g:fzf_layout = {'window': 'call windows#floating(40)'}
+
+let g:fzf_colors = {
+  \ 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Title'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+let g:fzf_preview_window = ['up:45%', 'ctrl-/']
+
 let g:fzf_tags_command = 'ctags.sh'
-let g:fzf_layout = {'window': 'call windows#floating(13)'}
 
 
 """""""
