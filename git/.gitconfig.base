@@ -2,10 +2,7 @@
     editor = nvim
     filemode = false
     excludesfile = ~/.gitignore_global
-
-    ; pager = delta --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
-    ; invoking bash slightly faster than 'defaults' (but need variable value to be updated)
-    pager = delta --$(bash -c "'if [ $DARK_SHELL -eq 0 ]; then echo dark; else echo light; fi'")
+    pager = delta --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
 
 [delta]
     features = line-numbers
