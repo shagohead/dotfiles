@@ -401,6 +401,9 @@ augroup vimrc
   au BufNewFile,BufRead flake8,pycodestyle setf dosini
   au BufNewFile,BufRead .gitconfig.* setf gitconfig
 
+  " Disable tab expansion
+  au FileType go setlocal noexpandtab
+
   " Return to previous line
   au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$")
@@ -427,7 +430,7 @@ augroup vimrc
   " au CmdlineLeave [/\?] :set nohlsearch
 
   " Word wrapping
-  au FileType html,jinja.html,htmldjango,python setlocal wrap
+  au FileType html,jinja.html,htmldjango,markdown,python setlocal wrap
 
   " Pytest plugin prints long lines with spaces
   " Python trailing spaces highlighted with python-syntax
