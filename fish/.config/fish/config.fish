@@ -19,7 +19,7 @@ set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
 set -x PYENV_SHELL fish
 set -x PYTEST_ADDOPTS -x --ff --nf --reuse-db --pdb \
-    --pdbcls=IPython.terminal.debugger:TerminalPdb
+--pdbcls=IPython.terminal.debugger:TerminalPdb
 
 # GO development
 set -q GOPATH; or set -xU GOPATH $HOME/go
@@ -42,14 +42,13 @@ set BASE16_SHELL $HOME/.config/base16-shell/
 
 # bat
 set -x BAT_STYLE plain
-set -x BAT_THEME base16-256
 
 # fzf
 set -l _fzf_colors fg:7,fg+:7,bg:0,bg+:0,hl:6,hl+:6,\
 info:2,prompt:1,pointer:12,marker:4,spinner:11,header:6
 # FIXME: add preview-window=up supported by vim
 set -l _fzf_common_opts --bind=ctrl-d:half-page-down,ctrl-u:half-page-up \
-    --history=$HOME/.fzf_history --color=dark --color=$_fzf_colors
+--history=$HOME/.fzf_history --color=dark --color=$_fzf_colors
 set -x FZF_DEFAULT_OPTS --reverse --height=$FZF_TMUX_HEIGHT $_fzf_common_opts
 set -l _fzf_bind_select --bind=alt-enter:select-all,alt-bs:deselect-all
 set -x FZF_NVIM_OPTS (string join -- ' ' $_fzf_common_opts $_fzf_bind_select)
@@ -97,24 +96,24 @@ if status --is-interactive
     abbr -a l ls -la
     abbr -a psaux 'ps aux | head -1 && ps aux | grep -v grep | grep'
 
-    if test (uname -s) = "Darwin"
-        # permanent value
-        set -q DARK_SHELL; or set -Ux DARK_SHELL \
-        (defaults read -globalDomain AppleInterfaceStyle &> /dev/null; echo $status)
-
-        # session-only value
-        set -gx DARK_SYSTEM (defaults read -globalDomain AppleInterfaceStyle &> /dev/null; echo $status)
-
-        if test $DARK_SHELL -ne $DARK_SYSTEM
-            set -Ux DARK_SHELL $DARK_SYSTEM
-            base16-init
-            if test $DARK_SYSTEM -eq 0
-                set -x BAT_THEME TwoDark
-                base16-onedark
-            else
-                set -x BAT_THEME base16-256
-                base16-one-light
-            end
-        end
+    # set light or dark background style
+    set -l DARK_SHELL 0
+    if test (uname -s) = Darwin
+        set DARK_SHELL (defaults read -globalDomain AppleInterfaceStyle &> /dev/null; echo $status)
     end
+
+    # set style themes
+    set -gx BAT_THEME TwoDark
+    set -gx BASE16_THEME base16-onedark
+    if test $DARK_SHELL -ne 0
+        set BAT_THEME base16-256
+        set BASE16_THEME base16-one-light
+    end
+
+    # apply shell theme
+    sh $BASE16_SHELL/scripts/$BASE16_THEME.sh
+
+    # update ~/.vim_background
+    echo -e "if !exists('g:colors_name') || g:colors_name != '\
+$BASE16_THEME'\n  colorscheme $BASE16_THEME\nendif" > ~/.vimrc_background
 end
