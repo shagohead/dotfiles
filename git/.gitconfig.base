@@ -9,7 +9,7 @@
     navigate = true
 
 [interactive]
-    diffFilter = delta --color-only
+    diffFilter = delta --color-only --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
 
 [alias]
     stsh = stash --keep-index
