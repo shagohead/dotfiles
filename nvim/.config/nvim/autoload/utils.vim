@@ -1,6 +1,16 @@
 scriptencoding utf-8
 " [TODO]: Cleanup this file
 
+" FIXME: Use OS background or shell?
+" function! utils#ensure_darkmode() abort
+"   let l:system_background = systemlist("defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light")[0]
+"   if l:system_background != &background
+"     echo "System background changed"
+"     let &background = l:system_background
+"     source ~/.config/nvim/init.vim
+"   end
+" endfunction
+
 function! utils#setupWrapping() abort
   set wrap
   set wrapmargin=2

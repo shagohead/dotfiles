@@ -12,6 +12,7 @@ filetype plugin indent on
 call plug#begin('~/.local/share/nvim/plugged')
 Plug '/usr/local/opt/fzf' " fzf integration
 Plug 'junegunn/fzf.vim' " fzf commands
+Plug 'airblade/vim-gitgutter' " git signs and highlights
 Plug 'benmills/vimux' " tmux commands (Vimux*)
 Plug 'cespare/vim-toml' " .toml syntax highlighting
 Plug 'chr4/nginx.vim' " nginx syntax highlighting
@@ -21,7 +22,8 @@ Plug 'haya14busa/is.vim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'justinmk/vim-sneak' " motions with: s / S
 Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
-Plug 'ludovicchabant/vim-gutentags' " .ctags autoupdating
+" FIXME: Ctags temporary disabled in favor of LSP
+" Plug 'ludovicchabant/vim-gutentags' " .ctags autoupdating
 Plug 'luochen1990/rainbow' " colored brackets highlighting
 Plug 'michaeljsmith/vim-indent-object' " indentation text objects: i / I
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " completions by langservers
@@ -158,7 +160,7 @@ set nowrap
 set linebreak
 if has('multi_byte') && &encoding ==# 'utf-8'
   set list
-  let &listchars = 'trail:↔,extends:⟩,precedes:⟨,nbsp:×'
+  let &listchars = 'trail:↔,extends:⟩,precedes:⟨,nbsp:×,tab:ͺ '
   let &fillchars = 'vert:|'
 
   if has('patch-7.4.338')
@@ -213,7 +215,8 @@ if exists('+termguicolors') && ($TERM == 'alacritty' || $TERM == 'xterm-kitty')
   set termguicolors
 endif
 
-let g:gutentags_ctags_extra_args = ['--tag-relative=always']
+" FIXME: Ctags temporary disabled in favor of LSP
+" let g:gutentags_ctags_extra_args = ['--tag-relative=always']
 let g:indentLine_faster = 1
 let g:indentLine_concealcursor = 'n'
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
@@ -324,7 +327,7 @@ nnoremap <Leader>e :call fz#history()<CR>
 nnoremap <Leader>f :find<Space>
 nnoremap <Leader>a :AllFiles<CR>
 nnoremap <Leader>g :Files<CR>
-nnoremap <Leader>h :e <C-r><C-r>=expand('%:h').'/'<CR>
+nnoremap <Leader>c :e <C-r><C-r>=expand('%:h').'/'<CR>
 
 " Show buffer symbols & tags
 nnoremap <Leader>o :CocList outline<CR>
@@ -335,8 +338,8 @@ nnoremap <Leader>s :CocList symbols<CR>
 nnoremap <Leader>t :Tags<CR>
 
 " List diagnostic messages & show one message contents
-nnoremap <silent> <Leader>w :CocList diagnostics<CR>
-nnoremap <silent> <Leader>W :call CocActionAsync('diagnosticInfo')<CR>
+nnoremap <silent> <Leader>W :CocList diagnostics<CR>
+nnoremap <silent> <Leader>w :call CocActionAsync('diagnosticInfo')<CR>
 
 " Toggle quickfix window
 nmap <Leader>q <Plug>(qf_qf_toggle_stay)
@@ -382,8 +385,9 @@ inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : utils#check_back_space()
 " }}}
 " Commands {{{
 
-command! ClearRegisters call change#ClearRegisters()
-command! Breadcrumbs call indent#breadcrumbs()
+command! -nargs=0 ClearRegisters call change#ClearRegisters()
+command! -nargs=0 Breadcrumbs call indent#breadcrumbs()
+command! -nargs=0 GitGutterMergeBase let g:gitgutter_diff_base=systemlist("git merge-base develop HEAD")[0] | GitGutter
 
 
 " Search inside / outside syntax group
@@ -409,10 +413,6 @@ augroup vimrc
         \ if line("'\"") > 0 && line("'\"") <= line("$")
         \| execute 'normal! g`"zvzz'
         \| endif
-
-  " Visible tab char only for windows with 'expandtab'
-  au BufReadPost * if &expandtab | set listchars+=tab:\·\  | endif
-  au BufReadPost * if !&expandtab | set listchars+=tab:\ \  | endif
 
   " Highlights cleanup
   au ColorScheme * call syntax#update_colors()
@@ -446,9 +446,13 @@ augroup vimrc
   au User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   au User CocStatusChange echo g:coc_status
 
-  " Gutentags status messages
-  au User GutentagsUpdated echo 'Tags updated'
-  au User GutentagsUpdating echo 'Updating tags..'
+  " FIXME: Ctags temporary disabled in favor of LSP
+  " " Gutentags status messages
+  " au User GutentagsUpdated echo 'Tags updated'
+  " au User GutentagsUpdating echo 'Updating tags..'
+
+  " FIXME: fix utils#ensure_darkmode
+  " au FocusGained * :call utils#ensure_darkmode()
 
   " TMUX window title with filename
   if exists('$TMUX')
