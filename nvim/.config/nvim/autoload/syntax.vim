@@ -101,6 +101,8 @@ function! syntax#update_colors()
   if &background == 'dark'
     hi Cursor guibg=Cyan
     hi User3 guifg=Cyan
+    hi link LspDiagnosticsSignError WarningMsg
+    hi link LspDiagnosticsVirtualTextError WarningMsg
   else
     hi Cursor guibg=DarkCyan
     hi User3 guifg=DarkCyan

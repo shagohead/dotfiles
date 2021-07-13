@@ -24,36 +24,7 @@ function! statusline#getDiffColors() abort
   return ['%#DiffDelete#', '%#DiffChange#', '%#DiffAdd#', '%#DiffText#']
 endfunction
 
-" For a more fancy ale statusline
-" https://github.com/w0rp/ale#5iv-how-can-i-show-errors-or-warnings-in-my-statusline
-function! statusline#LinterStatus() abort
-  if !exists(':ALEInfo')
-    return ''
-  endif
-
-  let l:error_symbol = syntax#GetIcon('error')
-  let l:style_symbol = syntax#GetIcon('warn')
-  let l:counts = ale#statusline#Count(bufnr(''))
-  let [l:DELETE, l:CHANGE, l:ADD, l:TEXT] = statusline#getDiffColors()
-  let l:status = []
-
-  if l:counts.error
-    call add(l:status, printf('%s%d %s %%*', l:DELETE,  l:counts.error, l:error_symbol))
-  endif
-  if l:counts.warning
-    call add(l:status, printf('%s%d %s %%*', l:CHANGE, l:counts.warning, l:style_symbol))
-  endif
-  if l:counts.style_error
-    call add(l:status, printf('%s%d %s %%*', l:DELETE, l:counts.style_error, l:error_symbol))
-  endif
-  if l:counts.style_warning
-    call add(l:status, printf('%s%d %s %%*', l:CHANGE, l:counts.style_warning, l:style_symbol))
-  endif
-
-  return join(l:status, ' ')
-endfunction
-
-function! statusline#statusDiagnostic() abort
+function! statusline#coc_diagnostic_info() abort
   let l:info = get(b:, 'coc_diagnostic_info', {})
   if empty(l:info)
     return ''
@@ -93,6 +64,14 @@ function! statusline#readOnly() abort
   else
     return ''
   endif
+endfunction
+
+function! statusline#lsp_status() abort
+  if luaeval('#vim.lsp.buf_get_clients() > 0')
+    return luaeval("require('lsp-status').status()")
+  endif
+
+  return ''
 endfunction
 
 function! statusline#filepath() abort
