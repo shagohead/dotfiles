@@ -108,19 +108,8 @@ function! syntax#update_colors()
     hi User3 guifg=DarkCyan
   endif
 
-  " exec 'hi User3 guifg='.(syntax#get_color('Question', 'fg', 'gui'))
   exec 'hi User4 guifg='.(syntax#get_color('NonText', 'fg', 'gui'))
   exec 'hi User5 guifg='.(syntax#get_color('ErrorMsg', 'fg', 'gui'))
-
-  " let g:clap_theme = {
-  "   \'current_selection': {'guifg': '#'.g:base16_gui08, 'ctermfg': g:base16_cterm08}
-  "   \}
-
-  " exec 'hi User3 ctermfg='.g:base16_cterm0E.' guifg=#'.g:base16_gui0E
-  " exec 'hi ClapDefaultCurrentSelection ctermfg='.g:base16_cterm08.' guifg=#'.g:base16_gui08
-  exec 'hi CocErrorSign ctermfg='.g:base16_cterm08.' guifg=#'.g:base16_gui08
-  exec 'hi CocWarningSign ctermfg='.g:base16_cterm0A.' guifg=#'.g:base16_gui0A
-  exec 'hi CocInfoSign ctermfg='.g:base16_cterm0D.' guifg=#'.g:base16_gui0D
 endfunction
 
 function! syntax#search_with_skip(pattern, flags, stopline, timeout, skip)

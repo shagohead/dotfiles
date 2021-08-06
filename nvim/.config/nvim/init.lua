@@ -19,6 +19,7 @@ vim.opt.linebreak = true
 vim.opt.smartcase = true
 vim.opt.ignorecase = true
 vim.opt.termguicolors = true
+vim.opt.joinspaces = false
 vim.opt.lazyredraw = true
 vim.opt.title = true
 vim.opt.ruler = false
@@ -55,15 +56,6 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
     virtual_text = false,
   }
 )
-vim.g.completion_chain_complete_list = {
-    default = {
-        {complete_items = {'lsp'}},
-        {complete_items = {'buffers'}},
-    },
-}
-vim.g.completion_timer_cycle = 500
-vim.g.completion_sorting = 'none'
-vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy', 'all'}
 vim.g.symbols_outline = {
   highlight_hovered_item = true,
   show_guides = true,
@@ -145,11 +137,11 @@ local key_map = function(mode, key, result)
   )
 end
 
-function _G.smart_tab()
+--[[ function _G.smart_tab()
     return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
 end
 
-vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true})
+vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true}) ]]
 
 key_map('n', '<Up>', '<Nop>')
 key_map('n', '<Down>', '<Nop>')
@@ -173,23 +165,27 @@ key_map('', '', '')
 key_map('n', '[q', '<Cmd>cp<CR>')
 key_map('n', ']q', '<Cmd>cn<CR>')
 
+key_map('n', 'gp', '<Cmd>execute "grep ".expand("<cword>")<CR>')
 key_map('n', '<C-w>0', '<Cmd>execute ":resize".line("$")<CR>')
 key_map('x', '@', ':<C-u>call tools#execute_macro_over_visual_range()<CR>')
 
 key_map('n', '<Leader><BS>', '<Cmd>echo ""<CR>')
 key_map('n', '<Leader><CR>', '<Cmd>noh<CR><Cmd>echo ""<CR>')
 
-key_map('n', '<Leader>b', ':b<Space>')
-key_map('n', '<Leader>e', '<Cmd>call tools#history()<CR>')
+key_map('n', '<Leader>b', '<Cmd>Buffers<CR>')
+key_map('n', '<Leader>e', '<Cmd>History<CR>')
 key_map('n', '<Leader>f', '<Cmd>Files<CR>')
 key_map('n', '<Leader>k', '<Cmd>call tools#which_key()<CR>')
--- key_map('n', '<Leader>c', ':e <C-r><C-r>=expand("%:h")."/"<CR>')
 key_map('n', '<Leader>o', '<Cmd>DocumentSymbols<CR>')
 key_map('n', '<Leader>p', '<Cmd>BTags<CR>')
+key_map('n', '<Leader>t', '<Cmd>TroubleToggle<CR>')
 vim.api.nvim_set_keymap('n', '<Leader>q', '<Plug>(qf_qf_toggle_stay)', {})
 
--- Автокоманды
+-- Объявление команд и автокоманд для событий
 vim.api.nvim_exec([[
+command! -nargs=0 GitGutterMergeBase let g:gitgutter_diff_base=systemlist("git merge-base develop HEAD")[0] | GitGutter
+command! -nargs=0 -complete=command HighGroup echo(synIDattr(synID(line("."), col("."), 0), "name"))
+
 augroup vimrc
   au!
 
@@ -209,7 +205,8 @@ augroup vimrc
   au FileType html,javascript,lua,yaml,vim setlocal tabstop=2
   au FileType html,javascript,lua,yaml,vim setlocal shiftwidth=2
   au FileType html,javascript,lua,yaml,vim setlocal softtabstop=2
-  au FileType markdown setlocal formatoptions-=l
+  au FileType markdown setlocal fo-=l
+  au FileType python setlocal dict+=~/.config/nvim/dictionary/python fo-=t fo+=ro tw=88
 
   au InsertEnter * set colorcolumn=89
   au InsertLeave * set colorcolumn=

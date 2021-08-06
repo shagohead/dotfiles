@@ -1,6 +1,7 @@
-local gl = require'galaxyline'
-local section = gl.section
-gl.short_line_list = {"packager"}
+-- https://github.com/glepnir/galaxyline.nvim
+local galaxyline = require'galaxyline'
+local section = galaxyline.section
+galaxyline.short_line_list = {"packager"}
 
 local buffer_not_empty = function()
   if vim.fn.empty(vim.fn.expand("%:t")) ~= 1 then
@@ -10,46 +11,33 @@ local buffer_not_empty = function()
 end
 
 local colors = {
-  bg = "NONE",
-  -- bg = "#2E3440",
-  fg = "#81A1C1",
-  line_bg = "NONE",
-  lbg = "NONE",
-  -- lbg = "#3B4252",
-  fg_green = "#8FBCBB",
   yellow = "#EBCB8B",
   cyan = "#A3BE8C",
-  darkblue = "#81A1C1",
   green = "#8FBCBB",
   orange = "#D08770",
   purple = "#B48EAD",
-  magenta = "#BF616A",
-  gray = "#616E88",
   blue = "#5E81AC",
-  red = "#BF616A"
+  red = "#BF616A",
 }
 
+-- Отступ слева, равный signcolumn
 section.left[1] = {
   FirstElement = {
-    -- provider = function() return '▊ ' end,
-    provider = function()
-      return "  "
-    end,
-    highlight = {colors.blue, colors.line_bg}
+    provider = function() return '   ' end,
   }
 }
-section.left[2] = {
+-- Иконка активного режима
+--[[ section.left[2] = {
   ViMode = {
     provider = function()
-      -- auto change color according the vim mode
       local mode_color = {
-        n = colors.magenta,
+        n = 'Normal',
         i = colors.green,
         v = colors.blue,
         [""] = colors.blue,
         V = colors.blue,
         c = colors.red,
-        no = colors.magenta,
+        no = colors.red,
         s = colors.orange,
         S = colors.orange,
         [""] = colors.orange,
@@ -65,47 +53,38 @@ section.left[2] = {
         t = colors.red
       }
       vim.cmd("hi GalaxyViMode guifg=" .. mode_color[vim.fn.mode()])
-      return "     "
+      return "  "
     end,
-    highlight = {colors.red, colors.line_bg, "bold"}
   }
 }
+ ]]
+-- Тип и имя файла
 section.left[3] = {
   FileIcon = {
     provider = "FileIcon",
     condition = buffer_not_empty,
-    highlight = {require("galaxyline.provider_fileinfo").get_file_icon_color, colors.line_bg}
+    highlight = {require("galaxyline.provider_fileinfo").get_file_icon_color}
   }
 }
 section.left[4] = {
   FileName = {
-    -- provider = "FileName",
-    provider = function()
-      return vim.fn.expand("%:F")
-    end,
-    condition = buffer_not_empty,
-    separator = " ",
-    separator_highlight = {colors.purple, colors.bg},
-    highlight = {colors.purple, colors.line_bg, "bold"}
+    provider = function() return vim.fn.expand("%:F") end,
+    condition = buffer_not_empty
   }
 }
 
+-- Текущая git ветка
 section.right[1] = {
   GitIcon = {
-    provider = function()
-      return " "
-    end,
+    provider = function() return " " end,
     condition = require("galaxyline.provider_vcs").check_git_workspace,
-    highlight = {colors.orange, colors.line_bg}
+    highlight = {colors.orange}
   }
 }
 section.right[2] = {
   GitBranch = {
     provider = "GitBranch",
     condition = require("galaxyline.provider_vcs").check_git_workspace,
-    separator = "",
-    separator_highlight = {colors.purple, colors.bg},
-    highlight = {colors.orange, colors.line_bg, "bold"}
   }
 }
 
@@ -117,12 +96,14 @@ local checkwidth = function()
   return false
 end
 
+-- Дифф изменений от gitgutter
 section.right[3] = {
   DiffAdd = {
     provider = "DiffAdd",
+    separator = " ",
     condition = checkwidth,
     icon = " ",
-    highlight = {colors.green, colors.line_bg}
+    highlight = {colors.green}
   }
 }
 section.right[4] = {
@@ -130,7 +111,7 @@ section.right[4] = {
     provider = "DiffModified",
     condition = checkwidth,
     icon = "柳",
-    highlight = {colors.yellow, colors.line_bg}
+    highlight = {colors.yellow}
   }
 }
 section.right[5] = {
@@ -138,83 +119,66 @@ section.right[5] = {
     provider = "DiffRemove",
     condition = checkwidth,
     icon = " ",
-    highlight = {colors.red, colors.line_bg}
+    highlight = {colors.red}
   }
 }
 
+-- Диагностика от LSP сервера
 section.right[6] = {
-  LineInfo = {
-    provider = "LineColumn",
-    separator = "",
-    separator_highlight = {colors.blue, colors.line_bg},
-    highlight = {colors.gray, colors.line_bg}
-  }
-}
-
---[[ section.right[7] = {
-  FileSize = {
-    provider = "FileSize",
-    separator = " ",
-    condition = buffer_not_empty,
-    separator_highlight = {colors.blue, colors.line_bg},
-    highlight = {colors.fg, colors.line_bg}
-  }
-} ]]
-
-section.right[8] = {
   DiagnosticError = {
     provider = "DiagnosticError",
     separator = " ",
     icon = " ",
-    highlight = {colors.red, colors.line_bg},
-    separator_highlight = {colors.bg, colors.bg}
+    highlight = {colors.red},
+  }
+}
+section.right[7] = {
+  DiagnosticWarn = {
+    provider = "DiagnosticWarn",
+    icon = " ",
+    highlight = {colors.yellow},
+  }
+}
+section.right[8] = {
+  DiagnosticInfo = {
+    provider = "DiagnosticInfo",
+    icon = " ",
+    highlight = {colors.green},
   }
 }
 section.right[9] = {
-  DiagnosticWarn = {
-    provider = "DiagnosticWarn",
-    -- separator = " ",
-    icon = " ",
-    highlight = {colors.yellow, colors.line_bg},
-    separator_highlight = {colors.bg, colors.bg}
-  }
-}
-
-section.right[10] = {
-  DiagnosticInfo = {
-    -- separator = " ",
-    provider = "DiagnosticInfo",
-    icon = " ",
-    highlight = {colors.green, colors.line_bg},
-    separator_highlight = {colors.bg, colors.bg}
-  }
-}
-
-section.right[11] = {
   DiagnosticHint = {
     provider = "DiagnosticHint",
-    -- separator = " ",
     icon = " ",
-    highlight = {colors.blue, colors.line_bg},
-    separator_highlight = {colors.bg, colors.bg}
   }
 }
 
+-- Замыкает линию номера строки и колонки
+section.right[10] = {
+  LineInfo = {
+    provider = "LineColumn",
+  }
+}
+
+-- Отступ слева, равный signcolumn
 section.short_line_left[1] = {
-  BufferType = {
-    provider = "FileIcon",
-    separator = " ",
-    separator_highlight = {"NONE", colors.lbg},
-    highlight = {colors.blue, colors.lbg, "bold"}
+  FirstElement = {
+    provider = function() return '   ' end,
   }
 }
-
+-- Тип и (короткое) имя файла
 section.short_line_left[2] = {
+  SFileIcon = {
+    provider = "FileIcon",
+    condition = buffer_not_empty
+  }
+}
+section.short_line_left[3] = {
   SFileName = {
     provider = function()
       local fileinfo = require("galaxyline.provider_fileinfo")
       local fname = fileinfo.get_current_file_name()
-      for _, v in ipairs(gl.short_line_list) do
+      for _, v in ipairs(galaxyline.short_line_list) do
         if v == vim.bo.filetype then
           return ""
         end
@@ -222,14 +186,13 @@ section.short_line_left[2] = {
       return fname
     end,
     condition = buffer_not_empty,
-    highlight = {colors.white, colors.lbg, "bold"}
   }
 }
 
+-- Типы буфера отличные от файлов
 section.short_line_right[1] = {
   BufferIcon = {
     provider = "BufferIcon",
-    highlight = {colors.fg, colors.lbg}
   }
 }
 
