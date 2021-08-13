@@ -1,8 +1,8 @@
--- Checkout:
+-- TODO: попытаться улучшить время запуска
+--
 -- https://github.com/nanotee/nvim-lua-guide
--- https://oroques.dev/notes/neovim-init/
--- https://teukka.tech/luanvim.html
 -- https://dev.to/2nit/how-to-write-neovim-plugins-in-lua-5cca
+-- https://github.com/mjlbach/defaults.nvim/blob/master/init.lua
 --
 local execute = vim.api.nvim_command
 
@@ -30,14 +30,16 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.sidescrolloff = 5
 vim.opt.synmaxcol = 800
-vim.opt.updatetime = 500
+vim.opt.updatetime = 250
 
 -- UI
 vim.opt.completeopt = {'menuone', 'noinsert', 'noselect'}
 vim.opt.concealcursor = 'nc'
+vim.opt.diffopt:append 'horizontal'
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevelstart = 99
 vim.opt.guicursor:append 'a:Cursor/lCursor'
+vim.opt.guifont='Iosevka Nerd Font:h14'
 vim.opt.mouse = 'a'
 vim.opt.shortmess:append 'c'
 vim.opt.signcolumn = 'yes'
@@ -50,12 +52,6 @@ vim.opt.path:append '**'
 vim.opt.wildignore:append '*.pyc'
 
 -- LSP и автодополнение
-vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
-    virtual_text = false,
-  }
-)
 vim.g.symbols_outline = {
   highlight_hovered_item = true,
   show_guides = true,
@@ -75,20 +71,26 @@ vim.g.symbols_outline = {
   lsp_blacklist = {},
 }
 
+for type, icon in pairs(require'variables'.signs) do
+  local hl = 'LspDiagnosticsSign' .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
+end
+
+-- vim.g.fzf_preview_window = {'up:45%', 'ctrl-/'}
+
 -- Подсветка отступов
-vim.g.indentLine_char_list = {'|', '¦', '┆', '┊'}
-vim.g.indentLine_bufTypeExclude = {'terminal'}
-vim.g.indentLine_fileTypeExclude = {'help', 'markdown'}
+vim.g.indent_blankline_char_list = {'|', '¦', '┆', '┊'}
+vim.g.indent_blankline_buftype_exclude = {'terminal'}
+vim.g.indent_blankline_filetype_exclude = {'help', 'markdown', 'packer'}
 vim.g.indent_blankline_show_first_indent_level = false
 vim.g.indent_blankline_show_trailing_blankline_indent = false
 
 -- Разбивка строки
 vim.opt.breakindent = true
 vim.opt.breakindentopt = 'sbr'
-vim.g.showbreak = vim.fn.nr2char(8618)..' '
+vim.o.showbreak = vim.fn.nr2char(8618)..' '
 
--- Отключение python провайдеров.
--- Иначе, без python_host_*, инициализация долгая.
+-- Python-провайдеры
 vim.g.loaded_python_provider = 0
 if vim.fn.empty(vim.fn.glob(vim.fn.expand('~/.pyenv/virtualenvs/pynvim/bin/python3'))) == 0 then
   vim.g.python3_host_prog =  '~/.pyenv/virtualenvs/pynvim/bin/python3'
@@ -127,62 +129,48 @@ vim.g.maplocalleader = ' '
 vim.opt.keymap = 'russian-jcukenmac'
 vim.opt.iminsert = 0
 
-local function t(str)
-    return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local key_map = function(mode, key, result)
+local keymap = function(mode, key, result)
   vim.api.nvim_set_keymap(
     mode, key, result, {noremap = true, silent = true}
   )
 end
 
---[[ function _G.smart_tab()
-    return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
-end
+keymap('n', '<Up>', '<Nop>')
+keymap('n', '<Down>', '<Nop>')
+keymap('n', '<Left>', '<Nop>')
+keymap('n', '<Right>', '<Nop>')
 
-vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true}) ]]
+keymap('c', '<M-b>', '<S-Left>')
+keymap('c', '<M-f>', '<S-Right>')
 
-key_map('n', '<Up>', '<Nop>')
-key_map('n', '<Down>', '<Nop>')
-key_map('n', '<Left>', '<Nop>')
-key_map('n', '<Right>', '<Nop>')
+keymap('n', '<C-p>', '"0p')
+keymap('v', '<C-p>', '"0p')
 
-key_map('c', '<M-b>', '<S-Left>')
-key_map('c', '<M-f>', '<S-Right>')
+keymap('n', '<M-p>', '"+p')
+keymap('i', '<M-p>', '+')
+keymap('v', '<M-p>', '"+p')
+keymap('v', '<M-y>', '"+y')
 
-key_map('n', '<C-p>', '"0p')
-key_map('v', '<C-p>', '"0p')
+keymap('', '', 'a')
+keymap('', '', '')
 
-key_map('n', '<M-p>', '"+p')
-key_map('i', '<M-p>', '+')
-key_map('v', '<M-p>', '"+p')
-key_map('v', '<M-y>', '"+y')
+keymap('n', '[q', '<Cmd>cp<CR>')
+keymap('n', ']q', '<Cmd>cn<CR>')
 
-key_map('', '', 'a')
-key_map('', '', '')
+keymap('n', '<C-w>0', '<Cmd>execute ":resize".line("$")<CR>')
+keymap('x', '@', ':<C-u>call tools#execute_macro_over_visual_range()<CR>')
 
-key_map('n', '[q', '<Cmd>cp<CR>')
-key_map('n', ']q', '<Cmd>cn<CR>')
+keymap('n', '<Leader><BS>', '<Cmd>echo ""<CR>')
+keymap('n', '<Leader><CR>', '<Cmd>noh<CR><Cmd>echo ""<CR>')
 
-key_map('n', 'gp', '<Cmd>execute "grep ".expand("<cword>")<CR>')
-key_map('n', '<C-w>0', '<Cmd>execute ":resize".line("$")<CR>')
-key_map('x', '@', ':<C-u>call tools#execute_macro_over_visual_range()<CR>')
-
-key_map('n', '<Leader><BS>', '<Cmd>echo ""<CR>')
-key_map('n', '<Leader><CR>', '<Cmd>noh<CR><Cmd>echo ""<CR>')
-
-key_map('n', '<Leader>b', '<Cmd>Buffers<CR>')
-key_map('n', '<Leader>e', '<Cmd>History<CR>')
-key_map('n', '<Leader>f', '<Cmd>Files<CR>')
-key_map('n', '<Leader>k', '<Cmd>call tools#which_key()<CR>')
-key_map('n', '<Leader>o', '<Cmd>DocumentSymbols<CR>')
-key_map('n', '<Leader>p', '<Cmd>BTags<CR>')
-key_map('n', '<Leader>t', '<Cmd>TroubleToggle<CR>')
+keymap('n', '<Leader>d', '<Cmd>execute "grep ".expand("<cword>")<CR>')
+keymap('n', '<Leader>k', '<Cmd>call tools#which_key()<CR>')
+keymap('n', '<Leader>t', '<Cmd>TroubleToggle<CR>')
 vim.api.nvim_set_keymap('n', '<Leader>q', '<Plug>(qf_qf_toggle_stay)', {})
 
 -- Объявление команд и автокоманд для событий
 vim.api.nvim_exec([[
+command! -nargs=0 DiffviewMergeBase exec 'DiffviewOpen '.systemlist("git merge-base develop HEAD")[0]
 command! -nargs=0 GitGutterMergeBase let g:gitgutter_diff_base=systemlist("git merge-base develop HEAD")[0] | GitGutter
 command! -nargs=0 -complete=command HighGroup echo(synIDattr(synID(line("."), col("."), 0), "name"))
 
@@ -202,14 +190,12 @@ augroup vimrc
 
   au FileType fish setlocal foldmethod=expr
   au FileType help setlocal conceallevel=0
-  au FileType html,javascript,lua,yaml,vim setlocal tabstop=2
-  au FileType html,javascript,lua,yaml,vim setlocal shiftwidth=2
-  au FileType html,javascript,lua,yaml,vim setlocal softtabstop=2
+  au FileType html,javascript,lua,yaml,vim setlocal ts=2 sw=2 sts=2
   au FileType markdown setlocal fo-=l
   au FileType python setlocal dict+=~/.config/nvim/dictionary/python fo-=t fo+=ro tw=88
 
-  au InsertEnter * set colorcolumn=89
-  au InsertLeave * set colorcolumn=
+  au InsertEnter * set cc=+1
+  au InsertLeave * set cc=
 
   au VimResized * wincmd =
 augroup END

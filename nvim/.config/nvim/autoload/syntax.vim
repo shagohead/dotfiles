@@ -87,6 +87,7 @@ function! syntax#update_colors()
 
   hi CurrentWord cterm=undercurl gui=undercurl
   hi CursorLineNr cterm=NONE gui=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+  hi Folded ctermbg=NONE guibg=NONE
   hi LineNr ctermbg=NONE guibg=NONE
   hi MatchParen cterm=bold,underline gui=bold,underline ctermbg=NONE guibg=NONE
   hi SignColumn ctermbg=NONE guibg=NONE
@@ -97,12 +98,13 @@ function! syntax#update_colors()
   hi TabLineSel ctermbg=NONE guibg=NONE
   hi VertSplit ctermbg=NONE guibg=NONE
   hi! link Comment Special
+  let l:error_fg = syntax#get_color('ErrorMsg', 'fg', 'gui')
+  exec 'hi LspDiagnosticsDefaultError guifg='.l:error_fg
+  exec 'hi LspDiagnosticsUnderlineError cterm=undercurl gui=undercurl guisp='.l:error_fg
 
   if &background == 'dark'
     hi Cursor guibg=Cyan
     hi User3 guifg=Cyan
-    hi link LspDiagnosticsSignError WarningMsg
-    hi link LspDiagnosticsVirtualTextError WarningMsg
   else
     hi Cursor guibg=DarkCyan
     hi User3 guifg=DarkCyan

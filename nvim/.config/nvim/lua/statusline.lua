@@ -68,8 +68,20 @@ section.left[3] = {
 }
 section.left[4] = {
   FileName = {
-    provider = function() return vim.fn.expand("%:F") end,
+    provider = function() return vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.") end,
     condition = buffer_not_empty
+  }
+}
+
+section.right[0] = {
+  Keymap = {
+    provider = function()
+      if vim.opt.iminsert:get() == 1 then
+        return "  "
+      end
+      return ""
+    end,
+    highlight = {"Cyan"}
   }
 }
 
@@ -96,6 +108,7 @@ local checkwidth = function()
   return false
 end
 
+signs = require'variables'.signs
 -- Дифф изменений от gitgutter
 section.right[3] = {
   DiffAdd = {
@@ -128,28 +141,28 @@ section.right[6] = {
   DiagnosticError = {
     provider = "DiagnosticError",
     separator = " ",
-    icon = " ",
+    icon = signs.Error,
     highlight = {colors.red},
   }
 }
 section.right[7] = {
   DiagnosticWarn = {
     provider = "DiagnosticWarn",
-    icon = " ",
+    icon = signs.Warning,
     highlight = {colors.yellow},
   }
 }
 section.right[8] = {
   DiagnosticInfo = {
     provider = "DiagnosticInfo",
-    icon = " ",
+    icon = signs.Information,
     highlight = {colors.green},
   }
 }
 section.right[9] = {
   DiagnosticHint = {
     provider = "DiagnosticHint",
-    icon = " ",
+    icon = signs.Hint,
   }
 }
 
