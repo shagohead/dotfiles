@@ -38,7 +38,7 @@ if vim.fn.empty(vim.fn.glob(packer_path)) > 0 then
   -- FIXME: sync and install
 end
 
-return require('packer').startup({function()
+return require('packer').startup(function()
   use 'wbthomason/packer.nvim'
 
   -- Профилирование времени запуска
@@ -425,9 +425,4 @@ return require('packer').startup({function()
 
   -- nginx .conf
   -- use {'chr4/nginx.vim', opt = true, ft = {''}}
-end,
-config = {
-  display = {
-    open_fn = require('packer.util').float,
-  }
-}})
+end)

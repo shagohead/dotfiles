@@ -170,8 +170,6 @@ vim.api.nvim_set_keymap('n', '<Leader>q', '<Plug>(qf_qf_toggle_stay)', {})
 
 -- Объявление команд и автокоманд для событий
 vim.api.nvim_exec([[
-command! -nargs=0 DiffviewMergeBase exec 'DiffviewOpen '.systemlist("git merge-base develop HEAD")[0]
-command! -nargs=0 GitGutterMergeBase let g:gitgutter_diff_base=systemlist("git merge-base develop HEAD")[0] | GitGutter
 command! -nargs=0 -complete=command HighGroup echo(synIDattr(synID(line("."), col("."), 0), "name"))
 
 augroup vimrc
