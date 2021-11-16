@@ -1,3 +1,4 @@
+local cmd = vim.cmd
 local M = {}
 
 -- Thanks: https://github.com/wbthomason/dotfiles/blob/linux/neovim/.config/nvim/lua/config/utils.lua
@@ -16,6 +17,10 @@ M.map = function(modes, lhs, rhs, opts)
   opts.noremap = opts.noremap == nil and true or opts.noremap
   if type(modes) == 'string' then modes = {modes} end
   for _, mode in ipairs(modes) do vim.api.nvim_set_keymap(mode, lhs, rhs, opts) end
+end
+
+M.t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
 return M

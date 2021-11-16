@@ -1,162 +1,40 @@
--- https://github.com/rockerBOO/awesome-neovim
--- https://github.com/windwp/nvim-autopairs
--- https://github.com/ray-x/navigator.lua
--- https://github.com/sindrets/diffview.nvim
---
--- Добавлить плагин lsp signature, чтобы поменьшей мере получать
--- докстринг в методам и типам при автодополнении.
---
--- Debugger:
--- https://puremourning.github.io/vimspector-web/
--- https://github.com/puremourning/vimspector
--- https://github.com/nvim-telescope/telescope-vimspector.nvim
---
--- Debug Python:
--- https://github.com/puremourning/vimspector/blob/master/README.md#python
--- https://github.com/microsoft/debugpy
---
--- DAP (Debug Adapter Protocol):
--- https://github.com/mfussenegger/nvim-dap
--- https://github.com/rcarriga/nvim-dap-ui
---
--- Snippets:
--- https://github.com/neovim/nvim-lspconfig/wiki/Snippets
--- https://github.com/L3MON4D3/LuaSnip
--- https://github.com/SirVer/ultisnips
--- https://github.com/fhill2/telescope-ultisnips.nvim
---
--- Testing:
--- https://github.com/rcarriga/vim-ultest
--- https://github.com/vim-test/vim-test
+-- https://github.com/justinmk/config/blob/master/.config/nvim/lua/plugins.lua
+-- https://github.com/wbthomason/dotfiles/blob/linux/neovim/.config/nvim/lua/plugins.lua
+-- https://www.youtube.com/watch?v=_DnmphIwnjo [nvim-cmp & dadbot & other?]
 
-local cmd = vim.api.cmd
-local packer_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if vim.fn.empty(vim.fn.glob(packer_path)) > 0 then
+-- Алиасы интерфейса к объектам vim.
+local g = vim.g
+local fn = vim.fn
+local cmd = vim.cmd
+local opt = vim.opt
+local o, wo, bo = vim.o, vim.wo, vim.bo
+local map = require 'utils'.map
+
+-- Автоустановка packer.nvim.
+local packer_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(packer_path)) > 0 then
   print('Cloning packer.nvim ..')
-  vim.fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', packer_path})
-  vim.api.nvim_command 'packadd packer.nvim'
+  fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', packer_path})
   -- FIXME: sync and install
+	cmd 'packadd packer.nvim'
+	cmd 'PackerUpdate'
 end
 
 return require('packer').startup(function()
-  use 'wbthomason/packer.nvim'
-
-  -- Профилирование времени запуска
-  use {
-    'dstein64/vim-startuptime',
-    cmd = 'StartupTime',
-    config = [[vim.g.startuptime_tries = 10]]
-  }
-
-  -- Подсветка синтаксиса TreeSitter'ом
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
-    config = function()
-      require 'nvim-treesitter.configs'.setup {
-        ensure_installed = {
-          'bash',
-          'fish',
-          'go',
-          'gomod',
-          'lua',
-          'python',
-          'rust',
-          'toml',
-          'yaml',
-        },
-        highlight = {
-          enable = true,
-        },
-        refactor = {
-          highlight_definitions = {
-            enable = true,
-          },
-          navigation = {
-            enable = true,
-            keymaps = {
-              goto_definition = 'gKn',
-              goto_next_usage = ']k',
-              goto_previous_usage = '[k',
-              list_definitions = 'gKl',
-              list_definitions_toc = 'gKo',
-            },
-          },
-        },
-      }
-    end,
-    requires = {
-      'nvim-treesitter/nvim-treesitter-refactor',
-      'romgrk/nvim-treesitter-context',
-    }
-  }
-
-  -- Цветовые схемы base16
-  use 'chriskempson/base16-vim'
-
-  -- Иконки nerd-fonts
-  use 'kyazdani42/nvim-web-devicons'
-
-  -- Окна с селекторами на fzf
-  use '/usr/local/opt/fzf'
-  use 'junegunn/fzf.vim'
-
-  -- Хоткеи для комментирования
-  use 'b3nj5m1n/kommentary'
-
-  -- Хоткей s и S для двухбуквенных движений наподобии f и F
-  use {
-    'ggandor/lightspeed.nvim',
-    setup = function()
-      function repeat_ft(reverse)
-        local ls = require 'lightspeed'
-        ls.ft['instant-repeat?'] = true
-        ls.ft:to(reverse, ls.ft['prev-t-like?'])
-      end
-      map = require 'utils'.map
-      local silent = {silent = true}
-      map('n', ';', '<Cmd>Telescope grep_string<CR>')
-      map('n', ';', '<Cmd>lua repeat_ft(false)<CR>', silent)
-      map('x', ';', '<Cmd>lua repeat_ft(false)<CR>', silent)
-      map('n', ',', '<Cmd>lua repeat_ft(true)<CR>', silent)
-      map('x', ',', '<Cmd>lua repeat_ft(true)<CR>', silent)
-    end,
-  }
-
-  -- Команды для работы с файлами
-  use 'tpope/vim-eunuch'
-
-  -- Парные хоткеи, использующие квадратные скобки
-  use 'tpope/vim-unimpaired'
-
-  -- Хоткеи обертывания текстовых объектов (скобками)
-  use 'tpope/vim-surround'
-
-  -- Поддержка изменения дат хоткеями <C-A>/<C-X>
-  use 'tpope/vim-speeddating'
-
-  -- Повтор последнего действия из плагинов (tpope/* и некоторых других)
-  use 'tpope/vim-repeat'
-
-  -- Подсветка при указании диапазона строк в командном режиме
-  use {
-    'winston0410/range-highlight.nvim',
-    config = function() require 'range-highlight'.setup{} end,
-    requires = {'winston0410/cmd-parser.nvim'},
-  }
-
-  -- Отображение отступов
-  use 'lukas-reineke/indent-blankline.nvim'
-
-  -- Провайдер для конфигурации статусной строки
-  use {
-    'glepnir/galaxyline.nvim',
-    config = function() require 'statusline' end,
-    branch = 'main',
-  }
-
-  -- UI с нечетким поиском, написанный на Lua
-  -- checkout: https://github.com/nvim-telescope/telescope-frecency.nvim
+	use 'wbthomason/packer.nvim'
+	use 'airblade/vim-gitgutter'
+  use 'justinmk/vim-sneak' -- Lua альтернатива: 'ggandor/lightspeed.nvim'
+	use 'tpope/vim-fugitive'
+	use 'tpope/vim-unimpaired'
+	use 'tpope/vim-commentary' -- Lua альтернатива: 'b3nj5m1n/kommentary'
+	use 'tpope/vim-speeddating'
+	use 'tpope/vim-surround'
+	use 'tpope/vim-repeat'
+	use 'tpope/vim-dadbod'
+	use 'junegunn/gv.vim'
+	use 'chriskempson/base16-vim'
+	
+	-- Селектор с нечетким поиском.
   use {
     'nvim-telescope/telescope.nvim',
     requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'},
@@ -188,6 +66,7 @@ return require('packer').startup(function()
           live_grep = {theme = 'dropdown'},
           oldfiles = {theme = 'dropdown'},
           treesitter = {theme = 'dropdown'},
+          lsp_references = {theme = 'dropdown'},
           lsp_document_symbols = {theme = 'dropdown'},
           lsp_workspace_symbols = {theme = 'dropdown'},
         },
@@ -195,234 +74,274 @@ return require('packer').startup(function()
     end,
     setup = function()
       map = require 'utils'.map
-      map('n', '<Leader>d', '<Cmd>Telescope grep_string<CR>')
-      map('n', '<Leader>D', '<Cmd>execute "Telescope lsp_workspace_symbols query=".expand("<cword>")<CR>')
+      -- map('n', 'gR', '<Cmd>Telescope lsp_references<CR>')
+      map('n', '<Leader>G', '<Cmd>Telescope grep_string<CR>')
       map('n', '<Leader>b', '<Cmd>Telescope buffers<CR>')
       map('n', '<Leader>e', '<Cmd>Telescope oldfiles<CR>')
       map('n', '<Leader>f', '<Cmd>Telescope find_files<CR>')
-      map('n', '<Leader>o', '<Cmd>Telescope lsp_document_symbols<CR>')
       map('n', '<Leader>p', '<Cmd>Telescope treesitter<CR>')
+      map('n', '<Leader>o', '<Cmd>Telescope lsp_document_symbols<CR>')
+      map('n', '<Leader>O', '<Cmd>execute "Telescope lsp_workspace_symbols query=".expand("<cword>")<CR>')
     end,
   }
 
   use {
-    'sudormrfbin/cheatsheet.nvim',
-    requires = 'nvim-telescope/telescope.nvim',
-    after = 'telescope.nvim',
+    'winston0410/range-highlight.nvim',
+    config = function() require 'range-highlight'.setup{} end,
+    requires = {'winston0410/cmd-parser.nvim'},
   }
 
-  -- Команды, хоткеи и автокоманды для списка quickfix
-  use 'romainl/vim-qf'
-
-  -- Дерево символов текущего документа
-  use 'simrat39/symbols-outline.nvim'
-
-  -- Пиктограммы для меню автодополнения
-  use {'onsails/lspkind-nvim', config = function() require 'lspkind'.init() end}
-
-  -- Симпотишные списки диагностических сообщений и quickfix/location list
-  use {'folke/trouble.nvim', config = function()
-    require 'trouble'.setup {
-      mode = 'lsp_document_diagnostics'
-    }
-  end}
-
-  -- Автодополнение
-  use {'hrsh7th/nvim-compe', config = function()
-    require 'compe'.setup {
-      enabled = true;
-      autocomplete = true;
-      debug = false;
-      min_length = 1;
-      preselect = 'enable';
-      throttle_time = 80;
-      source_timeout = 200;
-      incomplete_delay = 400;
-      max_abbr_width = 100;
-      max_kind_width = 100;
-      max_menu_width = 100;
-      documentation = true;
-
-      source = {
-        path = true;
-        buffer = true;
-        nvim_lsp = true;
-        nvim_lua = true;
-      };
-    }
-
-    local t = function(str)
-      return vim.api.nvim_replace_termcodes(str, true, true, true)
-    end
-
-    local check_back_space = function()
-      local col = vim.fn.col('.') - 1
-      if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-      else
-        return false
-      end
-    end
-
-    _G.tab_complete = function()
-      if vim.fn.pumvisible() == 1 then
-        return t'<C-n>'
-      elseif check_back_space() then
-        return t'<Tab>'
-      else
-        return vim.fn['compe#complete']()
-      end
-    end
-    _G.s_tab_complete = function()
-      if vim.fn.pumvisible() == 1 then
-        return t'<C-p>'
-      else
-        return t'<S-Tab>'
-      end
-    end
-
-    local expr = {expr = true}
-    vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.tab_complete()', expr)
-    vim.api.nvim_set_keymap('s', '<Tab>', 'v:lua.tab_complete()', expr)
-    vim.api.nvim_set_keymap('i', '<S-Tab>', 'v:lua.s_tab_complete()', expr)
-    vim.api.nvim_set_keymap('s', '<S-Tab>', 'v:lua.s_tab_complete()', expr)
-    vim.api.nvim_set_keymap('i', '<C-e>', 'compe#close("<C-e>")', expr)
-    vim.api.nvim_set_keymap('i', '<CR>', 'compe#confirm("<CR>")', expr)
-    -- vim.api.nvim_set_keymap('i', '<C-Space>', 'compe#complete()', expr)
-  end}
-
-  -- CodeActions: https://github.com/neovim/nvim-lspconfig/wiki/Code-Actions
-  -- Perf: https://github.com/neovim/nvim-lspconfig/wiki/Improving-performance
-  -- Lang-spec tools: https://github.com/neovim/nvim-lspconfig/wiki/Language-specific-plugins
-  --
-  -- Конфигурация LSP клиента
-  use {'neovim/nvim-lspconfig', config = function()
-    local on_attach = function(client, bufnr)
-      print('Attaching to '..client.name)
-
-      local map = require 'utils'.map
-      local silent = { silent = true }
-
-      map('n', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>')
-      map('i', '<C-y>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>')
-      map('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>')
-      map('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>')
-      -- map('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>')
-      map('n', 'gD', '<Cmd>lua vim.lsp.buf.type_definition()<CR>')
-      map('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>')
-      map('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>')
-      map('n', 'gR', '<Cmd>Trouble lsp_references<cr>')
-      map('n', '[w', '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')
-      map('n', ']w', '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
-      map('n', '<Leader>l', '<Cmd>lua vim.lsp.diagnostic.set_loclist()<CR>')
-      map('n', '<Leader>w', '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>')
-      map('n', '<Leader>Wa', '<Cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
-      map('n', '<Leader>Wr', '<Cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
-      map('n', '<Leader>Wl', '<Cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
-      map('n', '<Leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>')
-      map('n', '<Leader>i', '<Cmd>lua vim.lsp.buf.code_action()<CR>')
-      map('x', '<Leader>i', '<Cmd>lua vim.lsp.buf.range_code_action()<CR>')
-      map('n', '<Leader>=', '<Cmd>lua vim.lsp.buf.formatting()<CR>')
-      map('x', '<Leader>=', '<Cmd>lua vim.lsp.buf.formatting()<CR>')
-
-      -- TODO: Пофиксить или удалить
-      vim.api.nvim_set_keymap('n', 'Y', '<Cmd>lua v:lua.peek_definition()<CR>', {expr = true})
-      local function preview_location_callback(_, _, result)
-        if result == nil or vim.tbl_isempty(result) then
-          return nil
-        end
-        vim.lsp.util.preview_location(result[1])
-      end
-
-      _G.peek_definition = function()
-        local params = vim.lsp.util.make_position_params()
-        return vim.lsp.buf_request(0, 'textDocument/definition', params, preview_location_callback)
-      end
-    end
-
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities.textDocument.completion.completionItem.snippetSupport = true
-    --[[ capabilities.textDocument.completion.completionItem.resolveSupport = {
-      properties = {
-        'detail',
-        'documentation',
-        'additionalTextEdits',
-      }
-    } ]]
-
-    -- https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
-    local lspconfig = require 'lspconfig'
-    local lsp_util = require 'lspconfig/util'
-    local servers = {'bashls', 'dockerls', 'gopls', 'vimls'}
-    for _, lsp in ipairs(servers) do
-      lspconfig[lsp].setup{
-        on_attach = on_attach,
-        capabilities = capabilities,
-      }
-    end
-
-    lspconfig.pyright.setup{
-      on_attach = on_attach,
-      capabilities = capabilities,
-      --[[ root_dir = function(filename)
-        -- FIXME: correct root for knowflow/service/api
-        local unpacked = unpack(root_files)
-        vim.g.temp_unpacked = unpacked
-        local root_pattern = lsp_util.root_pattern(unpacked)(filename)
-        vim.g.temp_rootpattern = root_pattern
-        return root_pattern or lsp_util.path.dirname(filename)
-      end, ]]
-      on_init = function(client)
-        -- Окружение я всегда создаю в .venv, так что..
-        local pythonPath = client.config.root_dir .. '/.venv/bin/python'
-        if vim.loop.fs_stat(pythonPath) then
-          client.config.settings.python.pythonPath = pythonPath
-          client.notify('workspace/didChangeConfiguration')
-        end
-        return true
-      end
-    }
-  end}
-
-  -- Git
-  use 'sindrets/diffview.nvim'
   use {
-    'tpope/vim-fugitive',
-    cmd = {'G', 'Git', 'Gdiffsplit', 'Gw', 'Gwq'},
-    setup = function()
-      map = require 'utils'.map
-      map('n', '<Leader>g', '<Cmd>G<CR>')
+		'neovim/nvim-lspconfig',
+		requires = {
+			{'hrsh7th/nvim-cmp'},
+			{'hrsh7th/cmp-buffer'},
+			{'hrsh7th/cmp-nvim-lsp'},
+			{'hrsh7th/cmp-vsnip'},
+			{'hrsh7th/vim-vsnip'},
+			{'onsails/lspkind-nvim'},
+			{'kristijanhusak/vim-dadbod-completion'},
+			{'folke/trouble.nvim', opt = true},
+		},
+		config = function()
+			local on_attach = function(client, bufnr)
+				print('Attached to '..client.name)
+				vim.cmd([[
+					setlocal signcolumn=yes
+					nnoremap <buffer> <C-k> <Cmd>lua vim.lsp.buf.signature_help()<CR>
+					inoremap <buffer> <C-y> <Cmd>lua vim.lsp.buf.signature_help()<CR>
+					nnoremap <buffer> K <Cmd>lua vim.lsp.buf.hover()<CR>
+					nnoremap <buffer> gd <Cmd>lua vim.lsp.buf.definition()<CR>
+					nnoremap <buffer> gi <Cmd>lua vim.lsp.buf.implementation()<CR>
+					nnoremap <buffer> gr <Cmd>lua vim.lsp.buf.references()<CR>
+					nnoremap <buffer> [w <Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+					nnoremap <buffer> ]w <Cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+					nnoremap <buffer> <Leader>l <Cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
+					nnoremap <buffer> <Leader>w <Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+					nnoremap <buffer> <Leader>rn <Cmd>lua vim.lsp.buf.rename()<CR>
+					nnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.code_action()<CR>
+					xnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.range_code_action()<CR>
+					nnoremap <buffer> <Leader>= <Cmd>lua vim.lsp.buf.formatting()<CR>
+					xnoremap <buffer> <Leader>= <Cmd>lua vim.lsp.buf.formatting()<CR>
+
+					command! -nargs=0 WorkspaceAdd lua vim.lsp.buf.add_workspace_folder()
+					command! -nargs=0 WorkspaceRemove lua vim.lsp.buf.remove_workspace_folder()
+					command! -nargs=0 WorkspaceList lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+
+					packadd trouble.nvim
+					nnoremap <buffer> <Leader>t <Cmd>TroubleToggle<CR>
+				]])
+
+
+				require 'trouble'.setup {mode = 'lsp_document_diagnostics'}
+				-- map('n', 'gr', '<Cmd>Trouble lsp_references<cr>')
+			end
+
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+			local lspconfig = require 'lspconfig'
+			local lsp_util = require 'lspconfig/util'
+			local servers = {'bashls', 'dockerls', 'gopls', 'vimls'}
+			for _, lsp in ipairs(servers) do
+				lspconfig[lsp].setup{ on_attach = on_attach, capabilities = capabilities }
+			end
+
+			lspconfig.pyright.setup{
+				on_attach = on_attach,
+				capabilities = capabilities,
+				--[[ root_dir = function(filename)
+					-- FIXME: correct root for knowflow/service/api
+					local unpacked = unpack(root_files)
+					vim.g.temp_unpacked = unpacked
+					local root_pattern = lsp_util.root_pattern(unpacked)(filename)
+					vim.g.temp_rootpattern = root_pattern
+					return root_pattern or lsp_util.path.dirname(filename)
+				end, ]]
+				on_init = function(client)
+					local pythonPath = client.config.root_dir .. '/.venv/bin/python'
+					if vim.loop.fs_stat(pythonPath) then
+						client.config.settings.python.pythonPath = pythonPath
+						client.notify('workspace/didChangeConfiguration')
+					end
+					return true
+				end
+			}
+
+			vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+				vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false }
+			)
+
+			-- require 'lspkind'.init()
+			local lspkind = require 'lspkind'
+			local cmp = require 'cmp'
+			cmp.setup({
+				mapping = {
+					-- ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+					-- ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+					['<C-d>'] = cmp.mapping.scroll_docs(-4),
+					['<C-f>'] = cmp.mapping.scroll_docs(4),
+					['<Tab>'] = function(fallback)
+						if cmp.visible() then
+							cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+						-- elseif vim.fn['CheckBackSpace']() == 0 then
+						-- 	cmp.complete()
+						else
+							fallback()
+						end
+					end,
+					['<S-Tab>'] = function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+						-- elseif vim.fn['CheckBackSpace']() == 0 then
+						-- 	cmp.complete()
+						else
+							fallback()
+						end
+					end,
+					['<C-Space>'] = cmp.mapping.complete(),
+					['<C-e>'] = cmp.mapping.close(),
+					['<C-y>'] = cmp.mapping.confirm({
+						behavior = cmp.ConfirmBehavior.Insert,
+						select = true,
+					}),
+					['<CR>'] = cmp.mapping.confirm({
+						behavior = cmp.ConfirmBehavior.Replace,
+						select = true,
+					}),
+				},
+				sources = {
+					{ name = 'nvim_lsp' },
+					{ name = 'vsnip' },
+					{ name = 'buffer' },
+				},
+				snippet = {
+					expand = function(args)
+						vim.fn["vsnip#anonymous"](args.body)
+					end,
+				},
+				formatting = {
+					format = lspkind.cmp_format {
+						with_text = true,
+						menu = {
+							buffer = '[buf]',
+							luasnip = '[snip]',
+							nvim_lsp = '[LSP]',
+							path = '[path]',
+						}
+					}
+				},
+			})
+
+      local autocmd = require 'utils'.autocmd
+			autocmd('Completion', {[[FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })]]})
+		end,
+	}
+
+	use 'kyazdani42/nvim-web-devicons'
+
+	treesitter_ft = {
+		'bash',
+		'fish',
+		'go',
+		'gomod',
+		'lua',
+		'python',
+		'rust',
+		'toml',
+		'yaml',
+	}
+  use {
+    'nvim-treesitter/nvim-treesitter',
+		requires = {
+			'nvim-treesitter/nvim-treesitter-refactor',
+			'nvim-treesitter/nvim-treesitter-textobjects',
+		},
+		opt = true,
+		ft = treesitter_ft,
+    run = ':TSUpdate',
+    config = function()
+      require 'nvim-treesitter.configs'.setup {
+        ensure_installed = treesitter_ft,
+        highlight = {
+          enable = true,
+					-- custom_captures = {
+					-- 	['FIXME.group'] = 'Identifier',
+					-- },
+        },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = 'gss',
+            node_selection = 'gsn',
+            node_decremental = '-',
+            node_incremental = '+',
+            scope_incremental = 'gss',
+          },
+        },
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              ['am'] = '@function.outer',
+              ['im'] = '@function.inner',
+              ['ac'] = '@class.outer',
+              ['ic'] = '@class.inner',
+            },
+          },
+					-- FIXME configure: move, swap (arguments ;)
+					-- https://github.com/nvim-treesitter/nvim-treesitter-textobjects#text-objects-swap
+          __move = {
+            enable = true,
+            set_jumps = true,
+            goto_next_start = {
+              [']m'] = '@function.outer',
+              [']]'] = '@class.outer',
+            },
+            goto_next_end = {
+              [']M'] = '@function.outer',
+              [']['] = '@class.outer',
+            },
+            goto_previous_start = {
+              ['[m'] = '@function.outer',
+              ['[['] = '@class.outer',
+            },
+            goto_previous_end = {
+              ['[M'] = '@function.outer',
+              ['[]'] = '@class.outer',
+            },
+          },
+        },
+        refactor = {
+          highlight_definitions = { enable = true },
+          navigation = {
+            enable = true,
+            keymaps = {
+              goto_definition = 'gKn',
+              goto_next_usage = ']k',
+              goto_previous_usage = '[k',
+              list_definitions = 'gKl',
+              list_definitions_toc = 'gKo',
+            },
+          },
+        },
+      }
     end,
   }
-  use {'airblade/vim-gitgutter', opt = true, cmd = {'GitGutter'}}
 
-  -- Подсветка цветов для некоторых типов файлов
   use {
-    'norcalli/nvim-colorizer.lua',
-    opt = true, ft = {'css', 'html', 'xhtml', 'lua'},
-    config = function() require 'colorizer'.setup() end
+    'dstein64/vim-startuptime',
+    cmd = 'StartupTime',
+    config = [[vim.g.startuptime_tries = 10]]
   }
 
-  -- ?
-  use {'liuchengxu/vim-which-key', opt = true, cmd = {'WhichKey'}}
-  use {'luochen1990/rainbow', opt = true, cmd = {'RainbowToggle'}}
-
-  -- .fish
-  use {'dag/vim-fish', opt = true, ft = {'fish'}}
-
-  -- .md
-  use {'plasticboy/vim-markdown', opt = true, ft = {'markdown'}}
-
-  -- .ino
-  use {'sudar/vim-arduino-syntax', opt = true, ft = {'ino'}}
+	use {
+		'tpope/vim-eunuch',
+		cmd = {'Delete', 'Remove', 'Move', 'Rename', 'Mkdir', 'Mkdir!'}
+	}
 
   -- .py
-  use {'psf/black', opt = true, branch = 'main', ft = {'python'}}
-  use {'Vimjas/vim-python-pep8-indent', opt = true, ft = {'python'}}
-
-  -- .toml
-  use {'cespare/vim-toml', ft = {'toml'}}
-
-  -- nginx .conf
-  -- use {'chr4/nginx.vim', opt = true, ft = {''}}
+  use {'psf/black', branch = 'main', ft = {'python'}}
+  use {'Vimjas/vim-python-pep8-indent', ft = {'python'}}
 end)

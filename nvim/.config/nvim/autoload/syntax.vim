@@ -91,16 +91,22 @@ function! syntax#update_colors()
   hi LineNr ctermbg=NONE guibg=NONE
   hi MatchParen cterm=bold,underline gui=bold,underline ctermbg=NONE guibg=NONE
   hi SignColumn ctermbg=NONE guibg=NONE
-  hi StatusLine ctermbg=NONE guibg=NONE
-  hi StatusLineNC ctermbg=NONE guibg=NONE
+  " hi StatusLine ctermbg=NONE guibg=NONE
+  " hi StatusLineNC ctermbg=NONE guibg=NONE
   hi TabLine ctermbg=NONE guibg=NONE
   hi TabLineFill ctermbg=NONE guibg=NONE
   hi TabLineSel ctermbg=NONE guibg=NONE
   hi VertSplit ctermbg=NONE guibg=NONE
+
   hi! link Comment Special
+
   let l:error_fg = syntax#get_color('ErrorMsg', 'fg', 'gui')
   exec 'hi LspDiagnosticsDefaultError guifg='.l:error_fg
   exec 'hi LspDiagnosticsUnderlineError cterm=undercurl gui=undercurl guisp='.l:error_fg
+
+  hi DiffAdd guifg=NONE
+  hi DiffChange guifg=NONE
+  hi DiffText guifg=NONE
 
   if &background == 'dark'
     hi Cursor guibg=Cyan
