@@ -87,7 +87,6 @@ some usefull python packges (`pipx install PACKAGE NAME`):
 - http-prompt (httpie wrapper)
 - johnnydep (package depenedency graph)
 - base16-shell-preview (preview base16 color schemes)
-- glances (cli monitoring tool)
 
 
 some usefull settings:
@@ -99,12 +98,15 @@ poetry config settings.virtualenvs.in-project true
 ## Homebrewed packages:
 - git-flow
 - git-delta (update git-config core.pager & interacive.diffFilter)
+- pgformatter
 
 
 ## Node packages:
 
 - bash-language-server
 - dockerfile-language-server-nodejs
+- pyright
+- vim-language-server
 
 
 ## Rust development
