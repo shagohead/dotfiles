@@ -1,7 +1,7 @@
 function __rg_vim_qf -d "Wraps current rg command to populate nvim ($EDITOR) quickfix list"
     set -l cmd vim
-    if set -q EDITOR; and string match -r '.?vim' $EDITOR 1>/dev/null
-        echo $EDITOR | read -at cmd
+    if set -q VISUAL; and string match -r '.?vim' $VISUAL 1>/dev/null
+        echo $VISUAL | read -at cmd
     end
 
     if test -z (commandline -j | string join '')
