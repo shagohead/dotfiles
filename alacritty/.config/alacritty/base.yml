@@ -1,12 +1,17 @@
 # Example usage:
 # import:
-#   - /PATH_TO_ALACRITTY_SOURCE/alacritty.yml
-#   - /PATH_TO_USERS_HOME/.config/alacritty/base.yml
+#   - /PATH_TO_USER_HOME/.config/alacritty/base.yml
 
 env:
   TERM: alacritty
   LANG: ru_RU.UTF-8
   LC_CTYPE: ru_RU.UTF-8
+
+window:
+  # Fix macOS Misson Control's animations perf
+  # https://github.com/alacritty/alacritty/issues/4474
+  # opacity: 0.999
+  decorations: buttonless
 
 font:
   normal:
@@ -130,7 +135,7 @@ key_bindings:
   - { key: W, mods: Command, chars: ":q\x0d" }
   - { key: S, mods: Command, chars: ":w\x0d" }
 
-  # psql word navigation
+  # word navigation
   - { key: Left, mods: Alt, chars: "\x1bb" }
   - { key: Right, mods: Alt, chars: "\x1bf" }
 
