@@ -29,7 +29,7 @@ set -q GOPATH; or set -xU GOPATH $HOME/go
 set -gx PATH $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims $HOME/yandex-cloud/bin $PATH
 
 # Git merge-base for reviewing
-set -gx MERGE_BASE develop
+set -gx MERGE_TARGET develop
 
 ################
 # Tools config #

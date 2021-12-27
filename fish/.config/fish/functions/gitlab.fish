@@ -13,7 +13,7 @@ function gitlab
     if test $argv[1] = 'mrs'
         http GET https://gitlab.jetstyle.in/api/v4/projects/661/merge_requests \
         state==opened "Authorization: Bearer $token" \
-        | jq '.[] | "\(.title) \(.source_branch)"' -r | fzf | read -l branch; and echo $branch | awk '{print $NF}'
+        | jq '.[] | "\(.reference) \(.title) \(.source_branch)"' -r | fzf | read -l branch; and echo $branch | awk '{print $NF}'
     end
 
     if test $argv[1] = 'b2mr'
