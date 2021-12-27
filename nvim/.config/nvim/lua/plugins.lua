@@ -1,6 +1,7 @@
 -- https://github.com/justinmk/config/blob/master/.config/nvim/lua/plugins.lua
 -- https://github.com/wbthomason/dotfiles/blob/linux/neovim/.config/nvim/lua/plugins.lua
 -- https://www.youtube.com/watch?v=_DnmphIwnjo [nvim-cmp & dadbot & other?]
+-- https://github.com/rockerBOO/awesome-neovim
 
 -- Алиасы интерфейса к объектам vim.
 local g = vim.g
@@ -33,6 +34,7 @@ return require('packer').startup(function()
 	use 'tpope/vim-dadbod'
 	use 'junegunn/gv.vim'
 	use 'chriskempson/base16-vim'
+	-- use 'simnalamburt/vim-mundo'
 	
 	-- Селектор с нечетким поиском.
   use {
@@ -100,12 +102,13 @@ return require('packer').startup(function()
 			{'hrsh7th/cmp-vsnip'},
 			{'hrsh7th/vim-vsnip'},
 			{'onsails/lspkind-nvim'},
-			{'kristijanhusak/vim-dadbod-completion'},
+			{'kristijanhusak/vim-dadbod-completion'},  -- Lazy-load
 			{'folke/trouble.nvim', opt = true},
 		},
 		config = function()
 			local on_attach = function(client, bufnr)
 				print('Attached to '..client.name)
+				-- TODO: set new hover() mapping, release K for keywordprg
 				vim.cmd([[
 					setlocal signcolumn=yes
 					nnoremap <buffer> <C-k> <Cmd>lua vim.lsp.buf.signature_help()<CR>
@@ -340,6 +343,8 @@ return require('packer').startup(function()
 		'tpope/vim-eunuch',
 		cmd = {'Delete', 'Remove', 'Move', 'Rename', 'Mkdir', 'Mkdir!'}
 	}
+
+	use {'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim'}
 
   -- .py
   use {'psf/black', branch = 'main', ft = {'python'}}

@@ -33,6 +33,8 @@ g.mapleader = ' '
 g.maplocalleader = ' '
 
 -- Поведение UI.
+opt.splitbelow = true
+opt.splitright = true
 opt.scrolloff = 1
 opt.numberwidth = 2
 opt.updatetime = 250
@@ -92,17 +94,21 @@ autocmd('vimrc', {
 	[[BufNewFile,BufRead *init*.lua nmap K <Cmd>execute "help ".expand("<cword>")<CR>]],
 	[[ColorScheme * call UpdateColors()]],
 	[[FileType fish setlocal cms=#\ %s]],
-	[[FileType go setlocal noexpandtab]],
+	[[FileType go setlocal noexpandtab fo+=ro]],
 	[[FileType sql nmap <buffer> <Leader>= <Cmd>%!pg_format<CR>]],
 	-- [[FileType html,jinja.html,htmldjango,markdown,python setlocal wrap]],
 	-- [[FileType fish setlocal foldmethod=expr]],
 	-- [[FileType help setlocal conceallevel=0]],
 	[[FileType go,html,htmldjango,javascript,lua,markdown,yaml,vim setlocal ts=2 sw=2 sts=2]],
+	[[FileType markdown nmap <buffer> <Leader>J <Cmd>execute "!open https://j.jetstyle.in/browse/".expand("<cWORD>")<CR>]],
+	[[FileType markdown nmap <buffer> <Leader>M <Cmd>execute "!open https://gitlab.jetstyle.in/jetstyle/nti/talent-backend/-/merge_requests/".expand("<cword>")<CR>]],
 	[[FileType markdown setlocal fo-=l fo+=o]],
 	[[FileType python setlocal dict+=~/.config/nvim/dictionary/python fo-=t fo+=ro tw=88]],
+	[[FileType sql setlocal ts=4 sw=4 sts=4 expandtab cms=--\ %s]],
 	[[InsertEnter * set cc=+1]],
 	[[InsertLeave * set cc=]],
-	[[VimResized * wincmd =]],
+	-- [[VimResized * wincmd =]],
+	[[VimResized * call UpdateWindowOptions()]],
 }, true)
 
 -- FIXME: починить highlight объявления текущего keyword Tree-Sitter'ом в diff режиме
@@ -128,6 +134,16 @@ function! CheckBackSpace()
 	let col = col('.') - 1
 	return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+function! UpdateWindowOptions()
+	if &columns < 200
+		set diffopt-=vertical
+		set diffopt+=horizontal
+	else
+		set diffopt-=horizontal
+		set diffopt+=vertical
+	endif
+endfunction
 ]], false)
 
 -- Подсветка разделителей в конфликтах.
@@ -141,7 +157,9 @@ end
 
 
 -- Дополнение <C-L> очисткой поиска и апдейтом диффа.
-map('n', '<C-L>', ':noh<C-R>=has("diff")?"<Bar>diffupdate":""<CR><CR><C-L>')
+if fn.has('nvim-0.6') == 0 then
+	map('n', '<C-L>', ':noh<C-R>=has("diff")?"<Bar>diffupdate":""<CR><CR><C-L>')
+end
 
 -- Переключение langmap на <C-^> и <BS>, по аналогии с <i_C-^>.
 -- Смена файла по <C-H> вмето <C-^>.
@@ -157,6 +175,15 @@ map('n', '<C-G><C-W>', ':echo nvim_treesitter#statusline(<C-R>=&columns<CR>)<CR>
 
 -- Закрытие tabpage
 map('n', '<C-W><S-c>', '<Cmd>tabclose<CR>')
+
+-- Y работающий как D, т.е. с текущего символа и до конца строки.
+if fn.has('nvim-0.6') == 0 then
+	map('n', 'Y', 'y$')
+end
+
+-- Центрирование при поиске.
+map('n', 'n', 'nzzzv')
+map('n', 'N', 'Nzzzv')
 
 -- Переключение по элементам списка QuickFix.
 map('n', '[q', '<Cmd>cp<CR>')

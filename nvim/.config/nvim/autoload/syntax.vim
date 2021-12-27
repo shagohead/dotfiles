@@ -101,8 +101,8 @@ function! syntax#update_colors()
   hi! link Comment Special
 
   let l:error_fg = syntax#get_color('ErrorMsg', 'fg', 'gui')
-  exec 'hi LspDiagnosticsDefaultError guifg='.l:error_fg
-  exec 'hi LspDiagnosticsUnderlineError cterm=undercurl gui=undercurl guisp='.l:error_fg
+  exec 'hi DiagnosticsError guifg='.l:error_fg
+  exec 'hi DiagnosticsUnderlineError cterm=undercurl gui=undercurl guisp='.l:error_fg
 
   hi DiffAdd guifg=NONE
   hi DiffChange guifg=NONE
