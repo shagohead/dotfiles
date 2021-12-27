@@ -76,6 +76,8 @@ let mapleader="\<Space>"
 let maplocalleader="\<Space>"
 
 " Поведение UI.
+set splitbelow
+set splitright
 set scrolloff=1
 set laststatus=2
 set numberwidth=2
