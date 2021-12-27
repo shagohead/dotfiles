@@ -2,14 +2,16 @@
     editor = nvim
     filemode = false
     excludesfile = ~/.gitignore_global
-    pager = delta --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
+    ; pager = delta --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
+    pager = delta --light
 
 [delta]
     features = line-numbers
     navigate = true
 
 [interactive]
-    diffFilter = delta --color-only --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
+    ; diffFilter = delta --color-only --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
+    diffFilter = delta --light
 
 [alias]
     che = checkout
@@ -22,14 +24,14 @@
     loggg = logg --graph
 
     pwd = !cd -- ${GIT_PREFIX:-.}; pwd
-    mr-files = !cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative --name-only \"$MERGE_BASE\"
-    mr-stat = !cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative --stat \"$MERGE_BASE\"
-    mr-log = !git log $(git merge-base \"$MERGE_BASE\" HEAD)..HEAD
-    mr-review = !nvim -p $(git mr-files) +\"let g:gitgutter_diff_base = '$(git merge-base \"$MERGE_BASE\" HEAD)'\" +\"tabdo Gdiffsplit $(git merge-base \"$MERGE_BASE\" HEAD)\"
+    mr-files = !cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative --name-only \"$MERGE_TARGET\"
+    mr-stat = !cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative --stat \"$MERGE_TARGET\"
+    mr-log = !git log $(git merge-base \"$MERGE_TARGET\" HEAD)..HEAD
+    mr-review = !nvim -p $(git mr-files) +\"let g:gitgutter_diff_base = '$(git merge-base \"$MERGE_TARGET\" HEAD)'\" +\"tabdo Gdiffsplit $(git merge-base \"$MERGE_TARGET\" HEAD)\"
 
     re = rebase
     re-develop = rebase -i develop
-    re-feature = !git rebase -i $(git merge-base \"$MERGE_BASE\" HEAD)
+    re-feature = !git rebase -i $(git merge-base \"$MERGE_TARGET\" HEAD)
     re-continue = rebase --continue
 
 [merge]
