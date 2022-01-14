@@ -21,8 +21,10 @@ function update_all --description 'Update all packages'
         end
 
         if test $option_provided -eq 0; or contains -- -b $argv; or contains -- --brew $argv
-            _colored_echo "Updating Homebrew "
-            brew update
+            if command -sq brew
+                _colored_echo "Updating Homebrew "
+                brew update
+            end
         end
 
         if test $option_provided -eq 0; or contains -- --git $argv
@@ -33,25 +35,37 @@ function update_all --description 'Update all packages'
         end
 
         if test $option_provided -eq 0; or contains -- --go $argv
-            _colored_echo "Updating go packages "
-            env GO111MODULE=on go get -u github.com/rakyll/hey golang.org/x/lint/golint golang.org/x/tools/cmd/gopls@latest
-	    go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
+            if command -sq go
+                _colored_echo "Updating go packages "
+                go install github.com/rakyll/hey@latest
+                go install golang.org/x/lint/golint@latest
+                go install golang.org/x/tools/cmd/gopls@latest
+                go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
+            end
         end
 
         if test $option_provided -eq 0; or contains -- -n $argv; or contains -- --npm $argv
-            _colored_echo "Updating global npm packages "
-            npm -g update
+            if command -sq npm
+                _colored_echo "Updating global npm packages "
+                npm -g update
+            end
         end
 
         if test $option_provided -eq 0; or contains -- -p $argv; or contains -- --pipx $argv
-            _colored_echo "Upgrading pipx packages "
-            pipx upgrade-all
+            if command -sq pipx
+                _colored_echo "Upgrading pipx packages "
+                pipx upgrade-all
+            end
         end
 
         if test $option_provided -eq 0; or contains -- -f $argv; or contains -- --fish $argv
-            _colored_echo "Upgrading fish packages "
-            fisher update
-            poetry completions fish > ~/.config/fish/completions/poetry.fish
+            if command -sq fisher
+                _colored_echo "Upgrading fish packages "
+                fisher update
+            end
+            if command -sq poetry
+                poetry completions fish > ~/.config/fish/completions/poetry.fish
+            end
         end
     end
 
