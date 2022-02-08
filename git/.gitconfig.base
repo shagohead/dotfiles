@@ -3,7 +3,7 @@
     filemode = false
     excludesfile = ~/.gitignore_global
     ; pager = delta --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
-    pager = delta --light
+    pager = delta; --light
 
 [delta]
     features = line-numbers
@@ -11,7 +11,7 @@
 
 [interactive]
     ; diffFilter = delta --color-only --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
-    diffFilter = delta --light
+    diffFilter = delta; --light
 
 [alias]
     che = checkout
@@ -23,10 +23,16 @@
     logg = log --abbrev-commit --decorate --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
     loggg = logg --graph
 
-    pwd = !cd -- ${GIT_PREFIX:-.}; pwd
+    ; Пример использования: git squash N
+    squash = "!f(){ git reset --soft HEAD~${1} && git commit --edit -m\"$(git log --format=%B --reverse HEAD..HEAD@{1})\"; };f"
+
+    ; Переменная MERGE_TARGET содержит имя ветки для слияния
+    mr-log = !"git log HEAD...$MERGE_TARGET"
+    mr-rlog = !"git mr-log --reverse | awk '/commit/{printf \"\\n\"; printf substr($2, 0, 8)}/    [A-ZА-Я]/{printf substr($0, 4)}'"
+    mr-author = !"git show -s --format='%an <%ae>' $(git mr-log --reverse | head -1 | awk '{print $2}')"
+    mr-squash = !"COMMIT=$(git mr-rlog) && AUTHOR=$(git mr-author) && git reset --soft $(git merge-base $MERGE_TARGET HEAD) && git commit --edit --author=\"$AUTHOR\" --message=\".\n\n$COMMIT\""
     mr-files = !cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative --name-only \"$MERGE_TARGET\"
     mr-stat = !cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative --stat \"$MERGE_TARGET\"
-    mr-log = !git log $(git merge-base \"$MERGE_TARGET\" HEAD)..HEAD
     mr-review = !nvim -p $(git mr-files) +\"let g:gitgutter_diff_base = '$(git merge-base \"$MERGE_TARGET\" HEAD)'\" +\"tabdo Gdiffsplit $(git merge-base \"$MERGE_TARGET\" HEAD)\"
 
     re = rebase
@@ -36,7 +42,7 @@
 
 [merge]
     tool = nvim-fugitive
-    ; conflictstyle = diff3
+    conflictstyle = diff3
 
 [mergetool]
     prompt = true
