@@ -1,6 +1,13 @@
-# Dotfiles
+# My dotfiles
 
 Files in subdirs can be easly managed with GNU Stow.
+
+## TODO
+
+- [ ] nvim DAP (для python pdb и delve)
+- [ ] delta cterm color scheme (чтобы цвета delta зависели от текущей темы терминала)
+- [ ] nvim netrw с tpope/vim-vinegar (https://shapeshed.com/vim-netrw/)
+- [ ] [SQLS](https://github.com/lighttiger2505/sqls) (SQL LSP) & [nvim plugin](https://github.com/nanotee/sqls.nvim):
 
 
 # Installation
@@ -31,7 +38,7 @@ tmux plugin manager:
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
-(neo)vim plugin manager:
+vim plugin manager:
 
 ```
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
@@ -41,7 +48,7 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 some usefull stuff:
 
 ```
-brew install bat fd fzf ripgrep telnet shellcheck hadolint
+brew install bat fd fzf ripgrep telnet shellcheck hadolint glow
 git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
 ```
 
