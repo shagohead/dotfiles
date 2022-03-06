@@ -1,64 +1,81 @@
-[core]
-    editor = nvim
-    filemode = false
-    excludesfile = ~/.gitignore_global
-    ; pager = delta --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
-    pager = delta; --light
+; git config --global include.path ~/.gitconfig.base
 
-[delta]
-    features = line-numbers
-    navigate = true
+[core]
+    excludesfile = ~/.gitignore_global
+    filemode = false
+
+    ; Внешние инструменты.
+    editor = nvim; https://neovim.io
+    pager = delta; https://dandavison.github.io/delta/
+
+[init]
+	defaultBranch = master
+
+[pull]
+    rebase = true
 
 [interactive]
-    ; diffFilter = delta --color-only --$(defaults read -globalDomain AppleInterfaceStyle &> /dev/null && echo dark || echo light)
-    diffFilter = delta; --light
+    diffFilter = delta --color-only
 
-[alias]
-    che = checkout
-    che-dev = checkout develop
-    stat = status --short --branch
-    latesttag = describe --abbrev=0 --tags
-    branches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
-
-    logg = log --abbrev-commit --decorate --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
-    loggg = logg --graph
-
-    ; Пример использования: git squash N
-    squash = "!f(){ git reset --soft HEAD~${1} && git commit --edit -m\"$(git log --format=%B --reverse HEAD..HEAD@{1})\"; };f"
-
-    ; Переменная MERGE_TARGET содержит имя ветки для слияния
-    mr-log = !"git log HEAD...$MERGE_TARGET"
-    mr-rlog = !"git mr-log --reverse | awk '/commit/{printf \"\\n\"; printf substr($2, 0, 8)}/    [A-ZА-Я]/{printf substr($0, 4)}'"
-    mr-author = !"git show -s --format='%an <%ae>' $(git mr-log --reverse | head -1 | awk '{print $2}')"
-    mr-squash = !"COMMIT=$(git mr-rlog) && AUTHOR=$(git mr-author) && git reset --soft $(git merge-base $MERGE_TARGET HEAD) && git commit --edit --author=\"$AUTHOR\" --message=\".\n\n$COMMIT\""
-    mr-files = !cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative --name-only \"$MERGE_TARGET\"
-    mr-stat = !cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative --stat \"$MERGE_TARGET\"
-    mr-review = !nvim -p $(git mr-files) +\"let g:gitgutter_diff_base = '$(git merge-base \"$MERGE_TARGET\" HEAD)'\" +\"tabdo Gdiffsplit $(git merge-base \"$MERGE_TARGET\" HEAD)\"
-
-    re = rebase
-    re-develop = rebase -i develop
-    re-feature = !git rebase -i $(git merge-base \"$MERGE_TARGET\" HEAD)
-    re-continue = rebase --continue
+[diff]
+    tool = nvim-fugitive
+    colorMoved = default
 
 [merge]
     tool = nvim-fugitive
     conflictstyle = diff3
 
-[mergetool]
-    prompt = true
-    keepBackup = false
-[mergetool "nvim"]
-    cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-[mergetool "nvim-fugitive"]
-    cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
-[mergetool "vim-fugitive"]
-    cmd = vim -f -c \"Gdiffsplit!\" \"$MERGED\"
-
-[diff]
-    tool = nvim-fugitive
-
 [difftool]
     prompt = false
 
-[pull]
-    rebase = true
+[mergetool]
+    prompt = true
+    keepBackup = false
+
+[mergetool "nvim"]
+    cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[mergetool "nvim-fugitive"]
+    cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+
+[mergetool "vim-fugitive"]
+    cmd = vim -f -c \"Gdiffsplit!\" \"$MERGED\"
+
+[delta]
+    features = line-numbers
+    navigate = true
+
+    ; Оформление диффа, использующее цвета из палитры ANSI,
+    ; для независимости от выбранной цветовой схемы.
+    minus-style = syntax 18 strike
+    minus-emph-style = syntax 18 strike bold ul
+    plus-style = syntax 18
+    plus-emph-style = syntax 18 bold ul
+
+[alias]
+    che = checkout
+
+    ; Шорткаты для форматированного вывода.
+    branches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+
+    logg = log --abbrev-commit --decorate --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
+    loggg = logg --graph
+
+    ; Реверсивный log для добавления его в commit message.
+    ; Принимает позиционным аргументом ref. log будет строиться от merge-base этого ref и HEAD.
+    ; Таким образом можно получить коммиты, которые были сделаны в текущей ветке относительно ref.
+    rlog = !"f() { git log $(git merge-base HEAD $1)..HEAD --reverse | awk '/commit/{printf \"\\n\"; printf substr($2, 0, 8)}/    [A-ZА-Я]/{printf substr($0, 4)}'; }; f"
+
+    ; Автор первого коммита в текущей ветке относительно $1.
+    author = !"f() { git show -s --format='%an <%ae>' $(git log $(git merge-base HEAD $1)..HEAD --reverse | head -1 | awk '{print $2}'); }; f"
+
+    ; Объединение коммитов ветки, сделанных после merge-base от HEAD и $1.
+    squash = !"f() { COMMIT=$(git rlog $1) && AUTHOR=$(git author $1) && git reset --soft $(git merge-base HEAD $1) && git commit --edit --author=\"$AUTHOR\" --message=\".\n\n$COMMIT\"; }; f"
+
+    ; diff относительно текущей директории, сравнивающий HEAD с merge-base от HEAD и $1. Примеры:
+    ; git mdiff develop --stat (статистика по изменениям файлов в этой директории относительно develop)
+    ; git mdiff develop --name-only (тоже самое, но только список файлов, который можно передать куда-нибудь)
+    mdiff = !"f() { cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative ${@:1}; }; f"
+
+    ; Запускает редактор с табами измененных файлов и переменной окружения, указывающей на merge-base.
+    review = !"f() { DIFF_BASE=$(git merge-base HEAD $1) nvim $(git mdiff $1 --name-only) -p; }; f"

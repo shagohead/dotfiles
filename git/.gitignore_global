@@ -5,16 +5,18 @@
 .exrc
 .nvimrc
 .python-version
+.tags
 Session.vim
 tags
 
+.backups/
 .mypy_cache/
 .pytype/
+.sql/
 .stash/
 .venv/
 .vim/
 .vscode/
-.backups/
 __pycache__/
 
 /.env.development
