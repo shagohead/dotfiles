@@ -1,0 +1,8 @@
+keymap C-f NEXT_PAGE
+keymap C-b PREV_PAGE
+keymap C-e UP
+keymap C-y DOWN
+keymap C-o BACK
+keymap , OPTIONS
+keymap o GOTO_LINK
+keymap b PREV_WORD
