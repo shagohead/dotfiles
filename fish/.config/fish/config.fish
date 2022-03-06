@@ -7,9 +7,10 @@ if test -n "$ALACRITTY_LOG"
 end
 
 # editors
-set -x EDITOR vi -e
+set -x EDITOR vi
 set -x VISUAL nvim
 set -x LS_COLORS ''
+set -x MANPAGER 'nvim +Man!'
 
 # language
 set -x LANG en_US.UTF-8
@@ -19,7 +20,7 @@ set -x LC_CTYPE en_US.UTF-8
 set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
 set -x PYENV_SHELL fish
-set -x PYTEST_ADDOPTS -x --reuse-db --pdb \
+set -x PYTEST_ADDOPTS -x --reuse-db \
 --pdbcls=IPython.terminal.debugger:TerminalPdb
 
 # GO development
@@ -27,9 +28,6 @@ set -q GOPATH; or set -xU GOPATH $HOME/go
 
 # PATH
 set -gx PATH $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims $HOME/yandex-cloud/bin $PATH
-
-# Git merge-base for reviewing
-set -gx MERGE_TARGET develop
 
 ################
 # Tools config #
@@ -97,7 +95,7 @@ if status --is-interactive
     abbr -a gco git checkout
     abbr -a gd git diff
     abbr -a gm git merge-base
-    abbr -a gs git status
+    abbr -a gs git -p status
     abbr -a kc kubectl
     abbr -a l ls -la
     abbr -a psaux 'ps aux | head -1 && ps aux | grep -v grep | grep'

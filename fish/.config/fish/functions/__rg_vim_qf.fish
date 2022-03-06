@@ -1,4 +1,4 @@
-function __rg_vim_qf -d "Wraps current rg command to populate nvim ($EDITOR) quickfix list"
+function __rg_vim_qf -d "Обрамляет текущий вызов rg для передачи его в nvim ($EDITOR) список quickfix"
     set -l cmd vim
     if set -q VISUAL; and string match -r '.?vim' $VISUAL 1>/dev/null
         echo $VISUAL | read -at cmd
@@ -22,6 +22,6 @@ function __rg_vim_qf -d "Wraps current rg command to populate nvim ($EDITOR) qui
 
     if commandline -j | string match -q -r -v -- "$cmd .*\$"
         set -l job (commandline -j)
-        commandline -rj -- "nvim -q ($job)"
+        commandline -rj -- "nvim -q ($job) +copen"
     end
 end

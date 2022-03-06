@@ -40,6 +40,8 @@ function update_all --description 'Update all packages'
                 go install github.com/rakyll/hey@latest
                 go install golang.org/x/lint/golint@latest
                 go install golang.org/x/tools/cmd/gopls@latest
+                go install github.com/lighttiger2505/sqls@latest
+                go install github.com/go-delve/delve/cmd/dlv@latest
                 go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
             end
         end
