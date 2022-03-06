@@ -43,7 +43,7 @@ Plug 'ryanoasis/vim-devicons'
 " ctrl.p?
 
 Plug 'dstein64/vim-startuptime', {'on': ['StartupTime']}
-let g:startuptime_tries=10
+let g:startuptime_tries = 20
 
 Plug 'liuchengxu/vim-which-key', {'on': ['WhichKey', 'WhichKey!']}
 
@@ -53,7 +53,6 @@ call plug#end()
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " Взаимодействие с файловой системой.
-set autoread
 set path+=**
 set grepprg=rg\ --vimgrep
 set wildignore+=*.pyc
@@ -72,8 +71,8 @@ set iminsert=0
 set completeopt=menuone,noinsert,noselect,preview
 set concealcursor=nc
 " set imsearch=0
-let mapleader="\<Space>"
-let maplocalleader="\<Space>"
+let mapleader = "\<Space>"
+let maplocalleader = "\<Space>"
 
 " Поведение UI.
 set splitbelow
@@ -137,7 +136,7 @@ endfunction
 
 " Применение цветовой схемы терминала из base16-shell.
 if filereadable(expand("~/.vimrc_background"))
-  let base16colorspace=256
+  let base16colorspace = 256
   source ~/.vimrc_background
 endif
 
