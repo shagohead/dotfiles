@@ -53,12 +53,9 @@ mouse:
 # xxd -ps -c1
 
 key_bindings:
-  # Control + ^
+  # Control + ^ (Shift-6) для VIM
+  - { key: Back, mods: Command, chars: "\x1e" }
   - { key: Key6, mods: Control|Shift, chars: "\x1e" }
-
-  - key: Back
-    mods: Command
-    chars: "\x1e"
 
   # Switch to next tmux pane (o)
   - { key: O, mods: Command|Shift, chars: "\x13\x6f" }
@@ -129,13 +126,11 @@ key_bindings:
     #   program: "/usr/local/bin/tmux"
     #   args: ["new-window", "-ntranslate", "trans -d -I"]
 
-  # (NEO)VIM related bindings
-  - { key: J, mods: Alt, chars: "8j" }
-  - { key: K, mods: Alt, chars: "8k" }
+  # Vim related bindings
   - { key: W, mods: Command, chars: ":q\x0d" }
   - { key: S, mods: Command, chars: ":w\x0d" }
 
-  # word navigation
+  # Word navigation
   - { key: Left, mods: Alt, chars: "\x1bb" }
   - { key: Right, mods: Alt, chars: "\x1bf" }
 
@@ -149,8 +144,8 @@ key_bindings:
   - { key: G, mods: Alt, chars: "\x1bg" }
   - { key: H, mods: Alt, chars: "\x1bh" }
   - { key: I, mods: Alt, chars: "\x1bi" }
-# - { key: J, mods: Alt, chars: "\x1bj" }
-# - { key: K, mods: Alt, chars: "\x1bk" }
+  - { key: J, mods: Alt, chars: "\x1bj" }
+  - { key: K, mods: Alt, chars: "\x1bk" }
   - { key: L, mods: Alt, chars: "\x1bl" }
   - { key: M, mods: Alt, chars: "\x1bm" }
   - { key: N, mods: Alt, chars: "\x1bn" }
