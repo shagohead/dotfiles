@@ -1,8 +1,10 @@
-rafaelrinaldi/pure
-decors/fish-colored-man
 brgmnn/fish-docker-compose
-oh-my-fish/plugin-gi
+decors/fish-colored-man
+jethrokuan/fzf
 jethrokuan/z
 jorgebucaran/fish-nvm
+jorgebucaran/fisher
+jorgebucaran/hydro
+oh-my-fish/plugin-gi
 franciscolourenco/done
-jethrokuan/fzf
+evanlucas/fish-kubectl-completions
