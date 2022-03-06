@@ -22,5 +22,4 @@
 #     fd -E 'jedi/' -E 'mypy*' '.py$' $site_packages
 # end
 
-# # TODO js & node_modules
 fd -E 'jedi/' -E 'mypy*' -e py -I -H
