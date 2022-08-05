@@ -1,3 +1,27 @@
+# Base16 cterm colors
+set -l base00 '00'
+set -l base01 '18'
+set -l base02 '19'
+set -l base03 '08'
+set -l base04 '20'
+set -l base05 '07'
+set -l base06 '21'
+set -l base07 '15'
+set -l base08 '01'
+set -l base09 '16'
+set -l base0A '03'
+set -l base0B '02'
+set -l base0C '06'
+set -l base0D '04'
+set -l base0E '05'
+set -l base0F '17'
+# '09'='01' base08 - Bright Red
+# '10'='02' base0B - Bright Green
+# '11'='03' base0A - Bright Yellow
+# '12'='04' base0D - Bright Blue
+# '13'='05' base0E - Bright Magenta
+# '14'='06' base0C - Bright Cyan
+
 #################
 # Common config #
 #################
@@ -6,13 +30,12 @@ if test -n "$ALACRITTY_LOG"
     set -x TERM alacritty
 end
 
-# editors
 set -x EDITOR vi
 set -x VISUAL nvim
 set -x LS_COLORS ''
-set -x MANPAGER 'nvim +Man!'
+set -x PAGER less -R
+set -x MANPAGER 'less -R --use-color -Dd+b -Du+g'
 
-# language
 set -x LANG en_US.UTF-8
 set -x LC_CTYPE en_US.UTF-8
 
@@ -20,14 +43,13 @@ set -x LC_CTYPE en_US.UTF-8
 set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
 set -x PYENV_SHELL fish
-set -x PYTEST_ADDOPTS -x --reuse-db \
---pdbcls=IPython.terminal.debugger:TerminalPdb
+set -x PYTEST_ADDOPTS --reuse-db --pdbcls=IPython.terminal.debugger:TerminalPdb
 
 # GO development
 set -q GOPATH; or set -xU GOPATH $HOME/go
 
 # PATH
-set -gx PATH $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims $HOME/yandex-cloud/bin $PATH
+set -gx PATH $HOME/.local/bin $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims $HOME/yandex-cloud/bin $PATH
 
 ################
 # Tools config #
@@ -39,22 +61,18 @@ set -q HOMEBREW_GITHUB_API_TOKEN; or echo 'set -xU HOMEBREW_GITHUB_API_TOKEN ...
 # https://support.apple.com/ru-ru/HT208050
 set -x BASH_SILENCE_DEPRECATION_WARNING 1
 
-# base16
-set BASE16_SHELL $HOME/.config/base16-shell/
-
 # bat
 set -x BAT_STYLE plain
 set -x BAT_THEME base16-256
 
-# fzf
-set -l _fzf_colors fg:7,fg+:7,bg:0,bg+:0,hl:6,hl+:6,\
-info:2,prompt:1,pointer:12,marker:4,spinner:11,header:6
-# FIXME: add preview-window=up supported by vim
-set -l _fzf_common_opts --bind=ctrl-d:half-page-down,ctrl-u:half-page-up \
---history=$HOME/.fzf_history --color=dark --color=$_fzf_colors
-set -x FZF_DEFAULT_OPTS --reverse --height=$FZF_TMUX_HEIGHT $_fzf_common_opts
-set -l _fzf_bind_select --bind=alt-enter:select-all,alt-bs:deselect-all
-set -x FZF_NVIM_OPTS (string join -- ' ' $_fzf_common_opts $_fzf_bind_select)
+# FZF
+set -Ux FZF_DEFAULT_OPTS \
+" --color=bg+:$base01,bg:$base00,spinner:$base0C,hl:$base0D"\
+" --color=fg:$base04,header:$base0D,info:$base0A,pointer:$base0C"\
+" --color=marker:$base0C,fg+:$base06,prompt:$base0A,hl+:$base0D"\
+" --bind=ctrl-d:half-page-down,ctrl-u:half-page-up"\
+" --bind=alt-enter:select-all,alt-bs:deselect-all"\
+" --history=$HOME/.fzf_history"
 set -x FZF_DEFAULT_COMMAND fd --no-ignore --hidden --follow --exclude .git
 # https://github.com/jethrokuan/fzf#commands
 set -x FZF_FIND_FILE_COMMAND $FZF_DEFAULT_COMMAND
@@ -79,12 +97,13 @@ if status --is-interactive
     # quickfix-wrapped ripgrep call
     bind \er __rg_vim_qf
 
-    # complete from tmux buffer
-    bind \cx 'commandline -i (fzf-complete-from-tmux.sh) 2>/dev/null'
-
     # change key bindings while typing
     bind \cv toggle_key_bindings
     bind -M insert \cv toggle_key_bindings
+
+    # Замена \cs который занят prefix'ом для tmux
+    # bind -e --preset \cs
+    # bind \cg pager-toggle-search
 
     # abbreviations
     abbr -a dc docker-compose
@@ -95,13 +114,8 @@ if status --is-interactive
     abbr -a gco git checkout
     abbr -a gd git diff
     abbr -a gm git merge-base
-    abbr -a gs git -p status
+    abbr -a gs tig status
     abbr -a kc kubectl
     abbr -a l ls -la
     abbr -a psaux 'ps aux | head -1 && ps aux | grep -v grep | grep'
-    abbr -a neovide '~/Sources/opensource/neovide/target/release/neovide --geometry 100x40'
-
-    if test -e ~/.base16_theme
-	sh ~/.base16_theme
-    end
 end

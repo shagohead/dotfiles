@@ -1,0 +1,154 @@
+#!/bin/bash
+# Установка и обновление пакетов.
+
+# TODO: Опциональные зависимости для разработки под разные языки
+# т.е. возможность отключить установку каких-то пакетов.
+
+while getopts "c" options; do
+  case "${options}" in
+    c)
+      CONFIGURE=true
+      ;;
+  esac
+done
+
+set -e
+echo "Установка и обновление инструментов командной строки."
+default_icon=">"
+
+cecho ()
+{
+  if [ $# -eq 2 ]; then
+    COLOR=$1
+    TEXT=$2
+  else
+    COLOR=2
+    TEXT=$1
+  fi
+  echo -e "$(tput setaf $COLOR)$icon$(tput sgr0)  $(tput bold)$TEXT$(tput sgr0)"
+}
+
+configure ()
+{
+  icon_back=$icon
+  icon=""
+  cecho 3 "git: конфигурация"
+  git config --global include.path "$HOME/.gitconfig.base"
+  git config --global user.name shagohead
+  git config --global user.email html.ru@gmail.com
+
+  KITTY_PATH="$HOME/.config/kitty"
+  KITTY_CONF="$HOME/kitty.conf"
+  if [ -f $KITTY_CONF ]; then
+    icon=""
+    cecho 3 "kitty: конфигурация"
+    if ! grep -q "include custom.conf" $KITTY_CONF; then
+      echo "include custom.conf" >> $KITTY_CONF
+    fi
+    if ! grep -q "include current-theme.conf" $KITTY_CONF; then
+      cp "$KITTY_PATH/themes/base16-mexico-light.conf" "$KITTY_PATH/current-theme.conf"
+      echo "include current-theme.conf" >> $KITTY_CONF
+    fi
+  fi
+
+  icon=""
+  cecho 3 "fish: конфигурация"
+  FISH_CONFIG_COMMAND="
+  set fish_color_normal normal
+  set fish_color_command blue
+  set fish_color_param normal
+  set fish_color_quote green
+  set fish_color_redirection brmagenta
+  set fish_color_error red
+  set fish_color_end magenta
+  set fish_color_comment brblack
+  set fish_color_match --background=cyan
+  set fish_color_selection green
+  set fish_color_search_match --background=brblack
+  set fish_color_operator magenta
+  set fish_color_escape magenta
+  set fish_color_cwd brblue
+  set fish_color_autosuggestion -d
+  set fish_color_user brcyan
+  set fish_color_host brblue
+  set fish_color_cancel brred
+
+  set fish_pager_color_prefix white --underline
+  set fish_pager_color_description bryellow
+  set fish_pager_color_progress brcyan"
+  fish -c "$FISH_CONFIG_COMMAND"
+  icon=$icon_back
+}
+
+icon=""
+if ! which -s brew; then
+  sudo -v  # Для последующей установки fish в роли shell по-умолчанию.
+  cecho "Homebrew: установка"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  brew bundle
+  stow dotfiles
+  if ! grep -q /usr/local/bin/fish /etc/shells; then
+    sudo echo "/usr/local/bin/fish" >> /etc/shells
+    sudo chsh -s /usr/local/bin/fish
+  fi
+  configure
+
+  icon_back=$icon
+
+  icon=""
+  declare -a PIPX_PACKAGES=(
+    black
+    flake8
+    httpie
+    http-prompt
+    ipython
+    isort
+    johnnydep
+    poetry
+  )
+  cecho "pipx: установка пакетов"
+  for i in "${PIPX_PACKAGES[@]}"; do
+    pipx install $i
+  done
+
+  icon=""
+  declare -a GO_PACKAGES=(
+    golang.org/x/tools/gopls
+    github.com/go-delve/delve/cmd/dlv
+    github.com/kyleconroy/sqlc/cmd/sqlc
+  )
+  cecho "go: установка пакетов"
+  for i in "${PIPX_PACKAGES[@]}"; do
+    go install "${i}@latest"
+  done
+
+  icon=$icon_back
+else
+  if [ $CONFIGURE ]; then
+    configure
+  fi
+  cecho "Homebrew: обновление пакетов"
+  brew update
+  brew upgrade
+fi
+
+icon=""
+if ! fish -c "type -q fisher"; then
+  cecho "fisher: установка"
+  curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
+fi
+
+cecho "fisher: обновление пакетов"
+fish -c "fisher update"
+
+icon=""
+declare -a NPM_PACKAGES=(
+  bash-language-server
+  dockerfile-language-server-nodejs
+  neovim
+  pyright
+  typescript-language-server
+  vim-language-server
+)
+cecho "npm: установка и обновление пакетов ${NPM_PACKAGES[@]}"
+npm -g i ${NPM_PACKAGES[@]}

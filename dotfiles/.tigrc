@@ -1,0 +1,8 @@
+# TODO: Сменить маппинги всех команд, имеющих альтернативу в vim-fugitive
+bind generic s none
+bind status s status-update
+bind stage s status-update
+bind status ! none
+bind stage ! none
+bind status X status-revert
+bind stage X status-revert

@@ -1,0 +1,2 @@
+# curl https://raw.githubusercontent.com/Homebrew/homebrew-bundle/master/README.md 2>/dev/null | bat -l md
+glow https://raw.githubusercontent.com/Homebrew/homebrew-bundle/master/README.md

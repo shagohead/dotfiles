@@ -1,170 +1,82 @@
-lua require('plugins')
+" Author: Vakhmin Anton <html.ru@gmail.com>
+lua require('config.plugins')
+exe 'augroup vimrc'
+autocmd!
 
-" Взаимодействие с файловой системой.
-set noautoread
-set path+=**
-set grepprg=rg\ --vimgrep
-set wildignore+=*.pyc
+" Чтение и запись {{{
+
 set undofile
 
-" Ввод.
-set linebreak
+" }}}
+" Поиск файлов {{{
+
+set path+=**
+set wildignore+=*.pyc
+set grepprg=rg\ --vimgrep
+
+" }}}
+" Поиск по буферу {{{
+
 set smartcase
 set ignorecase
-set keymap=russian-jcukenmac
-set iminsert=0
-set completeopt=menuone,noinsert,noselect,preview
-set concealcursor=c
-let mapleader = ' '
-let maplocalleader = ' '
 
-" Поведение UI.
-set splitbelow
-set splitright
-set scrolloff=1
-set numberwidth=2
-set updatetime=250
-set mouse=a
-set guifont=Iosevka\ Nerd\ Font:h14
-set spelllang=ru_yo,en_us
-set foldmethod=indent
-set foldlevelstart=99
-set diffopt+=foldcolumn:0
-if winwidth(0) < 200
-  set diffopt-=vertical
-  set diffopt+=horizontal
-else
-  set diffopt-=horizontal
-  set diffopt+=vertical
-endif
+" }}}
+" Окна {{{
 
-" Разбивка строки.
-if has('patch-7.4.338')
-	set breakindent
-	set breakindentopt=sbr
-	let &showbreak = nr2char(8618).' ' " ↪ вначале разбитой строки
-endif
-
-" Заголовок окна.
 set title
 set titlestring=%t%(\ %M%)%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
 
-" Провайдеры Python.
-" let g:loaded_python_provider = 0 FIXME: понять надо ли это тут (проверить
-" запуск вима с питоновскими файлами и без)
-if empty(glob(expand('~/.pyenv/virtualenvs/pynvim/bin/python3'))) == 0
-  let g:python3_host_prog = '~/.pyenv/virtualenvs/pynvim/bin/python3'
-else
-  let g:loaded_python3_provider = 0
-end
+" }}}
+" Ввод {{{
 
-" Отключение неиспользуемых встроенных модулей.
-let s:disabled_built_ins = ['gzip', 'matchit', 'matchparen', 'shada_plugin', 'tar', 'tarPlugin', 'zip', 'zipPlugin']
-for n in s:disabled_built_ins
-	exec 'let g:loaded_'.n.' = 1'
-endfor
+let mapleader = ' '
+let maplocalleader = ' '
 
-sign define DiagnosticSignError text= texthl=DiagnosticSignError
-sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn
-sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo
-sign define DiagnosticSignHint text= texthl=DiagnosticSignHint
+set mouse=a
+set completeopt=menuone,noinsert,noselect,preview
 
-" Автокоманды и функции для них.
-augroup vimrc
-	autocmd!
-	au BufNewFile,BufRead flake8,pycodestyle setf dosini
-	au BufNewFile,BufRead .gitconfig.* setf gitconfig
-	au BufNewFile,BufRead *init*.lua nmap K <Cmd>execute "help ".expand("<cword>")<CR>
-	au ColorScheme * call UpdateColors()
-	au FileType fish setlocal cms=#\ %s
-	au FileType fish,gitconfig,sql setlocal ts=4 sw=4 sts=4 et
-	au FileType go setlocal noet fo+=ro nowrap
-	au FileType GV nmap <buffer> o .show<CR>
-	au FileType go,html,htmldjango,javascript,lua,markdown,yaml,vim setlocal ts=2 sw=2 sts=2
-	au FileType lua,vim setlocal nowrap
-	au FileType lua,vim nmap <buffer> <Leader>G <Cmd>execute "!open https://github.com/".expand("<cfile>")<CR>
-	au FileType markdown nmap <buffer> <Leader>J <Cmd>execute "!open https://j.jetstyle.in/browse/".expand("<cWORD>")<CR>
-	au FileType markdown nmap <buffer> <Leader>M <Cmd>execute "!open https://gitlab.jetstyle.in/jetstyle/nti/talent-backend/-/merge_requests/".expand("<cword>")<CR>
-	au FileType markdown setlocal fo-=l fo+=o
-	au FileType python setlocal dict+=~/.config/nvim/dictionary/python fo-=t fo+=ro tw=88
-	au FileType sql nmap <buffer> <Leader>= <Cmd>%!pg_format<CR>
-	au FileType sql nmap <buffer> <CR> <Cmd>%DB<CR>
-	au FileType sql xmap <buffer> <CR> <Cmd>'<,'>DB<CR>
-	au FileType sql setlocal cms=--\ %s
-	au InsertEnter * set cc=+1
-	au InsertLeave * set cc=
-	au VimEnter * call BindDiffSplit()
-	au VimResized * call UpdateWindowOptions()
-augroup END
-
-function! BindDiffSplit()
-	if len($DIFF_BASE)
-		nmap <Leader>d :exec ':Gdiffsplit '.$DIFF_BASE<CR>
-		command! -nargs=0 DiffBaseSplit execute ':Gdiffsplit '.$DIFF_BASE
-	endif
-endfunction
-
-function! UpdateColors()
-  hi DiffAdd ctermfg=NONE guifg=NONE
-  hi DiffChange ctermfg=NONE guifg=NONE
-  hi DiffText ctermfg=NONE guifg=NONE
-  hi Folded ctermbg=NONE guibg=NONE
-  hi GitGutterAdd ctermbg=NONE guibg=NONE
-  hi GitGutterChange ctermbg=NONE guibg=NONE
-  hi GitGutterDelete ctermbg=NONE guibg=NONE
-  hi SignColumn ctermbg=NONE guibg=NONE
-  hi TabLine ctermbg=NONE guibg=NONE
-  hi TabLineFill ctermbg=NONE guibg=NONE
-  hi TabLineSel ctermbg=NONE guibg=NONE
-	hi TSDefinition cterm=reverse
-	hi VertSplit ctermbg=NONE guibg=NONE
-endfunction
-
-function! UpdateWindowOptions()
-	if &columns < 200
-		set diffopt-=vertical
-		set diffopt+=horizontal
-	else
-		set diffopt-=horizontal
-		set diffopt+=vertical
-	endif
-endfunction
-
-" FIXME: найти применение или удалить
-function! CheckBackSpace()
-	let col = col('.') - 1
-	return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Подсветка разделителей в конфликтах.
-match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
-
-" Применение цветовой схемы терминала из base16-shell.
-if empty(glob(expand('~/.vimrc_background'))) == 0
-    let base16colorspace = 256
-    source ~/.vimrc_background
-endif
-
-" Дополнение <C-L> очисткой поиска и апдейтом диффа.
 if has('nvim-0.6') == 0
-	nnoremap <silent> <C-L> :noh<C-R>=has("diff")?"<Bar>diffupdate":""<CR><CR><C-L>
+  nnoremap <silent> <C-L> :noh<C-R>=has("diff")?"<Bar>diffupdate":""<CR><CR><C-L>
 end
 
-" Смена файла по <C-H> вместо <C-^> в normal.
-nnoremap  
-" Переключение langmap в normal на <C-^>, по аналогии с i_CTRL-^ (и c_CTRL-^).
-nnoremap  a
+" От случайных закрытий окон
+nnoremap <C-w>O <C-W>o
+nnoremap <C-w>o <Nop>
+nnoremap <C-w><C-o> <Nop>
 
-" Выход из режима terminal
 tnoremap <Esc><Esc> <C-\><C-n>
+nnoremap <C-W>0 <Cmd>execute ":resize".line("$")<CR>
+nnoremap <C-W>! <Cmd>execute ":vertical resize".max(map(getline(1,'$'), 'len(v:val)'))<CR>
+nnoremap <C-W><S-c> <Cmd>tabclose<CR>
+nnoremap [q <Cmd>cp<CR>
+nnoremap ]q <Cmd>cn<CR>
+
+" Кириллический ввод с поддержкой маппингов VIM.
+" «Универсальное» переключение режима использования langmap.
+" - такой маппинг удобней чем <C-^>
+" - при использовании в Normal, не конфликтует с переключением файла по <C-^>
+" - позволяет переключать режим langmap будучи в Normal
+set keymap=russian-jcukenmac
+set iminsert=0
+nnoremap <C-S> <Cmd>call ToggleInputMethod()<CR>
+inoremap <C-S> <Cmd>call ToggleInputMethod()<CR>
+cnoremap <C-S> <Cmd>call ToggleInputMethod()<CR>
+function! ToggleInputMethod() abort
+  if mode() == "n"
+    if &iminsert
+      setl iminsert=0
+    else
+      setl iminsert=1
+    endif
+  else
+    call feedkeys("")
+  endif
+endfunction
 
 " <C-G> будет использоваться для всех статусных сообщений (а еще есть <G><C-G>).
 nnoremap <C-G><C-G> <C-G>
 
-" Закрытие tabpage
-nnoremap <C-W><S-c> <Cmd>tabclose<CR>
-
-" Более быстрая альтернатива для <"+> и <"0>
+" Более быстрая альтернатива для <"+> и <"0>.
 nnoremap <M-y> "+
 xnoremap <M-y> "+
 nnoremap <M-p> "0
@@ -175,32 +87,196 @@ xnoremap <M-p> "0
 nnoremap I 2i
 xnoremap I 2i
 
-" Y работающий как D, т.е. с текущего символа и до конца строки.
+" <Y> работающий как <D>, т.е. с текущего символа и до конца строки.
 if has('nvim-0.6') == 0
-	nnoremap Y y$
+  nnoremap Y y$
 end
 
-" Переключение по элементам списка QuickFix.
-nnoremap [q <Cmd>cp<CR>
-nnoremap ]q <Cmd>cn<CR>
+" Для объявления в плагинах (Telescope/FZF/..)
+nnoremap <Leader>b <Nop>
+nnoremap <Leader>e <Nop>
+nnoremap <Leader>f <Nop>
+nnoremap <Leader>l <Nop>
+nnoremap <Leader>o <Nop>
+nnoremap <Leader>p <Nop>
+nnoremap <Leader>q <Nop>
+nnoremap <Leader>t <Nop>
+nnoremap <Leader>s <Cmd>syntax sync fromstart<CR>
+nnoremap <Leader>? :map <Leaderr<BS>><CR>
 
-" Ресайз окна по кол-ву строк.
-nnoremap <C-W>0 <Cmd>execute ":resize".line("$")<CR>
-
-" Применение макроса в VISUAL.
+" Применение макроса к выделенному тексту.
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
-
 function! ExecuteMacroOverVisualRange() abort
   echo "@".getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
 
-" Поиск разделитилей merge диффов.
-nnoremap <Leader>c /\\(<\\<Bar>>\\<Bar>=\\<Bar><Bar>\\)\\{7}<CR>
+" Маппинги по типам файлов.
+au FileType man setlocal nomodifiable
+au FileType GV nmap <buffer> o .show<CR>
+au FileType sql nmap <buffer> <Leader>= <Cmd>%!pg_format<CR>
+au FileType sql xmap <buffer> <Leader>= :!pg_format<CR>
+au FileType sql nmap <buffer> <CR> vap<CR>
+au FileType sql xmap <buffer> <CR> :'<,'>DB<CR>
 
-command! -nargs=0 Grep execute ':grep '.expand('<cword>')
-command! -nargs=0 OpenFileDir silent call system('open '.expand('%:p:h:~'))
+" }}}
+" Вывод {{{
+
+set guifont=Iosevka\ Nerd\ Font:h14
+set concealcursor=c
+set relativenumber
+set numberwidth=2
+set signcolumn=number
+set scrolloff=1
+set linebreak
+set list
+
+if has('patch-7.4.338')
+  set breakindent
+  set breakindentopt=sbr
+  let &showbreak = nr2char(8618).' ' " ↪ вначале разбитой строки
+endif
+
+au InsertEnter * set cc=+1
+au InsertLeave * set cc=
+
+" }}}
+" Тайминги {{{
+
+set updatetime=250
+
+" }}}
+" Форматирование и спеллчекинг {{{
+
+set fo+=ro
+set spelllang=ru_yo,en_us
+set fillchars=diff:/
+set listchars=tab:>\ ,trail:•,nbsp:␣
+
+au FileType go,html,htmldjango,javascript,lua,markdown,sh,yaml,vim setl ts=2 sw=2 sts=2
+au FileType git,GV setl nornu
+au FileType GV setl lcs-=trail:-
+au FileType python setl dict+=~/.config/nvim/dictionary/python fo-=t tw=88
+au FileType fish,gitconfig,sql setl ts=4 sw=4 sts=4 et
+au FileType go setl noet nowrap lcs=trail:-,nbsp:+,tab:\ \ 
+au FileType markdown setl fo-=l
+au FileType html,htmldjango,javascript,lua,sh,vim setl et
+au FileType lua,vim setl nowrap
+au FileType fish setl cms=#\ %s
+au FileType sql setl cms=--\ %s formatprg=pg_format\ -
+
+" }}}
+" Команды {{{
+
+command! -nargs=0 BrowseGitHub execute "!open https://github.com/".expand("<cfile>")
+" FIXME: Удалить перед публикацией. Может быть перенести в локальный vim файл, вне репы
+command! -nargs=0 BrowseGitLab execute "!open https://gitlab.jetstyle.in/jetstyle/nti/talent-backend/-/merge_requests/".expand("<cword>")
+command! -nargs=0 BrowseJira execute "!open https://j.jetstyle.in/browse/".expand("<cWORD>")
+command! -nargs=0 FindConflicts /\\(<\\<Bar>>\\<Bar>=\\<Bar><Bar>\\)\\{7}
+command! -nargs=0 GrepThis execute ':grep '.expand('<cword>')
 command! -nargs=0 FilePathEcho echo expand('%:p')
-command! -nargs=0 FilePathCopy let @+ = expand('%:p')
+command! -nargs=0 FileDirOpen silent call system('open '.expand('%:p:h:~'))
+command! -nargs=0 LAddLine laddexpr expand("%").":".line(".").":".getline(".")
+command! -nargs=0 LClear call setloclist(0, [], 'r')
 
-" TODO: <Leader>q для переключения окна qf.
+" }}}
+" Символы {{{
+
+sign define DiagnosticSignError text= texthl=DiagnosticSignError
+sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn
+sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo
+sign define DiagnosticSignHint text= texthl=DiagnosticSignHint
+
+" }}}
+" Подсветка {{{
+
+" Подсветка разделителей в конфликтах.
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+
+" Для цветовых тем на основе base16, использующих всю таблицу ANSI.
+let base16colorspace = 256
+colorscheme cterm
+
+let g:markdown_fenced_languages = ['python', 'go', 'lua', 'vim']
+
+" }}}
+" Встроенные плагины {{{
+
+" Использование более производительного filetype.lua.
+let g:do_filetype_lua = 1
+let g:did_load_filetypes = 0
+
+" Загрузка ftdetect файлов из плагинов (которая выполнялась в filetype.vim).
+if !exists('g:did_load_ftdetect')
+  runtime! ftdetect/*.vim
+  runtime! ftdetect/*.lua
+endif
+
+let s:disabled_built_ins = ['gzip', 'matchit', 'matchparen', 'shada_plugin', 'tar', 'tarPlugin', 'zip', 'zipPlugin']
+for n in s:disabled_built_ins
+  exec 'let g:loaded_'.n.' = 1'
+endfor
+
+" }}}
+" Провайдеры внешних плагинов {{{
+
+if empty(glob(expand('~/.pyenv/virtualenvs/pynvim/bin/python3'))) == 0
+  let g:python3_host_prog = '~/.pyenv/virtualenvs/pynvim/bin/python3'
+else
+  let g:loaded_python3_provider = 0
+end
+
+" }}}
+" Дифф {{{
+
+set diffopt+=foldcolumn:0
+set diffopt+=indent-heuristic
+set diffopt+=algorithm:histogram
+
+au VimEnter * call BindDiffMode()
+au VimEnter * call BindDiffSplit()
+au VimResized * call UpdateWindowOptions()
+
+function! BindDiffMode()
+  if &diff
+    set nonumber
+    set norelativenumber
+    lua vim.diagnostic.disable()
+    Gitsigns toggle_linehl
+  endif
+endfunction
+
+function! BindDiffSplit()
+  if len($DIFF_BASE)
+    nmap <Leader>d :exec ':Gdiffsplit '.$DIFF_BASE<CR>
+    command! -nargs=0 DiffBaseSplit execute ':Gdiffsplit '.$DIFF_BASE
+    execute ':Gitsigns change_base '.$DIFF_BASE
+  endif
+endfunction
+
+function! UpdateWindowOptions()
+  if &columns < 200
+    set diffopt-=vertical
+    set diffopt+=horizontal
+  else
+    set diffopt-=horizontal
+    set diffopt+=vertical
+  endif
+endfunction
+
+call UpdateWindowOptions()
+
+command DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
+		\ | diffthis | wincmd p | diffthis
+
+" }}}
+" Фолдинг {{{
+
+set foldmethod=indent
+set foldlevelstart=99
+
+" }}}
+
+exe 'augroup END'
+
+" vim: foldmethod=marker fdl=0

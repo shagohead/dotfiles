@@ -1,23 +1,24 @@
-*.swp
-.HELP.md
-.ctags
 .DS_Store
 .exrc
 .nvimrc
+.nvmrc
 .python-version
-.tags
-Session.vim
-tags
 
-.backups/
+.idea
+.ctags
+.tags
+tags
+Session.vim
+Taskfile.yml
+Taskfile.yaml
+
+.local/
 .mypy_cache/
 .pytype/
-.sql/
-.stash/
 .venv/
 .vim/
 .vscode/
 __pycache__/
 
-/.env.development
-/.idea
+*.swp
+.local.*

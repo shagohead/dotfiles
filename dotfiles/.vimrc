@@ -1,14 +1,12 @@
-" Sensible defaults
-" TODO diff with:
-" https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
+" Author: Vakhmin Anton <html.ru@gmail.com>
 source $VIMRUNTIME/defaults.vim
 autocmd! vimStartup
+augroup vimrc
 
 if &term =~ 'alacritty'
 	set mouse=a
 endif
 
-" Установка vim-plug, при его отсуствии.
 let s:plug_path = '~/.vim/autoload/plug.vim'
 if !filereadable(expand(s:plug_path))
 	let s:src = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
@@ -16,8 +14,6 @@ if !filereadable(expand(s:plug_path))
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" Менеджмент плагинов vim-plug'ом,
-" обходится примерно в 20ms на старте.
 call plug#begin('~/.local/share/vim-plugged')
 
 Plug 'airblade/vim-gitgutter'
@@ -103,22 +99,20 @@ let &listchars = 'trail:↔,extends:⟩,precedes:⟨,nbsp:×,tab:ͺ '
 let &fillchars = 'vert:|'
 
 " Автокоманды.
-augroup vimrc
-  au!
-  au BufNewFile,BufRead flake8,pycodestyle setf dosini
-  au BufNewFile,BufRead .gitconfig.* setf gitconfig
-	au ColorScheme * call UpdateColors()
-  au FileType go setlocal noexpandtab
-  " au FileType html,jinja.html,htmldjango,markdown,python setlocal wrap
-  " au FileType fish setlocal foldmethod=expr
-  " au FileType help setlocal conceallevel=0
-  au FileType html,htmldjango,javascript,lua,yaml,vim setlocal ts=2 sw=2 sts=2
-  au FileType markdown setlocal fo-=l fo+=o
-  au FileType python setlocal dict+=~/.config/nvim/dictionary/python fo-=t fo+=ro tw=88
-  au InsertEnter * set cc=+1
-  au InsertLeave * set cc=
-  au VimResized * wincmd =
-augroup END
+au!
+au BufNewFile,BufRead flake8,pycodestyle setf dosini
+au BufNewFile,BufRead .gitconfig.* setf gitconfig
+au ColorScheme * call UpdateColors()
+au FileType go setlocal noexpandtab
+" au FileType html,jinja.html,htmldjango,markdown,python setlocal wrap
+" au FileType fish setlocal foldmethod=expr
+" au FileType help setlocal conceallevel=0
+au FileType html,htmldjango,javascript,lua,yaml,vim setlocal ts=2 sw=2 sts=2
+au FileType markdown setlocal fo-=l fo+=o
+au FileType python setlocal dict+=~/.config/nvim/dictionary/python fo-=t fo+=ro tw=88
+au InsertEnter * set cc=+1
+au InsertLeave * set cc=
+au VimResized * wincmd =
 
 function! UpdateColors()
   hi DiffAdd ctermfg=NONE guifg=NONE
@@ -140,4 +134,6 @@ if filereadable(expand("~/.vimrc_background"))
   source ~/.vimrc_background
 endif
 
-" https://github.com/tpope/tpope/blob/master/.vimrc
+exe 'augroup END'
+
+" vim: foldmethod=marker fdl=0

@@ -9,7 +9,7 @@
     pager = delta; https://dandavison.github.io/delta/
 
 [init]
-	defaultBranch = master
+    defaultBranch = master
 
 [pull]
     rebase = true
@@ -19,14 +19,22 @@
 
 [diff]
     tool = nvim-fugitive
+    guitool = kitty.gui
     colorMoved = default
+
+[difftool]
+    prompt = true
+    trustExitCode = true
 
 [merge]
     tool = nvim-fugitive
     conflictstyle = diff3
 
-[difftool]
-    prompt = false
+[difftool "kitty"]
+    cmd = kitty +kitten diff $LOCAL $REMOTE
+
+[difftool "kitty.gui"]
+    cmd = kitty kitty +kitten diff $LOCAL $REMOTE
 
 [mergetool]
     prompt = true
@@ -46,11 +54,18 @@
     navigate = true
 
     ; Оформление диффа, использующее цвета из палитры ANSI,
-    ; для независимости от выбранной цветовой схемы.
-    minus-style = syntax 18 strike
-    minus-emph-style = syntax 18 strike bold ul
-    plus-style = syntax 18
-    plus-emph-style = syntax 18 bold ul
+    ; для независимости от используемой цветовой схемы.
+    line-numbers-minus-style = red
+    line-numbers-plus-style = green
+    minus-style = syntax 52
+    minus-emph-style = syntax 88 bold
+    plus-style = syntax 22
+    plus-emph-style = syntax 28 bold
+
+[tig "color"]
+    cursor = 15 19
+    title-focus = white 18 bold
+    title-blur = white 18 dim
 
 [alias]
     che = checkout
@@ -60,6 +75,12 @@
 
     logg = log --abbrev-commit --decorate --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
     loggg = logg --graph
+
+    ; Шорткат для merge-base
+    mb = merge-base HEAD
+
+    ; Шорткат для <ref> основанного на merge-base
+    mref = !"f() { echo $(git merge-base HEAD $1)..HEAD; }; f"
 
     ; Реверсивный log для добавления его в commit message.
     ; Принимает позиционным аргументом ref. log будет строиться от merge-base этого ref и HEAD.
@@ -78,4 +99,4 @@
     mdiff = !"f() { cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative ${@:1}; }; f"
 
     ; Запускает редактор с табами измененных файлов и переменной окружения, указывающей на merge-base.
-    review = !"f() { DIFF_BASE=$(git merge-base HEAD $1) nvim $(git mdiff $1 --name-only) -p; }; f"
+    review = !"f() { DIFF_BASE=$(git merge-base HEAD $1) nvim $(git mdiff $1 --name-only) ${@:1}; }; f"
