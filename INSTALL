@@ -79,6 +79,9 @@ configure ()
 install_packages ()
 {
   brew bundle
+  mkdir $HOME/.config/fish/conf.d
+  mkdir $HOME/.config/fish/completions
+  stow dotfiles
 
   declare -a PIPX_PACKAGES=(
     black
@@ -112,7 +115,6 @@ if ! which -s brew; then
   sudo -v
   title "Homebrew: установка"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  stow dotfiles
   install_packages
   configure
 else
