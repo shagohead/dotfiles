@@ -14,25 +14,15 @@ done
 
 set -e
 echo "Установка и обновление инструментов командной строки."
-default_icon=">"
 
-cecho ()
+title ()
 {
-  if [ $# -eq 2 ]; then
-    COLOR=$1
-    TEXT=$2
-  else
-    COLOR=2
-    TEXT=$1
-  fi
-  echo -e "$(tput setaf $COLOR)$icon$(tput sgr0)  $(tput bold)$TEXT$(tput sgr0)"
+  echo -e "$(tput bold)$@$(tput sgr0)"
 }
 
 configure ()
 {
-  icon_back=$icon
-  icon=""
-  cecho 3 "git: конфигурация"
+  title "git: конфигурация"
   git config --global include.path "$HOME/.gitconfig.base"
   git config --global user.name shagohead
   git config --global user.email html.ru@gmail.com
@@ -40,8 +30,7 @@ configure ()
   KITTY_PATH="$HOME/.config/kitty"
   KITTY_CONF="$HOME/kitty.conf"
   if [ -f $KITTY_CONF ]; then
-    icon=""
-    cecho 3 "kitty: конфигурация"
+    title "kitty: конфигурация"
     if ! grep -q "include custom.conf" $KITTY_CONF; then
       echo "include custom.conf" >> $KITTY_CONF
     fi
@@ -51,8 +40,7 @@ configure ()
     fi
   fi
 
-  icon=""
-  cecho 3 "fish: конфигурация"
+  title "fish: конфигурация"
   FISH_CONFIG_COMMAND="
   set fish_color_normal normal
   set fish_color_command blue
@@ -77,13 +65,11 @@ configure ()
   set fish_pager_color_description bryellow
   set fish_pager_color_progress brcyan"
   fish -c "$FISH_CONFIG_COMMAND"
-  icon=$icon_back
 }
 
-icon=""
 if ! which -s brew; then
   sudo -v  # Для последующей установки fish в роли shell по-умолчанию.
-  cecho "Homebrew: установка"
+  title "Homebrew: установка"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   brew bundle
   stow dotfiles
@@ -93,9 +79,6 @@ if ! which -s brew; then
   fi
   configure
 
-  icon_back=$icon
-
-  icon=""
   declare -a PIPX_PACKAGES=(
     black
     flake8
@@ -106,42 +89,37 @@ if ! which -s brew; then
     johnnydep
     poetry
   )
-  cecho "pipx: установка пакетов"
+  title "pipx: установка пакетов"
   for i in "${PIPX_PACKAGES[@]}"; do
     pipx install $i
   done
 
-  icon=""
   declare -a GO_PACKAGES=(
     golang.org/x/tools/gopls
     github.com/go-delve/delve/cmd/dlv
     github.com/kyleconroy/sqlc/cmd/sqlc
   )
-  cecho "go: установка пакетов"
+  title "go: установка пакетов"
   for i in "${PIPX_PACKAGES[@]}"; do
     go install "${i}@latest"
   done
-
-  icon=$icon_back
 else
   if [ $CONFIGURE ]; then
     configure
   fi
-  cecho "Homebrew: обновление пакетов"
+  title "Homebrew: обновление пакетов"
   brew update
   brew upgrade
 fi
 
-icon=""
 if ! fish -c "type -q fisher"; then
-  cecho "fisher: установка"
+  title "fisher: установка"
   curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
 fi
 
-cecho "fisher: обновление пакетов"
+title "fisher: обновление пакетов"
 fish -c "fisher update"
 
-icon=""
 declare -a NPM_PACKAGES=(
   bash-language-server
   dockerfile-language-server-nodejs
@@ -150,5 +128,5 @@ declare -a NPM_PACKAGES=(
   typescript-language-server
   vim-language-server
 )
-cecho "npm: установка и обновление пакетов ${NPM_PACKAGES[@]}"
+title "npm: установка и обновление пакетов ${NPM_PACKAGES[@]}"
 npm -g i ${NPM_PACKAGES[@]}
