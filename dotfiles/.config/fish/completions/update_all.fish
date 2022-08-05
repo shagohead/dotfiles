@@ -1,5 +1,0 @@
-complete -c update_all -s 'b' -l 'brew' -d 'homebrew packages'
-complete -c update_all -l 'git' -d 'git repositories'
-complete -c update_all -l 'go' -d 'go packages'
-complete -c update_all -s 'n' -l 'npm' -d 'global npm packages'
-complete -c update_all -s 'p' -l 'pipx' -d 'pipx packages'
