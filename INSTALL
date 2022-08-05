@@ -79,8 +79,8 @@ configure ()
 install_packages ()
 {
   brew bundle
-  mkdir $HOME/.config/fish/conf.d
-  mkdir $HOME/.config/fish/completions
+  [ ! -d "$HOME/.config/fish/conf.d" ] && mkdir $HOME/.config/fish/conf.d || echo "conf.d exists"
+  [ ! -d "$HOME/.config/fish/completions" ] && mkdir $HOME/.config/fish/completions || echo "completions exists"
   stow dotfiles
 
   declare -a PIPX_PACKAGES=(
