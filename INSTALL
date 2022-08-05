@@ -109,7 +109,7 @@ install_packages ()
 # FIXME: Установить токен HOMEBREW_GITHUB_API_TOKEN перед продолжением
 
 if ! which -s brew; then
-  sudo -v  # Для последующей установки fish в роли shell по-умолчанию.
+  sudo -v
   title "Homebrew: установка"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   stow dotfiles
@@ -117,6 +117,7 @@ if ! which -s brew; then
   configure
 else
   if [ $INSTALL_PACKAGES ]; then
+    sudo -v
     install_packages
   fi
   if [ $CONFIGURE ]; then
