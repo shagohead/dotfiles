@@ -4,7 +4,7 @@
 # TODO: Опциональные зависимости для разработки под разные языки
 # т.е. возможность отключить установку каких-то пакетов.
 
-while getopts "c" options; do
+while getopts "ic" options; do
   case "${options}" in
     c)
       CONFIGURE=true
