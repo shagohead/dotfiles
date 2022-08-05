@@ -118,8 +118,10 @@ if ! which -s brew; then
   install_packages
   configure
 else
-  if [ $INSTALL_PACKAGES ]; then
+  if [ $CONFIGURE ]; then
     sudo -v
+  fi
+  if [ $INSTALL_PACKAGES ]; then
     install_packages
   fi
   if [ $CONFIGURE ]; then
