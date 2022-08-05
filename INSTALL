@@ -101,7 +101,7 @@ install_packages ()
     github.com/kyleconroy/sqlc/cmd/sqlc
   )
   title "go: установка пакетов"
-  for i in "${PIPX_PACKAGES[@]}"; do
+  for i in "${GO_PACKAGES[@]}"; do
     go install "${i}@latest"
   done
 }
