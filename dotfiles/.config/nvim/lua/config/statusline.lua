@@ -56,3 +56,10 @@ require('lualine').setup {
     lualine_z = { 'location' }
   },
 }
+
+vim.api.nvim_create_autocmd({"User"}, {
+  pattern = "InputMethodChanged",
+  callback = function(args)
+    require('lualine').refresh()
+  end,
+})

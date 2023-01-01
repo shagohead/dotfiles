@@ -8,9 +8,13 @@
 .ctags
 .tags
 tags
+tags_venv
+tags_gomod
 Session.vim
 Taskfile.yml
+Taskfile*.yml
 Taskfile.yaml
+Taskfile*.yaml
 
 .local/
 .mypy_cache/
@@ -19,6 +23,7 @@ Taskfile.yaml
 .vim/
 .vscode/
 __pycache__/
+venv/
 
 *.swp
 .local.*

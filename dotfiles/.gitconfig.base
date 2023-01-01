@@ -1,7 +1,7 @@
 ; git config --global include.path ~/.gitconfig.base
 
 [core]
-    excludesfile = ~/.gitignore_global
+    ; excludesfile = ~/.config/git/ignore
     filemode = false
 
     ; Внешние инструменты.
@@ -58,9 +58,9 @@
     line-numbers-minus-style = red
     line-numbers-plus-style = green
     minus-style = syntax 52
-    minus-emph-style = syntax 88 bold
+    minus-emph-style = syntax 88
     plus-style = syntax 22
-    plus-emph-style = syntax 28 bold
+    plus-emph-style = syntax 28
 
 [tig "color"]
     cursor = 15 19
@@ -99,4 +99,4 @@
     mdiff = !"f() { cd -- ${GIT_PREFIX:-.} && git diff --merge-base --relative ${@:1}; }; f"
 
     ; Запускает редактор с табами измененных файлов и переменной окружения, указывающей на merge-base.
-    review = !"f() { DIFF_BASE=$(git merge-base HEAD $1) nvim $(git mdiff $1 --name-only) ${@:1}; }; f"
+    review = !"f() { DIFF_BASE=$(git merge-base HEAD $1) nvim $(git mdiff $1 --name-only) ${@:2}; }; f"

@@ -23,8 +23,9 @@ url_color {color20}
 cursor {color7}
 cursor_text_color background
 
-active_border_color {color8}
-inactive_border_color {color18}
+active_border_color {color6}
+inactive_border_color {color8}
+bell_border_color {color5}
 
 active_tab_background {color0}
 active_tab_foreground {color7}
@@ -78,12 +79,18 @@ def main():
     if bg_lightness > MAX_LIGHTNESS:
         bg_lightness = MAX_LIGHTNESS
 
-    colors['color52'] = hls_to_hex(set_lightness(hex_to_hls('color1'), bg_lightness))
-    colors['color22'] = hls_to_hex(set_lightness(hex_to_hls('color2'), bg_lightness))
-    colors['color88'] = hls_to_hex(set_lightness(hex_to_hls('color1'), bg_lightness, True))
-    colors['color28'] = hls_to_hex(set_lightness(hex_to_hls('color2'), bg_lightness, True))
-    colors['color27'] = hls_to_hex(set_lightness(hex_to_hls('color4'), bg_lightness))
-    colors['color53'] = hls_to_hex(set_lightness(hex_to_hls('color5'), bg_lightness))
+    # Diff: удаление
+    colors['color52'] = hls_to_hex(set_lightness(hex_to_hls('color1'), bg_lightness)) # red
+    colors['color88'] = hls_to_hex(set_lightness(hex_to_hls('color1'), bg_lightness, True)) # red
+
+    # Diff: добавление
+    colors['color22'] = hls_to_hex(set_lightness(hex_to_hls('color2'), bg_lightness)) # green
+    colors['color28'] = hls_to_hex(set_lightness(hex_to_hls('color2'), bg_lightness, True)) # green
+
+    # Diff: изменение
+    colors['color27'] = hls_to_hex(set_lightness(hex_to_hls('color4'), bg_lightness)) # blue
+    colors['color53'] = hls_to_hex(set_lightness(hex_to_hls('color5'), bg_lightness)) # magenta
+    colors['color220'] = hls_to_hex(set_lightness(hex_to_hls('color3'), bg_lightness)) # yellow
 
     output = ""
     if comments:

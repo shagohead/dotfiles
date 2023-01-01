@@ -1,4 +1,5 @@
 " Author: Vakhmin Anton <html.ru@gmail.com>
+" https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
 lua require('config.plugins')
 exe 'augroup vimrc'
 autocmd!
@@ -13,6 +14,7 @@ set undofile
 set path+=**
 set wildignore+=*.pyc
 set grepprg=rg\ --vimgrep
+set tags=./tags;,tags,tags_venv
 
 " }}}
 " Поиск по буферу {{{
@@ -40,9 +42,9 @@ if has('nvim-0.6') == 0
 end
 
 " От случайных закрытий окон
-nnoremap <C-w>O <C-W>o
-nnoremap <C-w>o <Nop>
-nnoremap <C-w><C-o> <Nop>
+" nnoremap <C-w>O <C-W>o
+" nnoremap <C-w>o <Nop>
+" nnoremap <C-w><C-o> <Nop>
 
 tnoremap <Esc><Esc> <C-\><C-n>
 nnoremap <C-W>0 <Cmd>execute ":resize".line("$")<CR>
@@ -62,15 +64,16 @@ nnoremap <C-S> <Cmd>call ToggleInputMethod()<CR>
 inoremap <C-S> <Cmd>call ToggleInputMethod()<CR>
 cnoremap <C-S> <Cmd>call ToggleInputMethod()<CR>
 function! ToggleInputMethod() abort
+  let l:new = &iminsert ? 0 : 1
   if mode() == "n"
-    if &iminsert
-      setl iminsert=0
-    else
-      setl iminsert=1
-    endif
+    let &iminsert=l:new
+  elseif mode() == "i"
+    let l:cmd = "\<C-o>:setl iminsert=" .. l:new .. "\<CR>"
+    execute "call feedkeys(l:cmd)"
   else
-    call feedkeys("")
+    call feedkeys('')
   endif
+  doautocmd <nomodeline> User InputMethodChanged
 endfunction
 
 " <C-G> будет использоваться для всех статусных сообщений (а еще есть <G><C-G>).
@@ -103,6 +106,7 @@ nnoremap <Leader>q <Nop>
 nnoremap <Leader>t <Nop>
 nnoremap <Leader>s <Cmd>syntax sync fromstart<CR>
 nnoremap <Leader>? :map <Leaderr<BS>><CR>
+nnoremap <Leader>w <Cmd>write<CR>
 
 " Применение макроса к выделенному тексту.
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
@@ -112,6 +116,8 @@ function! ExecuteMacroOverVisualRange() abort
 endfunction
 
 " Маппинги по типам файлов.
+au FileType fzf tnoremap <buffer> <Esc><Esc> <Nop>
+au FileType fzf tnoremap <buffer> <C-o> <Nop>
 au FileType man setlocal nomodifiable
 au FileType GV nmap <buffer> o .show<CR>
 au FileType sql nmap <buffer> <Leader>= <Cmd>%!pg_format<CR>
@@ -122,11 +128,12 @@ au FileType sql xmap <buffer> <CR> :'<,'>DB<CR>
 " }}}
 " Вывод {{{
 
-set guifont=Iosevka\ Nerd\ Font:h14
+set guifont=Iosevka\ Nerd\ Font\ Mono:h14
 set concealcursor=c
-set relativenumber
-set numberwidth=2
-set signcolumn=number
+" set relativenumber
+" set numberwidth=2
+" set signcolumn=number
+set signcolumn=auto:2
 set scrolloff=1
 set linebreak
 set list
@@ -155,6 +162,8 @@ set listchars=tab:>\ ,trail:•,nbsp:␣
 
 au FileType go,html,htmldjango,javascript,lua,markdown,sh,yaml,vim setl ts=2 sw=2 sts=2
 au FileType git,GV setl nornu
+" FIXME: URL строится не корректно
+au FileType kitty setl kp=open\ https://sw.kovidgoyal.net/kitty/conf/\\#opt-kitty.\
 au FileType GV setl lcs-=trail:-
 au FileType python setl dict+=~/.config/nvim/dictionary/python fo-=t tw=88
 au FileType fish,gitconfig,sql setl ts=4 sw=4 sts=4 et

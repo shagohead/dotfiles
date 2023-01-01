@@ -1,5 +1,4 @@
 # vim:ft=kitty
-# Background green & red for diff highlighting
 
 color0 #2e3440
 color1 #bf616a
@@ -29,6 +28,7 @@ color88 #732e35
 color28 #4f673a
 color53 #422c3e
 color27 #24374a
+color220 #5e4410
 
 background #2e3440
 foreground #e5e9f0
@@ -41,8 +41,9 @@ url_color #d8dee9
 cursor #e5e9f0
 cursor_text_color background
 
-active_border_color #4c566a
-inactive_border_color #3b4252
+active_border_color #88c0d0
+inactive_border_color #4c566a
+bell_border_color #b48ead
 
 active_tab_background #2e3440
 active_tab_foreground #e5e9f0
@@ -52,6 +53,3 @@ tab_bar_background #3b4252
 
 mark1_foreground #2e3440
 mark1_background #bf616a
-
-color28 #414c38
-color88 #572d31

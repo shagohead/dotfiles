@@ -49,7 +49,7 @@ set -x PYTEST_ADDOPTS --reuse-db --pdbcls=IPython.terminal.debugger:TerminalPdb
 set -q GOPATH; or set -xU GOPATH $HOME/go
 
 # PATH
-set -gx PATH $HOME/.local/bin $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims $HOME/yandex-cloud/bin $PATH
+set -gx PATH $HOME/.local/bin $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims $HOME/yandex-cloud/bin /usr/local/opt/curl/bin $PATH
 
 ################
 # Tools config #
@@ -72,6 +72,7 @@ set -Ux FZF_DEFAULT_OPTS \
 " --color=marker:$base0C,fg+:$base06,prompt:$base0A,hl+:$base0D"\
 " --bind=ctrl-d:half-page-down,ctrl-u:half-page-up"\
 " --bind=alt-enter:select-all,alt-bs:deselect-all"\
+" --bind=ctrl-o:preview'(echo {})'"\
 " --history=$HOME/.fzf_history"
 set -x FZF_DEFAULT_COMMAND fd --no-ignore --hidden --follow --exclude .git
 # https://github.com/jethrokuan/fzf#commands
@@ -116,6 +117,6 @@ if status --is-interactive
     abbr -a gm git merge-base
     abbr -a gs tig status
     abbr -a kc kubectl
-    abbr -a l ls -la
+    abbr -a l ls -a
     abbr -a psaux 'ps aux | head -1 && ps aux | grep -v grep | grep'
 end

@@ -37,7 +37,7 @@ if exists("base16colorspace") && base16colorspace == "256"
   let s:cterm0F        = "17"
   let g:base16_cterm0F = "17"
   let s:cterm_diff_add = "22"
-  let s:cterm_diff_chg = "27"
+  let s:cterm_diff_chg = "220"
   let s:cterm_diff_del = "52"
 else
   let s:cterm01        = "10"
@@ -177,7 +177,7 @@ call <sid>hi("cssColor",       s:cterm0C, "", "")
 call <sid>hi("DiffAdd",       "NONE", s:cterm_diff_add, "")
 call <sid>hi("DiffChange",    "NONE", s:cterm_diff_chg, "")
 call <sid>hi("DiffDelete",    s:cterm01, "NONE", "")
-call <sid>hi("DiffText",      "", s:cterm_diff_chg, "NONE")
+call <sid>hi("DiffText",      "", s:cterm_diff_chg, "italic")
 call <sid>hi("DiffAdded",     s:cterm0B, s:cterm00, "")
 call <sid>hi("DiffFile",      s:cterm08, s:cterm00, "")
 call <sid>hi("DiffNewFile",   s:cterm0B, s:cterm00, "")
@@ -220,6 +220,7 @@ hi link GitSignsDeleteNr GitGutterDeleteLineNr
 " hi link GitSignsAddLn GitGutterAddLine
 " hi link GitSignsChangeLn GitGutterChangeLine
 call <sid>hi("GitSignsDeleteLn", "", s:cterm_diff_del, "")
+call <sid>hi("GitSignsDeletePreview", "", s:cterm_diff_del, "")
 hi link GitSignsCurrentLineBlame NonText
 hi link GitSignsAddInline TermCursor
 hi link GitSignsDeleteInline TermCursor
@@ -343,6 +344,19 @@ call <sid>hi("LspSignatureActiveParameter", s:cterm08, "", "") " fg: 01
 
 " TreeSitter
 call <sid>hi("TSDefinition", "", "", "reverse")
+
+" nvim-cmp
+highlight! CmpItemAbbrDeprecated ctermbg=NONE cterm=strikethrough ctermfg=8
+highlight! CmpItemAbbrMatch ctermbg=NONE ctermfg=4
+highlight! CmpItemAbbrMatchFuzzy ctermbg=NONE ctermfg=4
+highlight! CmpItemKindVariable ctermbg=NONE ctermfg=12
+highlight! CmpItemKindInterface ctermbg=NONE ctermfg=12
+highlight! CmpItemKindText ctermbg=NONE ctermfg=12
+highlight! CmpItemKindFunction ctermbg=NONE ctermfg=13
+highlight! CmpItemKindMethod ctermbg=NONE ctermfg=13
+highlight! CmpItemKindKeyword ctermbg=NONE ctermfg=7
+highlight! CmpItemKindProperty ctermbg=NONE ctermfg=7
+highlight! CmpItemKindUnit ctermbg=NONE ctermfg=7
 
 " Remove functions
 delf <sid>hi

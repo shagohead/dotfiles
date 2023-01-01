@@ -102,6 +102,7 @@ install_packages ()
     golang.org/x/tools/gopls
     github.com/go-delve/delve/cmd/dlv
     github.com/kyleconroy/sqlc/cmd/sqlc
+    honnef.co/go/tools/cmd/staticcheck
   )
   title "go: установка пакетов"
   for i in "${GO_PACKAGES[@]}"; do
@@ -150,3 +151,8 @@ declare -a NPM_PACKAGES=(
 )
 title "npm: установка и обновление пакетов ${NPM_PACKAGES[@]}"
 npm -g i ${NPM_PACKAGES[@]}
+
+if ! witch -s rustup; then
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  rustup completions fish > ~/.config/fish/completions/rustup.fish
+fi
