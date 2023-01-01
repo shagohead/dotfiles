@@ -16,7 +16,7 @@ Taskfile*.yml
 Taskfile.yaml
 Taskfile*.yaml
 
-.local/
+/.local/
 .mypy_cache/
 .pytype/
 .venv/
@@ -26,4 +26,3 @@ __pycache__/
 venv/
 
 *.swp
-.local.*
