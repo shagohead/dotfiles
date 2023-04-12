@@ -10,6 +10,10 @@ function cheatsheet
         echo "cheat, eg, tldr"
         echo
 
+        colored_echo yellow " kitty keymap.py"
+        echo "kitty_mod+? (tip: kitty_mod: CTRL+SHIFT)"
+        echo
+
         colored_echo yellow " insert character by number:"
         echo ":help i_CTRL-V_digit (tip: u/U for unicode)"
         echo
@@ -17,7 +21,7 @@ function cheatsheet
         colored_echo yellow " insert digraph character:"
         echo ":help i_CTRL-K char char"
     end
-    
+
     if test $argv = '-c'
         echo \
         'PYCURL_SSL_LIBRARY=openssl LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include" pip install --no-cache-dir pycurl' \

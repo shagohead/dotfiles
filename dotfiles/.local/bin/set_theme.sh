@@ -48,11 +48,13 @@ main() {
     fi
   fi
 
-  theme=~/.config/kitty/themes/$name.conf
-  cp $theme ~/.config/kitty/current-theme.conf
+  kitty +kitten themes $name
+  python3.9 ~/.local/bin/kitty_patcher ~/.config/kitty/current-theme.conf
+  # theme=~/.config/kitty/themes/$name.conf
+  # cp $theme ~/.config/kitty/current-theme.conf
   pidfile=$(find /tmp/mykitty* 2>/dev/null)
   if [ -n "$pidfile" ]; then
-    kitty @ --to "unix:$pidfile" set-colors -a -c $theme
+    kitty @ --to "unix:$pidfile" set-colors -a -c ~/.config/kitty/current-theme.conf
   fi
 }
 

@@ -53,20 +53,6 @@
     features = line-numbers
     navigate = true
 
-    ; Оформление диффа, использующее цвета из палитры ANSI,
-    ; для независимости от используемой цветовой схемы.
-    line-numbers-minus-style = red
-    line-numbers-plus-style = green
-    minus-style = syntax 52
-    minus-emph-style = syntax 88
-    plus-style = syntax 22
-    plus-emph-style = syntax 28
-
-[tig "color"]
-    cursor = 15 19
-    title-focus = white 18 bold
-    title-blur = white 18 dim
-
 [alias]
     che = checkout
 

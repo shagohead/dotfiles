@@ -68,7 +68,7 @@ function! ToggleInputMethod() abort
   if mode() == "n"
     let &iminsert=l:new
   elseif mode() == "i"
-    let l:cmd = "\<C-o>:setl iminsert=" .. l:new .. "\<CR>"
+    let l:cmd = " \<BS>\<C-o>:setl iminsert=" .. l:new .. "\<CR>"
     execute "call feedkeys(l:cmd)"
   else
     call feedkeys('')
@@ -128,12 +128,7 @@ au FileType sql xmap <buffer> <CR> :'<,'>DB<CR>
 " }}}
 " Вывод {{{
 
-set guifont=Iosevka\ Nerd\ Font\ Mono:h14
 set concealcursor=c
-" set relativenumber
-" set numberwidth=2
-" set signcolumn=number
-set signcolumn=auto:2
 set scrolloff=1
 set linebreak
 set list
@@ -160,7 +155,7 @@ set spelllang=ru_yo,en_us
 set fillchars=diff:/
 set listchars=tab:>\ ,trail:•,nbsp:␣
 
-au FileType go,html,htmldjango,javascript,lua,markdown,sh,yaml,vim setl ts=2 sw=2 sts=2
+au FileType go,html,htmldjango,javascript,lua,markdown,sh,template,yaml,vim setl ts=2 sw=2 sts=2
 au FileType git,GV setl nornu
 " FIXME: URL строится не корректно
 au FileType kitty setl kp=open\ https://sw.kovidgoyal.net/kitty/conf/\\#opt-kitty.\
@@ -169,7 +164,7 @@ au FileType python setl dict+=~/.config/nvim/dictionary/python fo-=t tw=88
 au FileType fish,gitconfig,sql setl ts=4 sw=4 sts=4 et
 au FileType go setl noet nowrap lcs=trail:-,nbsp:+,tab:\ \ 
 au FileType markdown setl fo-=l
-au FileType html,htmldjango,javascript,lua,sh,vim setl et
+au FileType html,htmldjango,javascript,lua,sh,template,vim setl et
 au FileType lua,vim setl nowrap
 au FileType fish setl cms=#\ %s
 au FileType sql setl cms=--\ %s formatprg=pg_format\ -
@@ -187,14 +182,16 @@ command! -nargs=0 FilePathEcho echo expand('%:p')
 command! -nargs=0 FileDirOpen silent call system('open '.expand('%:p:h:~'))
 command! -nargs=0 LAddLine laddexpr expand("%").":".line(".").":".getline(".")
 command! -nargs=0 LClear call setloclist(0, [], 'r')
+command! -nargs=0 SynStack echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 
 " }}}
 " Символы {{{
 
-sign define DiagnosticSignError text= texthl=DiagnosticSignError
-sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn
-sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo
-sign define DiagnosticSignHint text= texthl=DiagnosticSignHint
+sign define DiagnosticSignError text=✖ texthl=DiagnosticSignError
+sign define DiagnosticSignWarn text=⚠︎ texthl=DiagnosticSignWarn
+sign define DiagnosticSignInfo text=ℹ︎ texthl=DiagnosticSignInfo
+" change Hint to lamp symbol
+sign define DiagnosticSignHint text=☞ texthl=DiagnosticSignHint
 
 " }}}
 " Подсветка {{{
@@ -203,25 +200,14 @@ sign define DiagnosticSignHint text= texthl=DiagnosticSignHint
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " Для цветовых тем на основе base16, использующих всю таблицу ANSI.
-let base16colorspace = 256
-colorscheme cterm
+colorscheme cterm256
 
 let g:markdown_fenced_languages = ['python', 'go', 'lua', 'vim']
 
 " }}}
 " Встроенные плагины {{{
 
-" Использование более производительного filetype.lua.
-let g:do_filetype_lua = 1
-let g:did_load_filetypes = 0
-
-" Загрузка ftdetect файлов из плагинов (которая выполнялась в filetype.vim).
-if !exists('g:did_load_ftdetect')
-  runtime! ftdetect/*.vim
-  runtime! ftdetect/*.lua
-endif
-
-let s:disabled_built_ins = ['gzip', 'matchit', 'matchparen', 'shada_plugin', 'tar', 'tarPlugin', 'zip', 'zipPlugin']
+let s:disabled_built_ins = ['gzip', 'shada_plugin', 'tar', 'tarPlugin', 'zip', 'zipPlugin']
 for n in s:disabled_built_ins
   exec 'let g:loaded_'.n.' = 1'
 endfor
@@ -251,7 +237,7 @@ function! BindDiffMode()
     set nonumber
     set norelativenumber
     lua vim.diagnostic.disable()
-    Gitsigns toggle_linehl
+    " Gitsigns toggle_linehl
   endif
 endfunction
 
@@ -259,7 +245,7 @@ function! BindDiffSplit()
   if len($DIFF_BASE)
     nmap <Leader>d :exec ':Gdiffsplit '.$DIFF_BASE<CR>
     command! -nargs=0 DiffBaseSplit execute ':Gdiffsplit '.$DIFF_BASE
-    execute ':Gitsigns change_base '.$DIFF_BASE
+    execute 'lua require("gitsigns").change_base("'.$DIFF_BASE.'", true)'
   endif
 endfunction
 

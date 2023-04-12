@@ -1,6 +1,7 @@
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
+tap "beeftornado/rmtree"
 
 # cask_args appdir: "~/Applications", require_sha: true
 
@@ -30,6 +31,7 @@ brew "kubernetes-cli"
 brew "kustomize"
 brew "lnav"
 brew "lua"
+brew "mdcat"
 brew "neovim"
 brew "node"
 brew "onefetch"
@@ -53,7 +55,7 @@ brew "wget"
 brew "wrk"
 
 cask "kitty"
-cask "font-iosevka-nerd-font"
+cask "font-iosevka"
 # cask "keepingyouawake"
 # cask "maccy"
 # cask "macdown"

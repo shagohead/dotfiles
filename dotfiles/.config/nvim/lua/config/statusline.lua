@@ -1,20 +1,21 @@
 local cterm_theme = {
-  inactive = { c = { fg = 7, bg = 18 } },
+  inactive = { c = { fg = 7, bg = 235 } },
   normal = {
-    a = { fg = 18, bg = 4, gui = 'bold' },
-    b = { fg = 7, bg = 18 },
-    c = { fg = 7, bg = 19 },
+    a = { fg = 233, bg = 4, gui = 'bold' },
+    b = { fg = 7, bg = 236 },
+    c = { fg = 7, bg = 234 },
   },
-  visual = { a = { fg = 18, bg = 5, gui = 'bold' } },
-  replace = { a = { fg = 18, bg = 17, gui = 'bold' } },
-  insert = { a = { fg = 18, bg = 2, gui = 'bold' } },
-  command = { a = { fg = 18, bg = 1, gui = 'bold'} },
+  visual = { a = { fg = 233, bg = 5, gui = 'bold' } },
+  replace = { a = { fg = 233, bg = 6, gui = 'bold' } },
+  insert = { a = { fg = 233, bg = 2, gui = 'bold' } },
+  command = { a = { fg = 233, bg = 1, gui = 'bold'} },
 }
 
 local minwidth = function() return vim.fn.winwidth(0) > 50 end
 
 require('lualine').setup {
   options = {
+    icons_enabled = false,
     theme = cterm_theme,
     component_separators = { left = '〉', right = '〈' },
     section_separators = { left = '', right = '' },
@@ -47,6 +48,7 @@ require('lualine').setup {
       {
         'diagnostics',
         sources = { 'nvim_diagnostic' },
+        symbols = {error = '✖', warn = '⚠︎', info = 'ℹ︎', hint = '✎'},
         cond = minwidth
       }
     },

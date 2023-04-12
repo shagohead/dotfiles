@@ -1,5 +1,6 @@
 return function()
   local on_attach = function(client, bufnr)
+  -- TODO: set signcolumn=yes
     print('Attached to '..client.name..' for buf #'..bufnr)
     vim.cmd([[
     setlocal omnifunc=v:lua.vim.lsp.omnifunc
@@ -12,7 +13,7 @@ return function()
     nnoremap <buffer> [w <Cmd>lua vim.diagnostic.goto_prev()<CR>
     nnoremap <buffer> ]w <Cmd>lua vim.diagnostic.goto_next()<CR>
     nnoremap <buffer> <Leader>l :Lsp
-    nnoremap <buffer> <Leader>d <Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+    nnoremap <buffer> <Leader>q <Cmd>TroubleToggle<CR>
     nnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.code_action()<CR>
     xnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.range_code_action()<CR>
     nnoremap <buffer> <Leader>= <Cmd>lua vim.lsp.buf.formatting()<CR>
@@ -28,8 +29,17 @@ return function()
     packadd lsp_signature.nvim
     packadd trouble.nvim
     ]])
-    require 'trouble'.setup { mode = 'document_diagnostics' }
-    require 'lsp_signature'.on_attach({ bind = true, hint_enable = false, handler_opts = { border = 'none' } }, bufnr)
+    require 'trouble'.setup {
+      icons = false,
+      mode = 'document_diagnostics'
+    }
+    require 'lsp_signature'.on_attach({
+      bind = true,
+      hint_enable = true,
+      handler_opts = {
+        border = 'rounded'
+      }
+    }, bufnr)
   end
 
   local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -104,8 +114,25 @@ return function()
     vim.lsp.diagnostic.on_publish_diagnostics(a, params, client_id, c, config)
   end
 
-
   vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
     custom_on_publish_diagnostics, { virtual_text = false }
   )
+
+  local border = 'rounded'
+
+  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+    vim.lsp.handlers.hover, { border = border }
+  )
+
+  vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+    vim.lsp.handlers.signature_help, { border = border }
+  )
+
+  vim.diagnostic.config{
+    float={border=border}
+  }
+
+  require('lspconfig.ui.windows').default_options = {
+    border = border
+  }
 end

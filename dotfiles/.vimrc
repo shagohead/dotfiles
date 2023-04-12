@@ -1,6 +1,5 @@
 " Author: Vakhmin Anton <html.ru@gmail.com>
 source $VIMRUNTIME/defaults.vim
-autocmd! vimStartup
 augroup vimrc
 
 if &term =~ 'alacritty'

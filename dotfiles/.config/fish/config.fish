@@ -63,16 +63,13 @@ set -x BASH_SILENCE_DEPRECATION_WARNING 1
 
 # bat
 set -x BAT_STYLE plain
-set -x BAT_THEME base16-256
 
 # FZF
-set -Ux FZF_DEFAULT_OPTS \
-" --color=bg+:$base01,bg:$base00,spinner:$base0C,hl:$base0D"\
-" --color=fg:$base04,header:$base0D,info:$base0A,pointer:$base0C"\
-" --color=marker:$base0C,fg+:$base06,prompt:$base0A,hl+:$base0D"\
+set -q FZF_DEFAULT_OPT; or set -U FZF_DEFAULT_OPTS \
 " --bind=ctrl-d:half-page-down,ctrl-u:half-page-up"\
 " --bind=alt-enter:select-all,alt-bs:deselect-all"\
 " --bind=ctrl-o:preview'(echo {})'"\
+" --height $FZF_TMUX_HEIGHT"\
 " --history=$HOME/.fzf_history"
 set -x FZF_DEFAULT_COMMAND fd --no-ignore --hidden --follow --exclude .git
 # https://github.com/jethrokuan/fzf#commands
@@ -115,7 +112,7 @@ if status --is-interactive
     abbr -a gco git checkout
     abbr -a gd git diff
     abbr -a gm git merge-base
-    abbr -a gs tig status
+    abbr -a gs git status
     abbr -a kc kubectl
     abbr -a l ls -a
     abbr -a psaux 'ps aux | head -1 && ps aux | grep -v grep | grep'

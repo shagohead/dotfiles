@@ -41,8 +41,8 @@ end
 
 require('gitsigns').setup {
   attach_to_untracked = false,
-  signcolumn = true,
-  -- linehl = true,
+  signcolumn = false,
+  linehl = true,
   numhl = false,
   on_attach = on_attach,
 }
