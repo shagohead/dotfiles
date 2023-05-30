@@ -2,6 +2,36 @@ return function()
   local lspkind = require 'lspkind'
   local cmp = require 'cmp'
 
+  lspkind.init({
+    symbol_map = {
+      Text = "✍",
+      Method = "⇒",
+      Function = "ƒ",
+      Constructor = "",
+      Field = "ﰠ",
+      Variable = "𝓍",
+      Class = "ℂ",
+      Interface = "",
+      Module = "",
+      Property = "ﰠ",
+      Unit = "塞",
+      Value = "",
+      Enum = "",
+      Keyword = "",
+      Snippet = "",
+      Color = "",
+      File = "",
+      Reference = "",
+      Folder = "",
+      EnumMember = "",
+      Constant = "",
+      Struct = "𝕊",
+      Event = "",
+      Operator = "",
+      TypeParameter = ""
+    },
+  })
+
   cmp.setup({
     snippet = {
       expand = function(args)

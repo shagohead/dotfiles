@@ -124,7 +124,6 @@ return require('packer').startup(function()
   use {
     'nvim-lualine/lualine.nvim',
     after = 'gitsigns.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons' },
     config = function() require('config.statusline') end
   }
 
@@ -149,7 +148,6 @@ return require('packer').startup(function()
     requires = {
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
-      'kyazdani42/nvim-web-devicons',
     },
   }
 
@@ -162,7 +160,17 @@ return require('packer').startup(function()
   use { 'sunaku/vim-dasht', config = require 'config.dasht' }
   use { 'lewis6991/gitsigns.nvim', config = function() require'config.gitsigns' end }
   use { 'dstein64/vim-startuptime', cmd = 'StartupTime', config = [[vim.g.startuptime_tries = 20]] }
-  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+  use {
+    'sindrets/diffview.nvim',
+    config = function() require 'diffview'.setup({
+      use_icons = false,
+      icons = {
+        folder_closed = "+",
+        folder_open = "-",
+      },
+    }) end,
+    requires = 'nvim-lua/plenary.nvim',
+  }
   use { 'tpope/vim-characterize', keys = { 'ga' } }
   use { 'tpope/vim-eunuch', cmd = { 'Delete', 'Remove', 'Move', 'Rename', 'Mkdir', 'Mkdir!' } }
   use { 'psf/black', branch = 'main', ft = { 'python' } }
@@ -182,6 +190,10 @@ return require('packer').startup(function()
       ]])
     end
   }
+
+  -- use {
+  --   'fatih/vim-go', ft = { 'go' }
+  -- }
 
   -- use {
   --   'nvim-treesitter/nvim-treesitter',

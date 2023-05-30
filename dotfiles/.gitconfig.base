@@ -52,18 +52,27 @@
 [delta]
     features = line-numbers
     navigate = true
+    line-numbers-minus-style = red
+    line-numbers-plus-style = green
+    minus-style = syntax 52
+    minus-emph-style = syntax 88
+    plus-style = syntax 22
+    plus-emph-style = syntax 28
+
+[tig "color"]
+    cursor = 15 235
+    title-focus = white 234 bold
+    title-blur = white 234 dim
 
 [alias]
     che = checkout
+    mb = merge-base HEAD
 
     ; Шорткаты для форматированного вывода.
     branches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 
     logg = log --abbrev-commit --decorate --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
     loggg = logg --graph
-
-    ; Шорткат для merge-base
-    mb = merge-base HEAD
 
     ; Шорткат для <ref> основанного на merge-base
     mref = !"f() { echo $(git merge-base HEAD $1)..HEAD; }; f"

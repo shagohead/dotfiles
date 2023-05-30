@@ -1,9 +1,10 @@
 return function()
   local on_attach = function(client, bufnr)
-  -- TODO: set signcolumn=yes
     print('Attached to '..client.name..' for buf #'..bufnr)
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc()')
+    vim.api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr(#{timeout_ms:250})')
+    vim.api.nvim_win_set_option(0, 'signcolumn', 'yes:1')
     vim.cmd([[
-    setlocal omnifunc=v:lua.vim.lsp.omnifunc
     nnoremap <buffer> <M-k> <Cmd>lua vim.lsp.buf.signature_help()<CR>
     inoremap <buffer> <M-k> <Cmd>lua vim.lsp.buf.signature_help()<CR>
     nnoremap <buffer> K <Cmd>lua vim.lsp.buf.hover()<CR>
@@ -16,8 +17,7 @@ return function()
     nnoremap <buffer> <Leader>q <Cmd>TroubleToggle<CR>
     nnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.code_action()<CR>
     xnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.range_code_action()<CR>
-    nnoremap <buffer> <Leader>= <Cmd>lua vim.lsp.buf.formatting()<CR>
-    xnoremap <buffer> <Leader>= <Cmd>lua vim.lsp.buf.formatting()<CR>
+    nnoremap <buffer> <Leader>= <Cmd>lua vim.lsp.buf.format({async = true})<CR>
     command! -nargs=0 -buffer LspRename lua vim.lsp.buf.rename()
     command! -nargs=0 -buffer LspTypeDef lua vim.lsp.buf.type_definition()
     command! -nargs=0 -buffer DiagnosticList lua vim.lsp.diagnostic.set_loclist()
@@ -70,6 +70,19 @@ return function()
       end
       return true
     end
+  }
+
+  lspconfig.yamlls.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      yaml = {
+        schemas = {
+          ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+          ["kubernetes"] = "*deploy/**/*.yaml"
+        },
+      },
+    }
   }
 
   function filter(arr, func)
