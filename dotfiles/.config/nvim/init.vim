@@ -1,6 +1,6 @@
-" Author: Vakhmin Anton <html.ru@gmail.com>
-" https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
-lua require('config.plugins')
+let mapleader = ' '
+let maplocalleader = ' '
+lua require('config.lazy')
 exe 'augroup vimrc'
 autocmd!
 
@@ -30,9 +30,6 @@ set titlestring=%t%(\ %M%)%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
 
 " }}}
 " Ввод {{{
-
-let mapleader = ' '
-let maplocalleader = ' '
 
 set mouse=a
 set completeopt=menuone,noinsert,noselect,preview
@@ -85,28 +82,17 @@ xnoremap <M-y> "+
 nnoremap <M-p> "0
 xnoremap <M-p> "0
 
-" Для более быстрого выбора объектов без пробелов перед ними,
-" особенно полезно с объектами из tpope/vim-surround.
-nnoremap I 2i
-xnoremap I 2i
-
 " <Y> работающий как <D>, т.е. с текущего символа и до конца строки.
 if has('nvim-0.6') == 0
   nnoremap Y y$
 end
 
-" Для объявления в плагинах (Telescope/FZF/..)
-nnoremap <Leader>b <Nop>
-nnoremap <Leader>e <Nop>
-nnoremap <Leader>f <Nop>
-nnoremap <Leader>l <Nop>
-nnoremap <Leader>o <Nop>
-nnoremap <Leader>p <Nop>
-nnoremap <Leader>q <Nop>
-nnoremap <Leader>t <Nop>
+nnoremap <Leader>d :lua vim.diagnostic.
 nnoremap <Leader>s <Cmd>syntax sync fromstart<CR>
 nnoremap <Leader>? :map <Leaderr<BS>><CR>
 nnoremap <Leader>w <Cmd>write<CR>
+nnoremap [w <Cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap ]w <Cmd>lua vim.diagnostic.goto_next()<CR>
 
 " Применение макроса к выделенному тексту.
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
@@ -129,7 +115,6 @@ au FileType sql xmap <buffer> <CR> :'<,'>DB<CR>
 " Вывод {{{
 
 set concealcursor=c
-set scrolloff=1
 set linebreak
 set list
 
@@ -154,6 +139,7 @@ set fo+=ro
 set spelllang=ru_yo,en_us
 set fillchars=diff:/
 set listchars=tab:>\ ,trail:•,nbsp:␣
+set nowrap
 
 au FileType go,html,htmldjango,javascript,lua,markdown,sh,template,yaml,vim setl ts=2 sw=2 sts=2
 au FileType git,GV setl nornu
@@ -250,7 +236,7 @@ function! BindDiffSplit()
 endfunction
 
 function! UpdateWindowOptions()
-  if &columns < 200
+  if &columns < 180
     set diffopt-=vertical
     set diffopt+=horizontal
   else

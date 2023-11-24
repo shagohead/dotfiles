@@ -74,7 +74,7 @@
     logg = log --abbrev-commit --decorate --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
     loggg = logg --graph
 
-    ; Шорткат для <ref> основанного на merge-base
+    ; merge-base от HEAD и указанного аргумента
     mref = !"f() { echo $(git merge-base HEAD $1)..HEAD; }; f"
 
     ; Реверсивный log для добавления его в commit message.
