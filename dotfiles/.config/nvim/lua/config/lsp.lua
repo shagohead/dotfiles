@@ -7,6 +7,8 @@ return function()
     vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr(#{timeout_ms:250})")
     vim.api.nvim_win_set_option(0, "signcolumn", "yes:1")
 
+    vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, { buffer = true, desc = 'Open symbols outline' })
+
     vim.cmd([[
     nnoremap <buffer> <M-k> <Cmd>lua vim.lsp.buf.signature_help()<CR>
     inoremap <buffer> <M-k> <Cmd>lua vim.lsp.buf.signature_help()<CR>
@@ -14,7 +16,6 @@ return function()
     nnoremap <buffer> gd <Cmd>lua vim.lsp.buf.definition()<CR>
     nnoremap <buffer> gi <Cmd>lua vim.lsp.buf.implementation()<CR>
     nnoremap <buffer> gr <Cmd>lua vim.lsp.buf.references()<CR>
-    nnoremap <buffer> <Leader>l :Lsp
     nnoremap <buffer> <Leader>q <Cmd>TroubleToggle<CR>
     nnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.code_action()<CR>
     xnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.range_code_action()<CR>
@@ -85,6 +86,17 @@ return function()
         },
       },
     }
+  }
+
+  lspconfig.lua_ls.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      Lua = {
+        workspace = { checkThirdParty = false },
+        telemetry = { enable = false },
+      },
+    },
   }
 
   function filter(arr, func)

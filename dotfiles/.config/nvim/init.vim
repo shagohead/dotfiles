@@ -1,5 +1,6 @@
 let mapleader = ' '
 let maplocalleader = ' '
+lua vim.diagnostic.config({ severity_sort = true })
 lua require('config.lazy')
 exe 'augroup vimrc'
 autocmd!
@@ -87,7 +88,6 @@ if has('nvim-0.6') == 0
   nnoremap Y y$
 end
 
-nnoremap <Leader>d :lua vim.diagnostic.
 nnoremap <Leader>s <Cmd>syntax sync fromstart<CR>
 nnoremap <Leader>? :map <Leaderr<BS>><CR>
 nnoremap <Leader>w <Cmd>write<CR>
