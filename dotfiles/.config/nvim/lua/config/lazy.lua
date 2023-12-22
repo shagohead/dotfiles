@@ -335,7 +335,7 @@ require("lazy").setup({
     "lifepillar/pgsql.vim",
     ft = "sql",
     config = function()
-      vim.g.sql_type_default = "nvim_lsp"
+      vim.g.sql_type_default = "pgsql"
     end
   },
 

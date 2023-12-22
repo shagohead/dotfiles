@@ -39,11 +39,6 @@ if has('nvim-0.6') == 0
   nnoremap <silent> <C-L> :noh<C-R>=has("diff")?"<Bar>diffupdate":""<CR><CR><C-L>
 end
 
-" От случайных закрытий окон
-" nnoremap <C-w>O <C-W>o
-" nnoremap <C-w>o <Nop>
-" nnoremap <C-w><C-o> <Nop>
-
 tnoremap <Esc><Esc> <C-\><C-n>
 nnoremap <C-W>0 <Cmd>execute ":resize".line("$")<CR>
 nnoremap <C-W>! <Cmd>execute ":vertical resize".max(map(getline(1,'$'), 'len(v:val)'))<CR>
