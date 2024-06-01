@@ -1,6 +1,6 @@
 let mapleader = ' '
 let maplocalleader = ' '
-lua vim.diagnostic.config({ severity_sort = true })
+lua require('config.init')
 lua require('config.lazy')
 exe 'augroup vimrc'
 autocmd!
@@ -181,6 +181,7 @@ sign define DiagnosticSignHint text=☞ texthl=DiagnosticSignHint
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " Для цветовых тем на основе base16, использующих всю таблицу ANSI.
+set notermguicolors
 colorscheme cterm256
 
 let g:markdown_fenced_languages = ['python', 'go', 'lua', 'vim']

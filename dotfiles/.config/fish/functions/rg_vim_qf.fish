@@ -1,4 +1,4 @@
-function __rg_vim_qf -d "Обрамляет текущий вызов rg для передачи его в nvim ($EDITOR) список quickfix"
+function rg_vim_qf -d "Update ripgrep commandline call for using as vim quickfix source"
     set -l cmd vim
     if set -q VISUAL; and string match -r '.?vim' $VISUAL 1>/dev/null
         echo $VISUAL | read -at cmd

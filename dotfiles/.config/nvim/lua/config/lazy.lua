@@ -19,11 +19,12 @@ require("lazy").setup({
   "tpope/vim-surround",
   "tpope/vim-repeat",
   "tpope/vim-dotenv",
-  "tpope/vim-vinegar",
+  "tpope/vim-vinegar", -- https://github.com/stevearc/oil.nvim ?
   "justinmk/vim-sneak",
   "fladson/vim-kitty",
   "tommcdo/vim-exchange",
   "junegunn/gv.vim",
+  "nvim-neotest/nvim-nio",
 
   {
     "junegunn/fzf",
@@ -49,19 +50,57 @@ require("lazy").setup({
   },
 
   {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = true
+  },
+
+  {
     "neovim/nvim-lspconfig",
-    config = require "config.lsp",
+    config = require "config.lsp".setup,
     dependencies = {
-      { "folke/neodev.nvim",        opts = {} },
       { "ray-x/lsp_signature.nvim", lazy = true },
+      {
+        "SmiteshP/nvim-navic",
+        lazy = true,
+        opts = {
+          icons = {
+            File          = "",
+            Module        = "",
+            Namespace     = "",
+            Package       = "",
+            Class         = "",
+            Method        = "",
+            Property      = "",
+            Field         = "",
+            Constructor   = "",
+            Enum          = "",
+            Interface     = "",
+            Function      = "",
+            Variable      = "",
+            Constant      = "",
+            String        = "",
+            Number        = "",
+            Boolean       = "",
+            Array         = "",
+            Object        = "",
+            Key           = "",
+            Null          = "",
+            EnumMember    = "",
+            Struct        = "",
+            Event         = "",
+            Operator      = "",
+            TypeParameter = "",
+          }
+        }
+      },
       {
         "folke/trouble.nvim",
         lazy = true,
         opts = {
-          -- icons = false,
+          icons = {},
           fold_open = "v",
           fold_closed = ">",
-          -- indent_lines = false,
           signs = {
             error = "✖",
             warning = "⚠︎",
@@ -69,7 +108,6 @@ require("lazy").setup({
             information = "ℹ︎",
             other = "?",
           },
-          -- use_diagnostic_signs = false
         }
       },
       {
@@ -83,6 +121,12 @@ require("lazy").setup({
         }
       },
     },
+  },
+
+  {
+    "folke/lazydev.nvim",
+    ft = "lua",
+    config = true
   },
 
   {
@@ -138,6 +182,8 @@ require("lazy").setup({
     config = function() require "config.gitsigns" end
   },
 
+  { "akinsho/git-conflict.nvim", version = "*", config = true },
+
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "gitsigns.nvim" },
@@ -160,6 +206,9 @@ require("lazy").setup({
   },
 
   {
+    -- https://github.com/jay-babu/mason-nvim-dap.nvim ?
+    -- https://github.com/nvim-lua/kickstart.nvim/blob/master/lua/kickstart/plugins/debug.lua
+    -- https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L537-L552
     "williamboman/mason.nvim",
     cmd = {
       "Mason",
@@ -178,33 +227,10 @@ require("lazy").setup({
   },
 
   {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter-refactor",
-      "nvim-treesitter/nvim-treesitter-context",
-    },
-    config = function()
-      require "nvim-treesitter".setup()
-      require "nvim-treesitter.configs".setup {
-        refactor = {
-          highlight_definitions = {
-            enable = true,
-            clear_on_cursor_move = false,
-          },
-        },
-      }
-      require "treesitter-context".setup {
-        enable = true,
-        max_lines = 3,
-      }
-    end
-  },
-
-  {
     "mfussenegger/nvim-dap",
     dependencies = {
       "rcarriga/nvim-dap-ui",
+      -- https://github.com/mfussenegger/nvim-dap-python
       {
         "leoluz/nvim-dap-go",
         ft = "go",
@@ -217,18 +243,18 @@ require("lazy").setup({
     config = function()
       local dap, dapui = require("dap"), require("dapui")
       dapui.setup {
-        icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+        icons = { expanded = "▾", collapsed = "▸", current_frame = "*" },
         controls = {
           icons = {
-            pause = '⏸',
-            play = '▶',
-            step_into = '⏎',
-            step_over = '⏭',
-            step_out = '⏮',
-            step_back = 'b',
-            run_last = '▶▶',
-            terminate = '⏹',
-            disconnect = '⏏',
+            pause = "⏸",
+            play = "▶",
+            step_into = "⏎",
+            step_over = "⏭",
+            step_out = "⏮",
+            step_back = "b",
+            run_last = "▶▶",
+            terminate = "⏹",
+            disconnect = "⏏",
           },
         },
       }
@@ -332,6 +358,30 @@ require("lazy").setup({
   },
 
   {
+    "mrcjkb/rustaceanvim",
+    version = "^4",
+    ft = "rust",
+    config = function()
+      vim.g.rustaceanvim = {
+        server = {
+          on_attach = require("config.lsp").on_attach,
+        }
+      }
+    end
+  },
+
+  -- {
+  --   "rust-lang/rust.vim",
+  --   ft = "rust",
+  --   dependencies = {
+  --     "mattn/webapi-vim",
+  --   },
+  --   config = function ()
+  --     vim.g.rust_clip_command = "pbcopy"
+  --   end
+  -- },
+
+  {
     "lifepillar/pgsql.vim",
     ft = "sql",
     config = function()
@@ -353,20 +403,20 @@ require("lazy").setup({
   ui = {
     border = "rounded",
     icons = {
-      cmd = ">",
-      config = "⚙",
-      event = "☇",
-      ft = "✉",
+      cmd = "⌘",
+      config = "🛠",
+      event = "📅",
+      ft = "📂",
       init = "⚙ ",
-      import = "← ",
-      keys = "⌨",
+      import = "📦",
+      keys = "🗝",
       lazy = "💤 ",
       loaded = "●",
       not_loaded = "○",
-      plugin = "📦",
-      runtime = " ",
-      source = "<> ",
-      start = "",
+      plugin = "🔌",
+      runtime = "💻",
+      source = "📄",
+      start = "🚀",
       task = "✔ ",
       list = {
         "●",

@@ -103,6 +103,8 @@ install_packages ()
     github.com/go-delve/delve/cmd/dlv
     github.com/kyleconroy/sqlc/cmd/sqlc
     honnef.co/go/tools/cmd/staticcheck
+    github.com/josharian/impl
+    google.golang.org/protobuf/cmd/protoc-gen-go
   )
   title "go: установка пакетов"
   for i in "${GO_PACKAGES[@]}"; do

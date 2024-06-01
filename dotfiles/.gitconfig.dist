@@ -1,7 +1,0 @@
-[include]
-    path = .gitconfig.base
-	path = cterm256/.gitconfig
-
-[user]
-    name = shagohead
-    email = html.ru@gmail.com

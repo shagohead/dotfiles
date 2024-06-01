@@ -1,4 +1,4 @@
 function dsa \
-    --description "docker stop all containers"
+    --description "Stop all docker containers"
     docker stop (docker ps -q) $argv
 end

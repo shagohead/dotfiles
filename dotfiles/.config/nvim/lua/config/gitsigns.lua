@@ -1,6 +1,6 @@
 local function map(mode, l, r, opts)
   opts = opts or {}
-  opts.buffer = bufnr
+  opts.buffer = true
   vim.keymap.set(mode, l, r, opts)
 end
 
@@ -45,4 +45,11 @@ require('gitsigns').setup {
   linehl = true,
   numhl = false,
   on_attach = on_attach,
+  signs = {
+    add = { text = '+' },
+    change = { text = '~' },
+    delete = { text = '_' },
+    topdelete = { text = '‾' },
+    changedelete = { text = '~' },
+  },
 }

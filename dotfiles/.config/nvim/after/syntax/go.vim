@@ -1,1 +1,1 @@
-syn keyword goBuiltins any
+syn keyword goType any

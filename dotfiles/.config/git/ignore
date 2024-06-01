@@ -17,6 +17,7 @@ Taskfile.yaml
 Taskfile*.yaml
 
 /.local/
+/.shagohead/
 .mypy_cache/
 .pytype/
 .venv/

@@ -56,9 +56,9 @@ end
 
 set -x EDITOR vi
 set -x VISUAL nvim
-set -x LS_COLORS ''
+set -x LS_COLORS
 set -x PAGER less -R
-set -x MANPAGER 'less -R --use-color -Dd+b -Du+g'
+set -x MANPAGER less -R --use-color -Dd+b -Du+g
 
 set -x LANG en_US.UTF-8
 set -x LC_CTYPE en_US.UTF-8
@@ -67,13 +67,16 @@ set -x LC_CTYPE en_US.UTF-8
 set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
 set -x PYENV_SHELL fish
-set -x PYTEST_ADDOPTS --reuse-db --pdbcls=IPython.terminal.debugger:TerminalPdb
+set -x PYTEST_ADDOPTS --reuse-db
 
 # GO development
 set -q GOPATH; or set -xU GOPATH $HOME/go
 
 # PATH
-set -gx PATH $HOME/.local/bin $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims $HOME/yandex-cloud/bin /usr/local/opt/curl/bin $PATH
+if not set -q PATH_SET
+    set -gx PATH $HOME/.local/bin $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims $HOME/yandex-cloud/bin /usr/local/opt/curl/bin $PATH
+    set -gx PATH_SET true
+end
 
 ################
 # Tools config #
@@ -103,14 +106,18 @@ set -x FZF_FIND_FILE_COMMAND $FZF_DEFAULT_COMMAND
 # https://github.com/pure-fish/pure
 set -g pure_threshold_command_duration 2
 
+# https://jqlang.github.io/jq/manual/#colors
+set -xg JQ_COLORS "0;90:0;39:0;39:0;39:0;32:1;39:1;39:1;34"
+
 ################
 # Key bindings #
 ################
 
 if status --is-interactive
+    set -x EDITOR $VISUAL
+
     # fzf-based fish functions https://github.com/jethrokuan/fzf
     set -q FZF_DISABLE_KEYBINDINGS; or set -U FZF_DISABLE_KEYBINDINGS 1
-    bind \eo fzf_cd_up
 
     # fzy-based fish history search
     bind \co __fzf_find_file
@@ -118,20 +125,16 @@ if status --is-interactive
     bind -M insert \cr fzy_history
 
     # quickfix-wrapped ripgrep call
-    bind \er __rg_vim_qf
+    bind \er rg_vim_qf
 
     # change key bindings while typing
-    bind \cv toggle_key_bindings
-    bind -M insert \cv toggle_key_bindings
-
-    # Замена \cs который занят prefix'ом для tmux
-    # bind -e --preset \cs
-    # bind \cg pager-toggle-search
+    # bind \cv toggle_key_bindings
+    # bind -M insert \cv toggle_key_bindings
 
     # abbreviations
-    abbr -a dc docker-compose
+    abbr -a dc docker compose
     abbr -a dig dig +short
-    abbr -a do docker
+    abbr -a d docker
     abbr -a ga git add
     abbr -a gc git commit
     abbr -a gco git checkout

@@ -52,7 +52,7 @@ require("lualine").setup {
         cond = minwidth
       }
     },
-    lualine_c = { "filename" },
+    lualine_c = { "filename", "navic" },
     lualine_x = { { "filetype", cond = minwidth } },
     lualine_y = { { "progress", cond = minwidth } },
     lualine_z = { "location" }

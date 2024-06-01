@@ -1,57 +1,61 @@
 -- NVIM LSP configuration
-return function()
-  local on_attach = function(client, bufnr)
-    print("Attached to "..client.name.." for buf #"..bufnr)
+local augroup = vim.api.nvim_create_augroup("init:lsp", { clear = true })
 
-    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc()")
-    vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr(#{timeout_ms:250})")
-    vim.api.nvim_win_set_option(0, "signcolumn", "yes:1")
+local on_attach = function(client, bufnr)
+  print("Attached to "..client.name.." for buf #"..bufnr)
 
-    vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, { buffer = true, desc = 'Open symbols outline' })
+  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc()")
+  vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr(#{timeout_ms:250})")
+  vim.api.nvim_win_set_option(0, "signcolumn", "yes:1")
 
-    vim.cmd([[
-    nnoremap <buffer> <M-k> <Cmd>lua vim.lsp.buf.signature_help()<CR>
-    inoremap <buffer> <M-k> <Cmd>lua vim.lsp.buf.signature_help()<CR>
-    nnoremap <buffer> K <Cmd>lua vim.lsp.buf.hover()<CR>
-    nnoremap <buffer> gd <Cmd>lua vim.lsp.buf.definition()<CR>
-    nnoremap <buffer> gi <Cmd>lua vim.lsp.buf.implementation()<CR>
-    nnoremap <buffer> gr <Cmd>lua vim.lsp.buf.references()<CR>
-    nnoremap <buffer> <Leader>q <Cmd>TroubleToggle<CR>
-    nnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.code_action()<CR>
-    xnoremap <buffer> <Leader>a <Cmd>lua vim.lsp.buf.range_code_action()<CR>
-    nnoremap <buffer> <Leader>= <Cmd>lua vim.lsp.buf.format({async = true})<CR>
-    command! -nargs=0 -buffer LspRename lua vim.lsp.buf.rename()
-    command! -nargs=0 -buffer LspTypeDef lua vim.lsp.buf.type_definition()
-    command! -nargs=0 -buffer DiagnosticList lua vim.lsp.diagnostic.set_loclist()
-    command! -nargs=0 -buffer DiagnosticList lua vim.lsp.diagnostic.set_loclist()
-    command! -nargs=0 -buffer WorkspaceAdd lua vim.lsp.buf.add_workspace_folder()
-    command! -nargs=0 -buffer WorkspaceRemove lua vim.lsp.buf.remove_workspace_folder()
-    command! -nargs=0 -buffer WorkspaceList lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    au CursorHold,CursorHoldI <buffer> lua require"nvim-lightbulb".update_lightbulb()
-    ]])
+  vim.api.nvim_buf_create_user_command(bufnr, "LspRename", function() vim.lsp.buf.rename() end, {})
+  vim.api.nvim_buf_create_user_command(bufnr, "LspTypeDef", function() vim.lsp.buf.type_definition() end, {})
+  vim.api.nvim_buf_create_user_command(bufnr, "DiagnosticList", function() vim.diagnostic.setloclist() end, {})
+  vim.api.nvim_buf_create_user_command(bufnr, "WorkspaceAdd", function() vim.lsp.buf.add_workspace_folder() end, {})
+  vim.api.nvim_buf_create_user_command(bufnr, "WorkspaceRemove", function() vim.lsp.buf.remove_workspace_folder() end, {})
+  vim.api.nvim_buf_create_user_command(bufnr, "WorkspaceList", function () print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, {})
+  vim.api.nvim_buf_create_user_command(bufnr, "Where", function () print(vim.inspect(require("nvim-navic").get_location())) end, {})
 
-    require "trouble".setup {
-      icons = false,
-      mode = "document_diagnostics"
+  vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, { buffer = true, desc = "Open symbols outline" })
+  vim.keymap.set({"n", "i"}, "<M-k>", vim.lsp.buf.signature_help, { buffer = true, desc = "Open signature help (normal mode)" })
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = true, desc = "Hover object" })
+  vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = true, desc = "Goto definition" })
+  vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, { buffer = true, desc = "Goto type definition" })
+  vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = true, desc = "Goto implementation" })
+  vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = true, desc = "Goto references" })
+  vim.keymap.set("n", "<Leader>=", vim.lsp.buf.format, { buffer = true, desc = "Format buffer with LSP" })
+  vim.keymap.set({"n", "x"}, "<Leader>a", vim.lsp.buf.code_action, { buffer = true, desc = "Run LSP code action" })
+  vim.keymap.set("n", "<Leader>q", require("trouble").toggle, { buffer = true, desc = "Toggle Trouble window" })
+
+  vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
+    desc = "Update LSP lightbulb on cursor hold",
+    group = augroup,
+    callback = function ()
+      require("nvim-lightbulb").update_lightbulb()
+    end,
+  })
+
+  require("lsp_signature").on_attach({
+    bind = true,
+    hint_enable = true,
+    handler_opts = {
+      border = "rounded"
     }
+  }, bufnr)
 
-    require "lsp_signature".on_attach({
-      bind = true,
-      hint_enable = true,
-      handler_opts = {
-        border = "rounded"
-      }
-    }, bufnr)
+  if client.server_capabilities.documentSymbolProvider then
+      require("nvim-navic").attach(client, bufnr)
   end
+end
 
+local setup = function()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  local lspconfig = require "lspconfig"
+  local lspconfig = require("lspconfig")
 
   for _, lsp in ipairs({
     "bashls",
     "dockerls",
     "gopls",
-    "rust_analyzer",
     "tsserver",
     "vimls"
   }) do
@@ -81,7 +85,6 @@ return function()
       yaml = {
         schemas = {
           ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-          ["kubernetes"] = "*deploy/**/*.yaml"
           -- ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] = "openapi.*.yaml"
         },
       },
@@ -99,7 +102,19 @@ return function()
     },
   }
 
-  function filter(arr, func)
+  -- lspconfig.rust_analyzer.setup {
+  --   on_attach = on_attach,
+  --   capabilities = capabilities,
+  --   -- settings = {
+  --   --   ["rust-analyzer"] = {
+  --   --     diagnostic = {
+  --   --       enable = true
+  --   --     }
+  --   --   },
+  --   -- },
+  -- }
+
+  local function filter(arr, func)
     -- Filter in place
     -- https://stackoverflow.com/questions/49709998/how-to-filter-a-lua-array-inplace
     local new_index = 1
@@ -114,7 +129,7 @@ return function()
   end
 
 
-  function filter_diagnostics(diagnostic)
+  local function filter_diagnostics(diagnostic)
     if diagnostic.source ~= "Pyright" then
       return true
     end
@@ -136,9 +151,9 @@ return function()
     return true
   end
 
-  function custom_on_publish_diagnostics(a, params, client_id, c, config)
-    filter(params.diagnostics, filter_diagnostics)
-    vim.lsp.diagnostic.on_publish_diagnostics(a, params, client_id, c, config)
+  local function custom_on_publish_diagnostics(_, result, ctx, config)
+    filter(result.diagnostics, filter_diagnostics)
+    vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
   end
 
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -163,3 +178,8 @@ return function()
     border = border
   }
 end
+
+return {
+  on_attach = on_attach,
+  setup = setup,
+}
