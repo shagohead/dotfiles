@@ -47,10 +47,6 @@
 
 [alias]
 	che = checkout
-	mb = merge-base HEAD
-
-	; Open nvim with files changed in current branch relative to suggested in argument branch (and sets env var with merge base)
-	review = !"f() { DIFF_BASE=$(git merge-base HEAD $1) nvim $(git diff --merge-base --relative --name-only $1) ${@:2}; }; f"
 
 	; Changelog from merge-base
 	changelog = !"f() { git log --oneline --no-decorate $(git merge-base HEAD $1)..HEAD ${@:2}; }; f"

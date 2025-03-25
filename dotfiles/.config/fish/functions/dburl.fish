@@ -29,5 +29,7 @@ db-name@user user:(security find-generic-password -s user-pass -w)@localhost:(tu
         return
     end
 
+    # TODO: Добавить поддержку альтернативных протоколов. Устанавливать postgresql только если никакой не задан.
+
     cat $confpath | awk -F\t '{print $1}' | fzf | read -gx DATABASE_NAME; and grep "^$DATABASE_NAME" $confpath | awk -F\t '{print $2}' | read -l host; and echo "set -gx DATABASE_URL postgresql://$host" | source
 end

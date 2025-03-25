@@ -34,6 +34,7 @@ set titlestring=%t%(\ %M%)%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
 
 set mouse=a
 set completeopt=menuone,noinsert,noselect,preview
+set wildoptions+=fuzzy
 
 if has('nvim-0.6') == 0
   nnoremap <silent> <C-L> :noh<C-R>=has("diff")?"<Bar>diffupdate":""<CR><CR><C-L>
@@ -136,7 +137,8 @@ set fillchars=diff:/
 set listchars=tab:>\ ,trail:•,nbsp:␣
 set nowrap
 
-au FileType go,html,htmldjango,javascript,lua,markdown,sh,template,yaml,vim setl ts=2 sw=2 sts=2
+au FileType c,go,html,htmldjango,javascript,lua,markdown,sh,template,yaml,vim setl ts=2 sw=2 sts=2
+au FileType c setl et
 au FileType git,GV setl nornu
 " FIXME: URL строится не корректно
 au FileType kitty setl kp=open\ https://sw.kovidgoyal.net/kitty/conf/\\#opt-kitty.\

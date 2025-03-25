@@ -1,41 +1,10 @@
 return function()
-  local lspkind = require 'lspkind'
   local cmp = require 'cmp'
-
-  lspkind.init({
-    symbol_map = {
-      Text = "✍",
-      Method = "⇒",
-      Function = "ƒ",
-      Constructor = "",
-      Field = "ﰠ",
-      Variable = "𝓍",
-      Class = "ℂ",
-      Interface = "",
-      Module = "",
-      Property = "ﰠ",
-      Unit = "塞",
-      Value = "",
-      Enum = "",
-      Keyword = "",
-      Snippet = "",
-      Color = "",
-      File = "",
-      Reference = "",
-      Folder = "",
-      EnumMember = "",
-      Constant = "",
-      Struct = "𝕊",
-      Event = "",
-      Operator = "",
-      TypeParameter = ""
-    },
-  })
 
   cmp.setup({
     snippet = {
       expand = function(args)
-        require 'snippy'.expand_snippet(args.body)
+        require('snippy').expand_snippet(args.body)
       end,
     },
     mapping = {
@@ -55,14 +24,10 @@ return function()
       end,
     },
     sources = {
+      { name = 'lazydev', group_index = 0 },
       { name = 'nvim_lsp', max_item_count = 20 },
       { name = 'buffer', keyword_length = 3, max_item_count = 10 },
       { name = 'snippy', max_item_count = 10 },
-    },
-    formatting = {
-      format = lspkind.cmp_format {
-        mode = 'symbol_text'
-      }
     },
   })
 

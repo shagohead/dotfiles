@@ -1,42 +1,44 @@
-local function map(mode, l, r, opts)
-  opts = opts or {}
-  opts.buffer = true
-  vim.keymap.set(mode, l, r, opts)
-end
-
-local function map_navigation(key, callback)
-  return function()
-    if vim.wo.diff then return key end
-    vim.schedule(function() callback() end)
-    return '<Ignore>'
-  end
-end
-
 local function on_attach(bufnr)
-  local gs = package.loaded.gitsigns
+  local function map(mode, l, r, opts)
+    opts = opts or {}
+    opts.buffer = bufnr
+    vim.keymap.set(mode, l, r, opts)
+  end
+
+  local gs = require('gitsigns')
 
   -- Наваигация
-  for key, callback in pairs({ [']c'] = gs.next_hunk, ['[c'] = gs.prev_hunk }) do
-    map('n', key, map_navigation(key, callback), { expr = true })
-  end
+  map('n', ']c', function()
+    if vim.wo.diff then
+      vim.cmd.normal({ ']c', bang = true })
+    else
+      gs.nav_hunk('next')
+    end
+  end)
+
+  map('n', '[c', function()
+    if vim.wo.diff then
+      vim.cmd.normal({ '[c', bang = true })
+    else
+      gs.nav_hunk('prev')
+    end
+  end)
 
   -- Действия
-  map({'n', 'v'}, '<Leader>hs', ':Gitsigns stage_hunk<CR>')
-  map({'n', 'v'}, '<Leader>hr', ':Gitsigns reset_hunk<CR>')
-  map('n', '<Leader>hS', gs.stage_buffer)
-  map('n', '<Leader>hR', gs.reset_buffer)
+  map('n', '<leader>hs', gs.stage_hunk)
+  map('n', '<leader>hr', gs.reset_hunk)
+  map('v', '<leader>hs', function() gs.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end)
+  map('v', '<leader>hr', function() gs.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end)
   map('n', '<Leader>hp', gs.preview_hunk)
   map('n', '<Leader>hu', gs.undo_stage_hunk)
   map('n', '<Leader>hc', gs.toggle_signs)
   map('n', '<Leader>hl', gs.toggle_linehl)
-  map('n', '<Leader>hb', function() gs.blame_line{full=true} end)
-  -- map('n', '<Leader>tb', gs.toggle_current_line_blame)
+  map('n', '<Leader>hb', function() gs.blame_line { full = true } end)
   map('n', '<Leader>hd', gs.diffthis)
   map('n', '<Leader>hD', function() gs.diffthis('~') end)
-  -- map('n', '<Leader>td', gs.toggle_deleted)
 
   -- Текстовый объект
-  map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
 end
 
 require('gitsigns').setup {

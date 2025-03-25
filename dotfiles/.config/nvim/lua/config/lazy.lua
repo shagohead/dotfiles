@@ -1,13 +1,25 @@
+-- vim: fdl=1 ts=2 sts=2 sw=2 et
+---@diagnostic disable: missing-fields
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local out = vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
+    "--branch=stable",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
     lazypath,
   })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out,                            "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -56,70 +68,85 @@ require("lazy").setup({
   },
 
   {
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup({
+        ui = {
+          icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+          }
+        }
+      })
+    end
+  },
+
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "williamboman/mason.nvim" },
+  },
+
+  {
+    "folke/trouble.nvim",
+    lazy = true,
+    opts = {
+      fold_open = "v",
+      fold_closed = ">",
+      signs = { error = "✖", warning = "⚠︎", hint = "☞", information = "ℹ︎", other = "?" },
+    }
+  },
+
+  {
+    "kosayoda/nvim-lightbulb",
+    lazy = true,
+    opts = { sign = { enabled = true, priority = 8 } }
+  },
+
+  {
+    "SmiteshP/nvim-navic",
+    lazy = true,
+    opts = {
+      icons = {
+        File          = "",
+        Module        = "",
+        Namespace     = "",
+        Package       = "",
+        Class         = "",
+        Method        = "",
+        Property      = "",
+        Field         = "",
+        Constructor   = "",
+        Enum          = "",
+        Interface     = "",
+        Function      = "",
+        Variable      = "",
+        Constant      = "",
+        String        = "",
+        Number        = "",
+        Boolean       = "",
+        Array         = "",
+        Object        = "",
+        Key           = "",
+        Null          = "",
+        EnumMember    = "",
+        Struct        = "",
+        Event         = "",
+        Operator      = "",
+        TypeParameter = "",
+      }
+    }
+  },
+
+  {
     "neovim/nvim-lspconfig",
     config = require "config.lsp".setup,
     dependencies = {
-      { "ray-x/lsp_signature.nvim", lazy = true },
-      {
-        "SmiteshP/nvim-navic",
-        lazy = true,
-        opts = {
-          icons = {
-            File          = "",
-            Module        = "",
-            Namespace     = "",
-            Package       = "",
-            Class         = "",
-            Method        = "",
-            Property      = "",
-            Field         = "",
-            Constructor   = "",
-            Enum          = "",
-            Interface     = "",
-            Function      = "",
-            Variable      = "",
-            Constant      = "",
-            String        = "",
-            Number        = "",
-            Boolean       = "",
-            Array         = "",
-            Object        = "",
-            Key           = "",
-            Null          = "",
-            EnumMember    = "",
-            Struct        = "",
-            Event         = "",
-            Operator      = "",
-            TypeParameter = "",
-          }
-        }
-      },
-      {
-        "folke/trouble.nvim",
-        lazy = true,
-        opts = {
-          icons = {},
-          fold_open = "v",
-          fold_closed = ">",
-          signs = {
-            error = "✖",
-            warning = "⚠︎",
-            hint = "☞",
-            information = "ℹ︎",
-            other = "?",
-          },
-        }
-      },
-      {
-        "kosayoda/nvim-lightbulb",
-        lazy = true,
-        opts = {
-          sign = {
-            enabled = true,
-            priority = 8
-          }
-        }
-      },
+      { "williamboman/mason-lspconfig.nvim" },
+      { "ray-x/lsp_signature.nvim" },
+      { "SmiteshP/nvim-navic" },
+      { "folke/trouble.nvim" },
+      { "kosayoda/nvim-lightbulb" },
     },
   },
 
@@ -150,7 +177,6 @@ require("lazy").setup({
     dependencies = {
       { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-nvim-lsp" },
-      { "onsails/lspkind-nvim" },
       { "dcampos/nvim-snippy" },
       { "dcampos/cmp-snippy" },
     },
@@ -182,7 +208,11 @@ require("lazy").setup({
     config = function() require "config.gitsigns" end
   },
 
-  { "akinsho/git-conflict.nvim", version = "*", config = true },
+  {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    config = true
+  },
 
   {
     "nvim-lualine/lualine.nvim",
@@ -203,27 +233,6 @@ require("lazy").setup({
   {
     "sunaku/vim-dasht",
     config = require "config.dasht"
-  },
-
-  {
-    -- https://github.com/jay-babu/mason-nvim-dap.nvim ?
-    -- https://github.com/nvim-lua/kickstart.nvim/blob/master/lua/kickstart/plugins/debug.lua
-    -- https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L537-L552
-    "williamboman/mason.nvim",
-    cmd = {
-      "Mason",
-      "MasonInstall",
-      "MasonLog",
-      "MasonUninstall",
-      "MasonUninstallAll",
-      "MasonUpdate",
-    },
-    dependencies = {
-      "williamboman/mason-lspconfig.nvim",
-    },
-    config = function()
-      require("mason").setup()
-    end
   },
 
   {
@@ -347,39 +356,17 @@ require("lazy").setup({
   },
 
   {
+    "fatih/vim-go",
+    ft = "go"
+  },
+
+  {
     "psf/black",
     branch = "main",
     ft = "python"
   },
 
-  {
-    "Vimjas/vim-python-pep8-indent",
-    ft = "python"
-  },
-
-  {
-    "mrcjkb/rustaceanvim",
-    version = "^4",
-    ft = "rust",
-    config = function()
-      vim.g.rustaceanvim = {
-        server = {
-          on_attach = require("config.lsp").on_attach,
-        }
-      }
-    end
-  },
-
-  -- {
-  --   "rust-lang/rust.vim",
-  --   ft = "rust",
-  --   dependencies = {
-  --     "mattn/webapi-vim",
-  --   },
-  --   config = function ()
-  --     vim.g.rust_clip_command = "pbcopy"
-  --   end
-  -- },
+  { "Vimjas/vim-python-pep8-indent", ft = "python" },
 
   {
     "lifepillar/pgsql.vim",
@@ -407,23 +394,19 @@ require("lazy").setup({
       config = "🛠",
       event = "📅",
       ft = "📂",
-      init = "⚙ ",
+      init = "⚙",
       import = "📦",
       keys = "🗝",
       lazy = "💤 ",
       loaded = "●",
       not_loaded = "○",
       plugin = "🔌",
+      require = "🌙",
       runtime = "💻",
       source = "📄",
       start = "🚀",
-      task = "✔ ",
-      list = {
-        "●",
-        "➜",
-        "★",
-        "‒",
-      },
+      task = "✔",
+      list = { "●", "➜", "★", "‒" },
     }
   }
 })

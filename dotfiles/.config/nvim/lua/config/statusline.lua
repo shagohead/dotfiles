@@ -1,15 +1,12 @@
 local cterm_theme = {
-  inactive = { c = { fg = 7, bg = 235 } },
-  normal = {
-    a = { fg = 233, bg = 4, gui = "bold" },
-    b = { fg = 7, bg = 236 },
-    c = { fg = 7, bg = 234 },
-  },
-  visual = { a = { fg = 233, bg = 5, gui = "bold" } },
-  replace = { a = { fg = 233, bg = 6, gui = "bold" } },
+  inactive = { c = 'StatusLineNC' },
+  normal = { a = 'StatusLine', b = { bg = 16 }, c = 'StatusLine' },
   insert = { a = { fg = 233, bg = 2, gui = "bold" } },
+  replace = { a = { fg = 233, bg = 6, gui = "bold" } },
+  visual = { a = { fg = 233, bg = 5, gui = "bold" } },
   command = { a = { fg = 233, bg = 1, gui = "bold"} },
 }
+cterm_theme.terminal = cterm_theme.command
 
 local minwidth = function() return vim.fn.winwidth(0) > 50 end
 
@@ -30,7 +27,7 @@ require("lualine").setup {
             return "   " .. vim.b.keymap_name .. " "
           end
         end,
-        color = { fg = 15, bg = 0 },
+        color = { fg = 15, bg = 16 },
         separator = {}, padding = 0,
       },
       "mode",
@@ -40,15 +37,21 @@ require("lualine").setup {
         "diff",
         cond = function() return vim.fn.winwidth(0) > 40 end,
         diff_color = {
-          added = {fg = 2},
-          modified = {fg = 4},
-          removed = {fg = 1}
+          added = {fg = 2, bg = 16},
+          modified = {fg = 4, bg = 16},
+          removed = {fg = 1, bg = 16}
         },
       },
       {
         "diagnostics",
         sources = { "nvim_diagnostic" },
         symbols = {error = "✖", warn = "⚠︎", info = "ℹ︎", hint = "✎"},
+        diagnostics_color = {
+            error = 'DiagnosticError',
+            warn  = 'DiagnosticWarn',
+            info  = 'DiagnosticInfo',
+            hint  = 'DiagnosticHint',
+        },
         cond = minwidth
       }
     },

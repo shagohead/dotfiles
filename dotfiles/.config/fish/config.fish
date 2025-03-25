@@ -1,56 +1,5 @@
-# colors
-# the default color
-# set -q fish_color_normal; or set -U fish_color_normal normal
-# # the color for commands
-# set -q fish_color_command; or set -U fish_color_command blue
-# # the color for quoted blocks of text
-# set -q fish_color_quote; or set -U fish_color_quote green
-# # the color for IO redirections
-# set -q fish_color_redirection; or set -U fish_color_redirection brmagenta
-# # the color for process separators like ';' and '&'
-# set -q fish_color_end; or set -U fish_color_end magenta
-# # the color used to highlight potential errors
-# set -q fish_color_error; or set -U fish_color_error red
-# # the color for regular command parameters
-# set -q fish_color_param; or set -U fish_color_param normal
-# # the color used for code comments
-# set -q fish_color_comment; or set -U fish_color_comment brblack
-# # the color used to highlight matching parenthesis
-# set -q fish_color_match; or set -U fish_color_match --background=cyan
-# # the color used when selecting text (in vi visual mode)
-# set -q fish_color_selection; or set -U fish_color_selection green
-# # used to highlight history search matches and the selected pager item (must be a background)
-# set -q fish_colorsearch_match; or set -U fish_colorsearch_match --background=brblack
-# # the color for parameter expansion operators like '*' and '~'
-# set -q fish_color_operator; or set -U fish_color_operator magenta
-# # the color used to highlight character escapes like '\n' and '\x70'
-# set -q fish_color_escape; or set -U fish_color_escape magenta
-# # the color used for the current working directory in the default prompt
-# set -q fish_color_cwd; or set -U fish_color_cwd brblue
-# # the color used for autosuggestions
-# set -q fish_color_autosuggestion; or set -U fish_color_autosuggestion -d
-# # the color used to print the current username in some of fish default prompts
-# set -q fish_color_user; or set -U fish_color_user brcyan
-# # the color used to print the current host system in some of fish default prompts
-# set -q fishcolor_host; or set -U fishcolor_host brblue
-# # the color for the '^C' indicator on a canceled command
-# set -q fish_color_cancel; or set -U fish_color_cancel brred
-# # the color of the prefix string, i.e. the string that is to be completed
-# set -q fish_pager_color_prefix; or set -U fish_pager_color_prefix white --underline
-# # # the color of the completion itself
-# # set -q fish_pager_color_completion; or set -U fish_pager_color_completion
-# # the color of the completion description
-# set -q fish_pager_color_description; or set -U fish_pager_color_description bryellow
-# # the color of the progress bar at the bottom left corner
-# set -q fish_pager_color_progress; or set -U fish_pager_color_progress brcyan
-# # # the background color of the every second completion
-# # set -q fish_pager_color_secondary; or set -U fish_pager_color_secondary
-
-#################
-# Common config #
-#################
-
 if test -n "$ALACRITTY_LOG"
+    # FIXME: Выглядит так будто она должна устанавливаться эмулятором терминала
     set -x TERM alacritty
 end
 
@@ -78,51 +27,49 @@ if not set -q PATH_SET
     set -gx PATH_SET true
 end
 
-################
-# Tools config #
-################
-
-# check-list
+# Brew uses github tokens
 set -q HOMEBREW_GITHUB_API_TOKEN; or echo 'set -xU HOMEBREW_GITHUB_API_TOKEN ...'
 
 # https://support.apple.com/ru-ru/HT208050
 set -x BASH_SILENCE_DEPRECATION_WARNING 1
 
-# bat
 set -x BAT_STYLE plain
 set -x BAT_THEME ansi
 
-# FZF
-set -q FZF_DEFAULT_OPT; or set -U FZF_DEFAULT_OPTS \
-" --bind=ctrl-d:half-page-down,ctrl-u:half-page-up"\
-" --bind=alt-enter:select-all,alt-bs:deselect-all"\
-" --bind=ctrl-o:preview'(echo {})'"\
-" --height $FZF_TMUX_HEIGHT"\
-" --history=$HOME/.fzf_history"
-set -x FZF_DEFAULT_COMMAND fd --no-ignore --hidden --follow --exclude .git
-# https://github.com/jethrokuan/fzf#commands
-set -x FZF_FIND_FILE_COMMAND $FZF_DEFAULT_COMMAND
+if not set -q FZF_CONFIGURED
+    set -Ux FZF_DEFAULT_COMMAND fd --no-ignore --hidden --follow --exclude .git
+    set -Ux FZF_DEFAULT_OPTS \
+    " --bind=ctrl-d:half-page-down,ctrl-u:half-page-up"\
+    " --bind=alt-enter:select-all,alt-bs:deselect-all"\
+    " --bind=ctrl-o:preview'(bat {})'"\
+    " --history=$HOME/.fzf_history"
+    # " --height $FZF_TMUX_HEIGHT"\
+    # https://github.com/jethrokuan/fzf
+    set -U FZF_DISABLE_KEYBINDINGS 1
+    set -Ux FZF_FIND_FILE_COMMAND $FZF_DEFAULT_COMMAND
+    set -U FZF_CONFIGURED true
+end
 
-# https://github.com/pure-fish/pure
-set -g pure_threshold_command_duration 2
+set -x RIPGREP_CONFIG_PATH $HOME/.config/ripgrep
 
 # https://jqlang.github.io/jq/manual/#colors
-set -xg JQ_COLORS "0;90:0;39:0;39:0;39:0;32:1;39:1;39:1;34"
+#----------------  null:falsetrue:num :str :arr :obj :obj-keys
+set -xg JQ_COLORS "2;37:0;35:0;35:0;39:0;32:1;36:1;34:0;37"
 
-################
-# Key bindings #
-################
+# «Fix» tmux TERM_PROGRAM var overriding.
+if [ "$TERM_PROGRAM" = "tmux" ]
+    if [ -n "$KITTY_PID" ]
+        set -gx TERM_PROGRAM kitty
+        set -gu TERM_PROGRAM_VERSION
+    end
+end
 
 if status --is-interactive
     set -x EDITOR $VISUAL
 
-    # fzf-based fish functions https://github.com/jethrokuan/fzf
-    set -q FZF_DISABLE_KEYBINDINGS; or set -U FZF_DISABLE_KEYBINDINGS 1
-
-    # fzy-based fish history search
     bind \co __fzf_find_file
-    bind \cr fzy_history
-    bind -M insert \cr fzy_history
+    # bind \cr fzy_history
+    # bind -M insert \cr fzy_history
 
     # quickfix-wrapped ripgrep call
     bind \er rg_vim_qf
@@ -144,4 +91,11 @@ if status --is-interactive
     abbr -a kc kubectl
     abbr -a l ls -a
     abbr -a psaux 'ps aux | head -1 && ps aux | grep -v grep | grep'
+    abbr -a now date '+%y.%m.%d_%H:%M:%S'
+
+    if set -q KITTY_INSTALLATION_DIR
+        set --global KITTY_SHELL_INTEGRATION enabled
+        source "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_conf.d/kitty-shell-integration.fish"
+        set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
+    end
 end

@@ -81,7 +81,7 @@ set spelllang=ru_yo,en_us
 set foldmethod=indent
 set foldlevelstart=99
 set diffopt+=foldcolumn:0
-if winwidth(0) < 200
+if winwidth(0) < 160
 	set diffopt-=vertical
 	set diffopt+=horizontal
 else
@@ -101,7 +101,6 @@ let &fillchars = 'vert:|'
 au!
 au BufNewFile,BufRead flake8,pycodestyle setf dosini
 au BufNewFile,BufRead .gitconfig.* setf gitconfig
-au ColorScheme * call UpdateColors()
 au FileType go setlocal noexpandtab
 " au FileType html,jinja.html,htmldjango,markdown,python setlocal wrap
 " au FileType fish setlocal foldmethod=expr
@@ -112,26 +111,6 @@ au FileType python setlocal dict+=~/.config/nvim/dictionary/python fo-=t fo+=ro 
 au InsertEnter * set cc=+1
 au InsertLeave * set cc=
 au VimResized * wincmd =
-
-function! UpdateColors()
-  hi DiffAdd ctermfg=NONE guifg=NONE
-  hi DiffChange ctermfg=NONE guifg=NONE
-  hi DiffText ctermfg=NONE guifg=NONE
-  hi GitGutterAdd ctermbg=NONE guibg=NONE
-  hi GitGutterChange ctermbg=NONE guibg=NONE
-  hi GitGutterDelete ctermbg=NONE guibg=NONE
-  hi SignColumn ctermbg=NONE guibg=NONE
-  hi TabLine ctermbg=NONE guibg=NONE
-  hi TabLineFill ctermbg=NONE guibg=NONE
-  hi TabLineSel ctermbg=NONE guibg=NONE
-	hi VertSplit ctermbg=NONE guibg=NONE
-endfunction
-
-" Применение цветовой схемы терминала из base16-shell.
-if filereadable(expand("~/.vimrc_background"))
-  let base16colorspace = 256
-  source ~/.vimrc_background
-endif
 
 exe 'augroup END'
 

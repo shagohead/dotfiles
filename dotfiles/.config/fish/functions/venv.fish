@@ -35,7 +35,7 @@ function venv \
             set -gx PYTHONBREAKPOINT ipdb.set_trace
         end
     case "*"
-        echo "unknown action provided"
+        echo "Unknown provided action"
         return 1
     end
 end

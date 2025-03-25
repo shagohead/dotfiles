@@ -86,8 +86,6 @@ install_packages ()
   declare -a PIPX_PACKAGES=(
     black
     flake8
-    httpie
-    http-prompt
     ipython
     isort
     johnnydep
@@ -105,6 +103,7 @@ install_packages ()
     honnef.co/go/tools/cmd/staticcheck
     github.com/josharian/impl
     google.golang.org/protobuf/cmd/protoc-gen-go
+    github.com/davecheney/httpstat
   )
   title "go: установка пакетов"
   for i in "${GO_PACKAGES[@]}"; do
@@ -143,16 +142,19 @@ fi
 title "fisher: обновление пакетов"
 fish -c "fisher update"
 
-declare -a NPM_PACKAGES=(
+declare -a LSP_SERVERS=(
   bash-language-server
-  dockerfile-language-server-nodejs
-  neovim
+  clangd
+  dockerfile-language-server
+  gopls
+  lua-language-server
   pyright
   typescript-language-server
   vim-language-server
+  yaml-language-server
 )
-title "npm: установка и обновление пакетов ${NPM_PACKAGES[@]}"
-npm -g i ${NPM_PACKAGES[@]}
+title "neovim: установка и обновление LSP серверов ${LSP_SERVERS[@]}"
+nvim --headless +"MasonInstall ${LSP_SERVERS[@]}" +qall
 
 if ! witch -s rustup; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
