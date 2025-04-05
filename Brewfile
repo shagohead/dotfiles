@@ -1,7 +1,5 @@
 tap "apple/apple", "http://github.com/apple/homebrew-apple"
 tap "beeftornado/rmtree"
-tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
 tap "mike-engel/jwt-cli"
 
 # cask_args appdir: "~/Applications", require_sha: true
