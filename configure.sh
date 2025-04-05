@@ -7,6 +7,8 @@ title () {
 }
 
 main() {
+  stow -t ~/ dotfiles
+
   if ! grep -q /usr/local/bin/fish /etc/shells; then
     title "Установка fish как shell по-умолчанию"
     sudo echo "/usr/local/bin/fish" >> /etc/shells
