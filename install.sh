@@ -20,9 +20,9 @@ main() {
   if [ -z "$CONFIG" ]; then
     CONFIG=$HOME/.config
   fi
-  [ ! -d "$CONFIG" ] && mkdir "$CONFIG"
-  [ ! -d "$CONFIG/fish/conf.d" ] && mkdir $CONFIG/fish/conf.d
-  [ ! -d "$CONFIG/fish/completions" ] && mkdir $CONFIG/fish/completions
+  [ ! -d "$CONFIG/fish/conf.d" ] && mkdir -p $CONFIG/fish/conf.d
+  [ ! -d "$CONFIG/fish/completions" ] && mkdir -p $CONFIG/fish/completions
+  [ ! -d "$CONFIG/fish/functions" ] && mkdir -p $CONFIG/fish/functions
   stow dotfiles
 
   declare -a GO_PACKAGES=(
