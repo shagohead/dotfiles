@@ -18,7 +18,7 @@ main() {
   brew bundle
   CONFIG=$XDG_CONFIG_HOME
   if [ -z "$CONFIG" ]; then
-    CONFIG=$HOME/.CONFIG
+    CONFIG=$HOME/.config
   fi
   [ ! -d "$CONFIG" ] && mkdir "$CONFIG"
   [ ! -d "$CONFIG/fish/conf.d" ] && mkdir $CONFIG/fish/conf.d
