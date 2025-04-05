@@ -18,7 +18,11 @@ main() {
   setgitopt "user.name"
   setgitopt "user.email"
 
-  KITTY_CONF="$HOME/.config/kitty/kitty.conf"
+  CONFIG=$XDG_CONFIG_HOME
+  if [ -z "$config" ]; then
+    config=$HOME/.config
+  fi
+  KITTY_CONF="$CONFIG/kitty/kitty.conf"
   if [ -f $KITTY_CONF ]; then
     title "Дополнение kitty.conf"
     if ! grep -q "include custom.conf" $KITTY_CONF; then
@@ -62,16 +66,16 @@ main() {
 
   fish -c "ctheme"
 
-  if [ -d ~/.config/cterm256-contrib ]; then
+  if [ -d $CONFIG/cterm256-contrib ]; then
     for name in delta tig; do
       if !(git config get --global --all include.path | grep -q $name/.gitconfig); then
-        git config set --global --add include.path ~/.config/cterm256-contrib/$name/.gitconfig
+        git config set --global --add include.path $CONFIG/cterm256-contrib/$name/.gitconfig
       fi
     done
   fi
 
   found=0
-  for fconf in ~/.config/tmux/tmux.conf ~/.tmux.conf; do
+  for fconf in $CONFIG/tmux/tmux.conf ~/.tmux.conf; do
     if [ -f $fconf ]; then
       fpath=$fconf
       if grep -q cterm256-contrib/tmux/.tmux.conf $fconf; then
@@ -82,11 +86,11 @@ main() {
   done
 
   if [ $found == 0 ]; then
-    echo "source-file ~/.config/cterm256-contrib/tmux/.tmux.conf" >>$fpath
+    echo "source-file $CONFIG/cterm256-contrib/tmux/.tmux.conf" >>$fpath
   fi
 
-  if ! [ -f ~/.config/nvim/colors/cterm256.vim ]; then
-    ln -s ~/.config/cterm256-contrib/vim/cterm256.vim ~/.config/nvim/colors
+  if ! [ -f $CONFIG/nvim/colors/cterm256.vim ]; then
+    ln -s $CONFIG/cterm256-contrib/vim/cterm256.vim $CONFIG/nvim/colors
   fi
 }
 

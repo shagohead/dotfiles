@@ -16,8 +16,13 @@ main() {
 
   title "Установка библиотек и приложений из Homebrew"
   brew bundle
-  [ ! -d "$HOME/.config/fish/conf.d" ] && mkdir $HOME/.config/fish/conf.d
-  [ ! -d "$HOME/.config/fish/completions" ] && mkdir $HOME/.config/fish/completions
+  CONFIG=$XDG_CONFIG_HOME
+  if [ -z "$CONFIG" ]; then
+    CONFIG=$HOME/.CONFIG
+  fi
+  [ ! -d "$CONFIG" ] && mkdir "$CONFIG"
+  [ ! -d "$CONFIG/fish/conf.d" ] && mkdir $CONFIG/fish/conf.d
+  [ ! -d "$CONFIG/fish/completions" ] && mkdir $CONFIG/fish/completions
   stow dotfiles
 
   declare -a GO_PACKAGES=(
@@ -49,22 +54,22 @@ main() {
 
   if ! fish -c "type -q fisher"; then
     title "Установка менеджера плагинов для fish"
-    curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
+    curl https://git.io/fisher --create-dirs -sLo $CONFIG/fish/functions/fisher.fish
   fi
 
   title "Установка и обновление плагинов для fish"
   fish -c "fisher update"
 
   title "Клонирование/актуализация cterm256-contrib"
-  if [ -d ~/.config/cterm256-contrib ]; then
-    git -C ~/.config/cterm256-contrib pull
+  if [ -d $CONFIG/cterm256-contrib ]; then
+    git -C $CONFIG/cterm256-contrib pull
   else
-    git clone github.com:shagohead/cterm256-contrib ~/.config/cterm256-contrib
+    git clone github.com:shagohead/cterm256-contrib $CONFIG/cterm256-contrib
   fi
 
   # if ! witch -s rustup; then
   #   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  #   rustup completions fish > ~/.config/fish/completions/rustup.fish
+  #   rustup completions fish > $CONFIG/fish/completions/rustup.fish
   # fi
 }
 
