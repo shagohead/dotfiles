@@ -2,7 +2,7 @@
 
 set -e
 
-title () {
+title() {
   echo -e "$(tput bold)$@$(tput sgr0)"
 }
 
@@ -11,7 +11,7 @@ main() {
 
   if ! grep -q /usr/local/bin/fish /etc/shells; then
     title "Установка fish как shell по-умолчанию"
-    sudo echo "/usr/local/bin/fish" >> /etc/shells
+    sudo echo "/usr/local/bin/fish" >>/etc/shells
     sudo chsh -s /usr/local/bin/fish
   fi
 
@@ -22,7 +22,7 @@ main() {
   if [ -f $KITTY_CONF ]; then
     title "Дополнение kitty.conf"
     if ! grep -q "include custom.conf" $KITTY_CONF; then
-      echo "include custom.conf" >> $KITTY_CONF
+      echo "include custom.conf" >>$KITTY_CONF
     fi
   fi
 
@@ -59,6 +59,35 @@ main() {
   set fish_pager_color_description bryellow
   set fish_pager_color_progress brcyan"
   fish -c "$FISH_CONFIG_COMMAND"
+
+  fish -c "ctheme"
+
+  if [ -d ~/.config/cterm256-contrib ]; then
+    for name in delta tig; do
+      if !(git config get --global --all include.path | grep -q $name/.gitconfig); then
+        git config set --global --add include.path ~/.config/cterm256-contrib/$name/.gitconfig
+      fi
+    done
+  fi
+
+  found=0
+  for fconf in ~/.config/tmux/tmux.conf ~/.tmux.conf; do
+    if [ -f $fconf ]; then
+      fpath=$fconf
+      if grep -q cterm256-contrib/tmux/.tmux.conf $fconf; then
+        found=1
+        break
+      fi
+    fi
+  done
+
+  if [ $found == 0 ]; then
+    echo "source-file ~/.config/cterm256-contrib/tmux/.tmux.conf" >>$fpath
+  fi
+
+  if ! [ -f ~/.config/nvim/colors/cterm256.vim ]; then
+    ln -s ~/.config/cterm256-contrib/vim/cterm256.vim ~/.config/nvim/colors
+  fi
 }
 
 setgitopt() {
