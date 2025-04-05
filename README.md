@@ -1,3 +1,8 @@
-# Shagohead dotfiles
+Shagohead dotfiles
+==================
 
-Configuration files for nvim, fish, kitty, ANSI colors (changed with extended base16).
+Idempotent installation & base configuration:
+
+```sh
+./install.sh && ./configure.sh
+```
