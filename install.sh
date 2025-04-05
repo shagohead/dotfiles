@@ -27,9 +27,9 @@ main() {
 
   declare -a GO_PACKAGES=(
     github.com/go-delve/delve/cmd/dlv
-    github.com/kyleconroy/sqlc/cmd/sqlc
     github.com/josharian/impl
     github.com/shagohead/cterm256/cmd/cterm256
+    github.com/sqlc-dev/sqlc/cmd/sqlc
     golang.org/x/tools/gopls
     google.golang.org/protobuf/cmd/protoc-gen-go
   )
