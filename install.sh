@@ -16,27 +16,60 @@ main() {
 
   title "Установка библиотек и приложений из Homebrew"
   brew bundle
+
+  fish -c 'set -q HOMEBREW_GITHUB_API_TOKEN; or set -xU HOMEBREW_GITHUB_API_TOKEN (read -P "Github API token for Homebrew: ")'
+
   CONFIG=$XDG_CONFIG_HOME
   if [ -z "$CONFIG" ]; then
     CONFIG=$HOME/.config
   fi
-  [ ! -d "$CONFIG/fish/conf.d" ] && mkdir -p $CONFIG/fish/conf.d
-  [ ! -d "$CONFIG/fish/completions" ] && mkdir -p $CONFIG/fish/completions
-  [ ! -d "$CONFIG/fish/functions" ] && mkdir -p $CONFIG/fish/functions
-  stow dotfiles
+
+  stow --no-folding -t ~/ dotfiles
+
+  title "Клонирование/актуализация cterm256-contrib"
+  if [ -d $CONFIG/cterm256-contrib ]; then
+    git -C $CONFIG/cterm256-contrib pull
+  else
+    git clone github.com:shagohead/cterm256-contrib $CONFIG/cterm256-contrib
+  fi
+  for name in delta tig; do
+    if !(git config get --global --all include.path | grep -q $name/.gitconfig); then
+      git config set --global --append include.path $CONFIG/cterm256-contrib/$name/.gitconfig
+    fi
+  done
+
+  if ! [ -f $CONFIG/nvim/colors/cterm256.vim ]; then
+    ln -s $CONFIG/cterm256-contrib/vim/cterm256.vim $CONFIG/nvim/colors
+  fi
+
+  found=0
+  for fconf in $CONFIG/tmux/tmux.conf ~/.tmux.conf; do
+    if [ -f $fconf ]; then
+      fpath=$fconf
+      if grep -q cterm256-contrib/tmux/.tmux.conf $fconf; then
+        found=1
+        break
+      fi
+    fi
+  done
+
+  if [ $found == 0 ]; then
+    echo "source-file $CONFIG/cterm256-contrib/tmux/.tmux.conf" >>$fpath
+  fi
 
   declare -a GO_PACKAGES=(
     github.com/go-delve/delve/cmd/dlv
     github.com/josharian/impl
     github.com/shagohead/cterm256/cmd/cterm256
-    github.com/sqlc-dev/sqlc/cmd/sqlc
     golang.org/x/tools/gopls
-    google.golang.org/protobuf/cmd/protoc-gen-go
   )
   title "Сборка и установка утилит на Go"
   for i in "${GO_PACKAGES[@]}"; do
     go install "${i}@latest"
   done
+
+  title "Установка и обновление плагинов для neovim"
+  nvim --headless +"Lazy install" +qall
 
   title "Установка и обновление LSP серверов для neovim"
   declare -a LSP_SERVERS=(
@@ -59,13 +92,6 @@ main() {
 
   title "Установка и обновление плагинов для fish"
   fish -c "fisher update"
-
-  title "Клонирование/актуализация cterm256-contrib"
-  if [ -d $CONFIG/cterm256-contrib ]; then
-    git -C $CONFIG/cterm256-contrib pull
-  else
-    git clone github.com:shagohead/cterm256-contrib $CONFIG/cterm256-contrib
-  fi
 
   # if ! witch -s rustup; then
   #   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh

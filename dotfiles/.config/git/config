@@ -56,3 +56,9 @@
 
 	; Two-lines log (like --oneline + date and author)
 	logg = log --abbrev-commit --decorate --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
+[include]
+	path = /Users/shagohead/.config/cterm256-contrib/delta/.gitconfig
+	path = /Users/shagohead/.config/cterm256-contrib/tig/.gitconfig
+[user]
+	name = shagohead
+	email = html.ru@gmail.com
