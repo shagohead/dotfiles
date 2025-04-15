@@ -1,8 +1,8 @@
 Shagohead dotfiles
 ==================
 
-Idempotent installation & base configuration:
+Idempotent installation & configuration:
 
 ```sh
-./install.sh && ./configure.sh
+./setup.sh
 ```

@@ -3,6 +3,7 @@ if test -n "$ALACRITTY_LOG"
     set -x TERM alacritty
 end
 
+set -x SHELL (which fish)
 set -x EDITOR vi
 set -x VISUAL nvim
 set -x LS_COLORS
@@ -23,7 +24,7 @@ set -q GOPATH; or set -xU GOPATH $HOME/go
 
 # PATH
 if not set -q PATH_SET
-    set -gx PATH $HOME/.local/bin $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims $HOME/yandex-cloud/bin /usr/local/opt/curl/bin $PATH
+    set -gx PATH $HOME/.local/bin $HOME/.cargo/bin $GOPATH/bin $HOME/.pyenv/shims /usr/local/opt/curl/bin $PATH
     set -gx PATH_SET true
 end
 
@@ -98,4 +99,6 @@ if status --is-interactive
         source "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_conf.d/kitty-shell-integration.fish"
         set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
     end
+
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 end
