@@ -24,7 +24,7 @@ main() {
   fish -c 'set -q HOMEBREW_GITHUB_API_TOKEN; or set -xU HOMEBREW_GITHUB_API_TOKEN (read -P "Github API токен для Homebrew: ")'
 
   title "Установка библиотек и приложений из Homebrew"
-  brew bundle
+  brew bundle --no-upgrade
 
   CONFIG=$XDG_CONFIG_HOME
   if [ -z "$CONFIG" ]; then
