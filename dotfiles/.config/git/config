@@ -41,6 +41,7 @@
 [delta]
 	features = line-numbers
 	navigate = true
+	hyperlinks = true
 
 [rerere]
 	enabled = true

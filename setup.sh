@@ -126,6 +126,14 @@ main() {
   fish -c "fish_config theme choose cterm256"
   fish -c "echo y | fish_config theme save"
 
+  k9s_conf=$HOME/Library/Application\ Support/k9s
+  if ! [ -f $k9s_conf/skins/cterm256.yaml ]; then
+    if ! [ -d $k9s_conf/skins ]; then
+      mkdir -p $k9s_conf/skins
+    fi
+    ln -s $CONFIG/cterm256-contrib/k9s/cterm256.yaml $k9s_conf/skins
+  fi
+
   # if ! witch -s rustup; then
   #   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
   #   rustup completions fish > $CONFIG/fish/completions/rustup.fish
