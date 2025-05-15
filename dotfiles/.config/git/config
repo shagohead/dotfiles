@@ -53,7 +53,8 @@
 	changelog = !"f() { git log --oneline --no-decorate $(git merge-base HEAD $1)..HEAD ${@:2}; }; f"
 
 	; List branches with latest commits
-	branches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+    ; git branches | fzf | awk '{print $1}' | xargs git che; or return 0
+	branches = for-each-ref --sort=committerdate refs/heads/ --format='%(color:yellow)%(refname:short)%(color:reset) %(HEAD) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 
 	; Two-lines log (like --oneline + date and author)
 	logg = log --abbrev-commit --decorate --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
