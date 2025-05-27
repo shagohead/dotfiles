@@ -1,5 +1,5 @@
 function tunnel -d "SSH tunnel manager based on tmux windows"
-    argparse 'e/edit' 'h/help' -- $argv
+    argparse 'e/edit' 'h/help' 'u/unused' -- $argv
     or return
 
     set -l confpath $HOME/.local/shell/tunnels
@@ -8,17 +8,20 @@ function tunnel -d "SSH tunnel manager based on tmux windows"
     set -q tunnels_sleep; or set -l tunnels_sleep 0.2
 
     if test -n "$_flag_help"
-        echo "usage: tunnel [-e | --edit] [-h | --help] [<tunnel-name>]
+        echo "usage: tunnel [-e | --edit] [-h | --help] [-u | --unused] [<tunnel-name>]
 
 If tunnel name is not provided, fzf will be invoked for tunnel selection.
 
 Port for tunnel will be used in range defined by \$tunnels_port_range variable.
-Default range is: 50000 50100.
+Default range: 50000 50100.
+Current range: $tunnels_port_range
 
 Tunnels are stored in $confpath.
 Edit that file directly or use tunnel command with -e/--edit option.
 
-Each line in file is a tunnel specification:
+Each line in file is a tunnel specification.
+By default, port selected as range start + line index.
+With -u/--unused will be used first unused port.
 
 tunnel-spec = name \"\t\" ssh-arguments;
 name = (non-tabular-symbol) +;
@@ -57,16 +60,19 @@ ssh-arguments = target-host \":\" target-port \" \" ssh-tunnel-conn-string;
         return
     end
 
-    for i in (seq $tunnels_port_range)
-        if not nc -z localhost $i 2>/dev/null
-            set port $i
-            break
+    if test -n "$_flag_unused"
+        for i in (seq $tunnels_port_range)
+            if not nc -z localhost $i 2>/dev/null
+                set port $i
+                break
+            end
         end
-    end
-
-    if test -z "$port"
-        echo "Not found closed port in range."
-        return 1
+        if test -z "$port"
+            echo "Not found opened port in range."
+            return 1
+        end
+    else
+        set port (math $tunnels_port_range[1] - 1 + (grep -n "^$name" $confpath | awk -F: '{print $1}'))
     end
 
 
@@ -77,6 +83,7 @@ ssh-arguments = target-host \":\" target-port \" \" ssh-tunnel-conn-string;
         tmux new-session -d -s $tunnels_session -n $name $ssh_cmd
     end
 
+    # FIXME: Пинг и ожидание доступности порта; нужно чтобы ожидание доступности было явно заметным.
     if test -n "$tunnels_sleep"
         sleep $tunnels_sleep
         tmux list-windows -f "#{==:#W,$name}" -t $tunnels_session 2>/dev/null | read -l found
