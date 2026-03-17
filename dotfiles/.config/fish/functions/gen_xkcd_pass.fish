@@ -17,7 +17,7 @@ Generate password like in https://xkcd.com/936/"
         set _flag_delimiter "-"
     end
 
-    python -c "import secrets
+    python3 -c "import secrets
 with open('/usr/share/dict/words') as f:
     words = [word.strip() for word in f]
     print('$_flag_delimiter'.join(secrets.choice(words) for i in range($_flag_words)))"

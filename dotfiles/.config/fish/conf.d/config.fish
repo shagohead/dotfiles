@@ -7,17 +7,16 @@ set -x SHELL (which fish)
 set -x EDITOR vi
 set -x VISUAL nvim
 set -x LS_COLORS
-set -x PAGER less -R
-set -x MANPAGER less -R --use-color -Dd+b -Du+g
+set -x LESS --mouse
+set -x PAGER less -R --mouse
+set -x MANPAGER less -R --mouse --use-color -Dd+b -Du+g
 
 set -x LANG en_US.UTF-8
 set -x LC_CTYPE en_US.UTF-8
 
 # Python development
-set -x PIPENV_VENV_IN_PROJECT 1
 set -x PYENV_ROOT $HOME/.pyenv
 set -x PYENV_SHELL fish
-set -x PYTEST_ADDOPTS --reuse-db
 
 # GO development
 set -q GOPATH; or set -xU GOPATH $HOME/go

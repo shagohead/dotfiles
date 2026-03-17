@@ -2,6 +2,8 @@
 .exrc
 .nvimrc
 .nvmrc
+.nvim.lua
+/.nvim/
 .python-version
 
 .idea

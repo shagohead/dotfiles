@@ -1,0 +1,11 @@
+views:
+  v1/pods:
+    sortColumn: AGE:asc
+    columns:
+      - AGE
+      - STATUS
+      - READY
+      - NAME
+      - RESTARTS
+      - CPU
+      - MEM

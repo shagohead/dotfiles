@@ -43,6 +43,13 @@ main() {
     fi
   done
 
+  if ! [ -d $CONFIG/gitui ]; then
+    mkdir $CONFIG/gitui
+  fi
+  if ! [ -f $CONFIG/gitui/theme.ron ]; then
+    ln -s $CONFIG/cterm256-contrib/gitui/theme.ron $CONFIG/gitui/
+  fi
+
   title "Создание ссылок на конфигурационные файлы"
   stow --no-folding -t ~/ dotfiles
 
@@ -88,15 +95,23 @@ main() {
   declare -a GO_PACKAGES=(
     github.com/go-delve/delve/cmd/dlv
     github.com/shagohead/cterm256/cmd/cterm256
-    golang.org/x/tools/gopls
+    golang.org/x/tools/cmd/godoc
   )
   title "Сборка и установка утилит на Go"
   for i in "${GO_PACKAGES[@]}"; do
     go install "${i}@latest"
   done
 
+  rustup update
+  rustup-init -y
+
+	cargo install --locked tree-sitter-cli
+
   title "Установка и обновление плагинов для neovim"
   nvim --headless +"Lazy install" +qall
+
+  title "Установка парсеров tree-sitter для neovim"
+  nvim --headless +"TSInstall bash c go lua vim vimdoc query markdown markdown_inline" +qall
 
   title "Установка и обновление LSP серверов для neovim"
   declare -a LSP_SERVERS=(
