@@ -46,6 +46,12 @@ vim.o.undofile = true
 
 -- Exrc only for trusted files
 if vim.fn.has("nvim-0.9") then
+	-- Add into project file .nvim.lua with contents:
+	-- vim.cmd[[set rtp+=.nvim]]
+	--
+	-- Then use project .nvim directory as usual nvim rtp dir.
+	-- :help rtp
+	-- :help lsp-config
 	vim.o.exrc = true
 end
 
@@ -145,12 +151,24 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+-- TODO: Conceal backslash escape symbol in non modifiable markdown.
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	desc = "Conceal markdown previews",
+-- 	pattern = "markdown",
+-- 	group = augroup,
+-- 	callback = function (args)
+-- 		if not vim.bo.modifiable then
+-- 		end
+-- 	end
+-- })
+
 -- SQL keymaps
 vim.api.nvim_create_autocmd("FileType", {
 	desc = "Bind SQL keymaps",
 	pattern = "sql",
 	group = augroup,
 	callback = function(args)
+		vim.bo.expandtab = true
 		vim.keymap.set(
 			"n", "<CR>", "vap<CR>",
 			{ buffer = args.buf, remap = true, desc = "Query database with paragraph under cursor" }
@@ -347,6 +365,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- vim.wo[win][0].signcolumn = "yes:1"
 		if client:supports_method('textDocument/foldingRange') then
 			vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+			vim.wo[win][0].foldmethod = 'expr'
 		end
 
 		vim.api.nvim_buf_create_user_command(
@@ -582,7 +601,10 @@ require("lazy").setup({
 					menu = {
 						border = "single",
 						draw = {
-							columns = { { "label", "kind", "label_description", gap = 1 } },
+							columns = {
+								{ "label", "label_description", gap = 1 },
+								{ "kind_icon", "kind" }
+							},
 							padding = { 0, 0 }
 						}
 					},
