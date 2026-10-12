@@ -1,3 +1,4 @@
+# mergiraf languages --gitattributes > dotfiles/.config/git/attributes
 *.java merge=mergiraf
 *.properties merge=mergiraf
 *.kt merge=mergiraf
