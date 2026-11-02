@@ -654,7 +654,7 @@ require("lazy").setup({
 
 		{
 			"williamboman/mason.nvim",
-			config = {
+			opts = {
 				ui = {
 					icons = {
 						package_installed = "✓",

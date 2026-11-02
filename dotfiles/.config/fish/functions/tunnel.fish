@@ -42,7 +42,7 @@ ssh-arguments = target-host \":\" target-port \" \" ssh-tunnel-conn-string;
         cat $confpath | awk -F\t '{print $1}' | fzf | read name; or return 0
     end
 
-    grep "^$name" $confpath | awk -F\t '{print $2}' | read -l remote
+    awk -F\t -v name=$name '$1 == name {print $2; exit}' $confpath | read -l remote
     if test -z "$remote"
         echo "$name not found in $confpath"
         return 1
@@ -72,7 +72,7 @@ ssh-arguments = target-host \":\" target-port \" \" ssh-tunnel-conn-string;
             return 1
         end
     else
-        set port (math $tunnels_port_range[1] - 1 + (grep -n "^$name" $confpath | awk -F: '{print $1}'))
+        set port (math $tunnels_port_range[1] - 1 + (awk -F\t -v name=$name '$1 == name {print NR; exit}' $confpath))
     end
 
 
